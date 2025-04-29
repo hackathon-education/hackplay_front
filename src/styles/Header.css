@@ -1,0 +1,57 @@
+.header {
+    background-color: white;
+    border-bottom: 2px solid #0059b3;
+    padding: 15px 0;
+}
+
+.header-inner {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #0059b3;
+    cursor: pointer;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links li {
+    display: inline;
+}
+
+.nav-links button {
+    background: none;
+    border: none;
+    color: #0059b3;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.nav-links button:hover {
+    text-decoration: underline;
+}
+
+.login-button button {
+    background-color: #0059b3;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.login-button button:hover {
+    background-color: #004080;
+}

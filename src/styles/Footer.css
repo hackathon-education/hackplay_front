@@ -1,0 +1,13 @@
+.footer {
+    background-color: white;
+    border-top: 2px solid #0059b3;
+    text-align: center;
+    padding: 20px 10px;
+    color: #003366;
+}
+
+.company-info {
+    margin-top: 15px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}

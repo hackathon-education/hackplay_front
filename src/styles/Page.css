@@ -1,0 +1,47 @@
+/* Page.css */
+
+.page-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+    border: 2px solid #0059b3;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.simple-list {
+    list-style-type: disc;
+    margin-top: 20px;
+    text-align: left;
+    padding-left: 30px;
+}
+
+.basic-button {
+    background-color: #0059b3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.basic-button:hover {
+    background-color: #004080;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.login-form input {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
