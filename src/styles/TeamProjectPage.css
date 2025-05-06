@@ -1,0 +1,107 @@
+.team-project-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 30px;
+    font-family: 'Arial', sans-serif;
+    background-color: #ffffff;
+}
+
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #ddd;
+}
+
+.title-block h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.title-block p {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.tag {
+    display: inline-block;
+    background-color: #3498db;
+    color: white;
+    border-radius: 5px;
+    padding: 4px 10px;
+    margin-right: 8px;
+    font-size: 0.9rem;
+}
+
+.info-box {
+    background-color: #f7f7f7;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.start-button {
+    margin-top: 15px;
+    background-color: #2ecc71;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.section {
+    margin-top: 40px;
+}
+
+.unit-list {
+    list-style: decimal;
+    padding-left: 20px;
+    line-height: 1.8;
+}
+
+.unit-list li.locked {
+    opacity: 0.5;
+    font-style: italic;
+}
+
+.progress-box {
+    margin-top: 10px;
+}
+
+.progress-bar {
+    background-color: #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    height: 10px;
+    margin: 5px 0;
+}
+
+.progress-fill {
+    background-color: #2ecc71;
+    height: 100%;
+    transition: width 0.3s;
+}
+
+.unit-card {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.unit-card img {
+    border-radius: 4px;
+    width: 100px;
+    height: 60px;
+    object-fit: cover;
+}
+
+.unit-card.locked {
+    opacity: 0.5;
+    font-style: italic;
+}

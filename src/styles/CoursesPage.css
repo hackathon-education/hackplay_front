@@ -1,0 +1,114 @@
+/* 페이지 제목 */
+.page-title {
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+/* 메인 탭 영역 (Front / Back / Design) */
+.tab-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin: 40px 0;
+}
+
+/* 탭 버튼 공통 스타일 */
+.tab {
+    width: 240px;
+    padding: 25px;
+    border-radius: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.tab:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+.front-tab {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+}
+
+.back-tab {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.design-tab {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+.active {
+    border: 3px solid #ffffff;
+    outline: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+/* 콘텐츠 영역 */
+.tab-content {
+    background-color: #f9f9f9;
+    padding: 30px;
+    border-radius: 16px;
+    font-size: 1.1rem;
+    margin-top: 30px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.locked {
+    color: #888;
+    font-style: italic;
+}
+
+/* 레벨 카드 (초급 / 중급 / 고급) */
+.level-tab {
+    width: 240px;
+    padding: 22px;
+    border-radius: 16px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    border: 3px solid transparent;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    margin-top: 20px;
+}
+
+.level-tab:hover:not(.locked) {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* 각 단계별 색상 (그라데이션) */
+.level-beginner {
+    background: linear-gradient(135deg, #1abc9c, #16a085);
+}
+
+.level-intermediate {
+    background: linear-gradient(135deg, #e67e22, #d35400);
+}
+
+.level-advanced {
+    background: linear-gradient(135deg, #8e44ad, #6c3483);
+}
+
+/* 선택된 레벨 강조 */
+.level-tab.active {
+    border: 3px solid #ffffff;
+    outline: 2px solid rgba(0, 0, 0, 0.15);
+}
+
+/* 잠겨있는 레벨 */
+.level-tab.locked {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+}
