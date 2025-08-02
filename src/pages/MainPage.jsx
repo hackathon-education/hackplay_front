@@ -1,6 +1,6 @@
 import React from 'react';
 import '../styles/MainPage.css';
-import Mockup from '../assets/mockup.png'
+import Mockup from '../assets/mockup.jpg'
 
 function MainPage() {
     return (
