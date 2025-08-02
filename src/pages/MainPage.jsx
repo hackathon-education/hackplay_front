@@ -1,5 +1,6 @@
 import React from 'react';
 import '../styles/MainPage.css';
+import Mockup from '../assets/mockup.png'
 
 function MainPage() {
     return (
@@ -13,9 +14,12 @@ function MainPage() {
 
             <section className="visual-section">
                 <div className="slide-mockup">
-                    {/* 이 영역에 추후 슬라이더 또는 이미지 삽입 */}
                     <div className="mockup-placeholder">
-                        {/* 회색 박스 이미지 모형 */}
+                        <img
+                            src={Mockup}
+                            alt="메인 모형 이미지"
+                            className="mockup-image"
+                        />
                     </div>
                     <div className="dots">
                         <span className="dot active" />

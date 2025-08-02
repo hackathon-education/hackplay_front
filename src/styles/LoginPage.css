@@ -10,18 +10,22 @@
 .login-box {
     display: flex;
     flex-direction: column;
-    width: 320px;
+    width: 200%;
+    max-width: 500px;
+    padding: 0 50px;  /* ← 좌우 여백 추가 */
+    margin: 0 auto;
 }
 
+
 .login-title {
-    font-size: 1.4rem;
+    font-size: 2.4rem;
     font-weight: 700;
     margin-bottom: 6px;
     color: #111;
 }
 
 .login-subtitle {
-    font-size: 1rem;
+    font-size: 2rem;
     color: #444;
     margin-bottom: 24px;
 }
@@ -69,6 +73,17 @@
 .signup-link {
     color: #000;
     font-weight: 500;
+    margin-left: 6px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.signup-link-btn {
+    background: none;
+    border: none;
+    color: #0070f3;
+    font-weight: 600;
+    font-size: 0.95rem;
     margin-left: 6px;
     cursor: pointer;
     text-decoration: underline;

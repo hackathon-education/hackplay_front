@@ -10,6 +10,7 @@ import TeamProjectPage from "./pages/TeamProjectPage.jsx";
 import BasicLearningPage from "./pages/BasicLearningPage.jsx";
 import ToolPage from "./pages/ToolPage.jsx";
 import GitPage from "./pages/GitPage.jsx";
+import SignupPage from "./pages/SignupPage.jsx";
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                     <Route path="/courses" element={<CoursesPage />} />
                     <Route path="/projects" element={<ProjectsPage />} />
                     <Route path="/login" element={<LoginPage />} />
+                    <Route path="/signup" element={<SignupPage />} />
                     <Route path="/front/beginner" element={<FrontBeginnerPage />} />
                     <Route path="/front/beginner/team-project" element={<TeamProjectPage />} />
                     <Route path="/front/basic-learning" element={<BasicLearningPage />} />
