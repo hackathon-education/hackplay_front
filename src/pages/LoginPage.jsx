@@ -1,8 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/Page.css';
-import '../styles/LoginPage.css'; // 별도 스타일 분리 추천
+import '../styles/LoginPage.css';
 
 function LoginPage() {
+    const navigate = useNavigate();
+
     return (
         <div className="login-page-container">
             <div className="login-box">
@@ -15,7 +18,13 @@ function LoginPage() {
                 </form>
                 <hr className="login-divider" />
                 <p className="signup-text">
-                    처음 방문하셨나요? <span className="signup-link">회원 가입</span>
+                    처음 방문하셨나요?
+                    <button
+                        className="signup-link-btn"
+                        onClick={() => navigate('/signup')}
+                    >
+                        회원 가입
+                    </button>
                 </p>
             </div>
         </div>
