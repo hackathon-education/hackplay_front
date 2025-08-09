@@ -1,84 +1,62 @@
-body, html {
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
-    background-color: white;
-    color: #003366;
-    height: 100%;
-}
-
-.container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-.logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #0059b3;
-    cursor: pointer;
-}
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    gap: 15px;
-}
-
-.nav-links li {
-    display: inline;
-}
-
-.nav-links button {
-    background: none;
-    border: none;
-    color: #0059b3;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.nav-links button:hover {
-    text-decoration: underline;
-}
-
-/* 로그인 버튼 */
-.login-button button {
-    background-color: #0059b3;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9rem;
-}
-
-.login-button button:hover {
-    background-color: #004080;
-}
-
-/* 메인 컨텐츠 */
-.main-content {
-    padding: 30px 15px;
+.main-container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 60px 20px;
     text-align: center;
-    display: flex;
-    justify-content: center;
 }
 
-/* 각 섹션 */
-.content-section {
-    max-width: 700px;
+.main-header h1 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #000;
+    line-height: 1.5;
+}
+
+.highlight {
+    color: #003366;
+}
+
+.visual-section {
+    margin-top: 40px;
+}
+
+.mockup-placeholder {
     width: 100%;
-    margin: 20px auto;
-    padding: 20px;
-    border: 2px solid #0059b3;
-    border-radius: 10px;
-    box-sizing: border-box;
+    max-width: 200px;
+    margin: 0 auto;
+    border-radius: 12px;
+    overflow: hidden;
 }
 
-.company-info {
-    margin-top: 10px;
-    font-size: 0.85rem;
-    line-height: 1.4;
+.mockup-image {
+    width: 100%;
+    display: block;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dots {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    margin-top: 8px;
+    margin-right: 20px;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    background-color: #ccc;
+    border-radius: 50%;
+}
+
+.dot.active {
+    background-color: #333;
+}
+
+.description-section {
+    margin-top: 40px;
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.6;
 }
