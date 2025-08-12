@@ -1,33 +1,84 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
+import reactHooks from 'eslint-plugin-react-hooks';
+import tsParser from '@typescript-eslint/parser';
+import tsPlugin from '@typescript-eslint/eslint-plugin';
+import prettierPlugin from 'eslint-plugin-prettier';
+
+import airbnbBase from 'eslint-config-airbnb-base';
+import airbnbTs from 'eslint-config-airbnb-typescript';
+import react from 'eslint-plugin-react';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
 
 export default [
-  { ignores: ['dist'] },
   {
     files: ['**/*.{js,jsx}'],
     languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
+      parser: 'espree',
+      env: {
+        browser: true,
+      },
       parserOptions: {
         ecmaVersion: 'latest',
-        ecmaFeatures: { jsx: true },
         sourceType: 'module',
+        ecmaFeatures: { jsx: true },
       },
     },
     plugins: {
+      react,
       'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
+      'jsx-a11y': jsxA11y,
+      prettier: prettierPlugin,
     },
     rules: {
-      ...js.configs.recommended.rules,
+      ...airbnbBase.rules,
+      ...react.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
+      ...jsxA11y.configs.recommended.rules,
+
+      'prettier/prettier': 'error',
+      'react/require-default-props': 'off',
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
     },
   },
-]
+  {
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      parser: tsParser,
+      env: {
+        browser: true,
+      },
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        ecmaFeatures: { jsx: true },
+        project: './tsconfig.json',
+      },
+    },
+    plugins: {
+      react,
+      'react-hooks': reactHooks,
+      '@typescript-eslint': tsPlugin,
+      'jsx-a11y': jsxA11y,
+      prettier: prettierPlugin,
+    },
+    rules: {
+      ...airbnbBase.rules,
+      ...airbnbTs.rules,
+      ...react.configs.recommended.rules,
+      ...reactHooks.configs.recommended.rules,
+      ...tsPlugin.configs.recommended.rules,
+      ...jsxA11y.configs.recommended.rules,
+
+      'prettier/prettier': 'error',
+      'react/require-default-props': 'off',
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+  },
+];
