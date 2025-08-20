@@ -1,1 +1,56 @@
+@import './global.css';
 @import 'tailwindcss';
+
+@font-face {
+  font-family: 'FreesentationVF';
+  src: url('/fonts/FreesentationVF.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-freesentation: 'FreesentationVF', sans-serif;
+
+  /** Colors **/
+  --color-blue-100: #cddefe;
+  --color-blue-200: #9bbdfd;
+  --color-blue-300: #4a98e0;
+  --color-blue-400: #0071bc;
+
+  --color-gray-50: #fafafa;
+  --color-gray-100: #f4f4f4;
+  --color-gray-200: #d9d9d9;
+  --color-gray-300: #c0c0c0;
+  --color-gray-400: #a8a8a8;
+  --color-gray-500: #939393;
+  --color-gray-600: #888888;
+  --color-gray-700: #363636;
+
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /** Shadow **/
+  --shadow-1: 1px 1px 1px 0px rgba(0, 0, 0, 0.1);
+  --shadow-2: 1px 1px 39.4px -9px rgba(0, 0, 0, 0.41);
+  --shadow-3: 1px 1px 39.4px -9px rgba(0, 113, 188, 0.76);
+  --shadow-4: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
+  --shadow-5: 0px 10px 19.9px 0px rgba(0, 0, 0, 0.28);
+
+  /** z-index 계층 구조 **/
+
+  /* Layer 1: 기본 콘텐츠 */
+  --z-index-base: 1;
+
+  /* Layer 2: 네비게이션 (헤더, 햄버거) */
+  --z-index-nav: 10;
+
+  /* Layer 3: 드롭다운, 툴팁 */
+  --z-index-dropdown: 100;
+
+  /* Layer 4: 모달, 오버레이 (최우선) */
+  --z-index-modal: 10000;
+
+  /* Layer 5: 토스트, 알림 (최상위) */
+  --z-index-toast: 20000;
+}
