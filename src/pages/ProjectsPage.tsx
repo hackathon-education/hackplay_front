@@ -1,4 +1,3 @@
-import '../styles/Page.css';
 
 function ProjectsPage() {
   return (

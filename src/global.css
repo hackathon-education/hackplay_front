@@ -1,0 +1,25 @@
+/* 🎯 Safe Area Support for Mobile */
+@supports (padding: max(0px)) {
+  .pb-safe {
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
+}
+
+html,
+body {
+  font-family: 'FreesentationVF', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+div,
+span {
+  line-height: 1;
+}

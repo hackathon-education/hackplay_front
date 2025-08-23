@@ -1,10 +1,8 @@
-import '../styles/Footer.css';
-
 function Footer() {
   return (
-    <footer className="footer">
+    <footer className="bg-white border-t-2 border-[#0059b3] text-center px-2.5 py-5 text-[#003366]">
       <div>© 2025 웹 개발 학습 플랫폼</div>
-      <div className="company-info">
+      <div className="mt-[15px] text-[0.9rem] leading-[1.6]">
         <p>
           <strong>회사명</strong>: WebGrow Inc.
         </p>

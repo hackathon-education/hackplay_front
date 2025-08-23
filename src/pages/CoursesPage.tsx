@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/Page.css';
-import '../styles/CoursesPage.css';
-import Frontend from '../assets/frontend.png';
+
 import Backend from '../assets/backend.png';
 import Designer from '../assets/designer.png';
+import Frontend from '../assets/frontend.png';
 
 function CoursesPage() {
   const [selectedTab, setSelectedTab] = useState('front');
@@ -15,30 +14,56 @@ function CoursesPage() {
   };
 
   return (
-    <div className="page-container">
-      <h2 className="step-title">나의 포지션 선택</h2>
+    <div className="max-w-[600px] mx-auto my-[50px] p-[30px] border-2 border-[#0059b3] rounded-[10px] bg-[#f9f9f9] text-center">
+      <h2 className="text-[1.5rem] font-bold text-center mb-10">나의 포지션 선택</h2>
 
-      <div className="card-list">
+      <div className="flex justify-center gap-10 mb-10 flex-nowrap overflow-x-auto py-2.5">
         <div
-          className={`position-card ${selectedTab === 'front' ? 'selected' : ''}`}
+          className={`bg-white border-2 ${
+            selectedTab === 'front' ? 'border-[#007bff]' : 'border-transparent'
+          } rounded-2xl p-5 w-[200px] cursor-pointer shadow-[0_4px_8px_rgba(0,0,0,0.05)] transition-all duration-200 ease-in-out text-center hover:-translate-y-1 hover:shadow-[0_6px_12px_rgba(0,0,0,0.1)]`}
           onClick={() => setSelectedTab('front')}
         >
-          <img src={Frontend} alt="Front end" className="position-image" />
-          <button className="position-label">Front end</button>
+          <img src={Frontend} alt="Front end" className="w-full rounded-xl mb-3" />
+          <button
+            className={`bg-none border border-[#007bff] rounded-full px-3 py-1.5 text-[0.9rem] cursor-pointer ${
+              selectedTab === 'front' ? 'bg-[#007bff] text-white' : 'text-[#007bff]'
+            }`}
+          >
+            Front end
+          </button>
         </div>
+
         <div
-          className={`position-card ${selectedTab === 'back' ? 'selected' : ''}`}
+          className={`bg-white border-2 ${
+            selectedTab === 'back' ? 'border-[#007bff]' : 'border-transparent'
+          } rounded-2xl p-5 w-[200px] cursor-pointer shadow-[0_4px_8px_rgba(0,0,0,0.05)] transition-all duration-200 ease-in-out text-center hover:-translate-y-1 hover:shadow-[0_6px_12px_rgba(0,0,0,0.1)]`}
           onClick={() => setSelectedTab('back')}
         >
-          <img src={Backend} alt="Back end" className="position-image" />
-          <button className="position-label">Back end</button>
+          <img src={Backend} alt="Back end" className="w-full rounded-xl mb-3" />
+          <button
+            className={`bg-none border border-[#007bff] rounded-full px-3 py-1.5 text-[0.9rem] cursor-pointer ${
+              selectedTab === 'back' ? 'bg-[#007bff] text-white' : 'text-[#007bff]'
+            }`}
+          >
+            Back end
+          </button>
         </div>
+
         <div
-          className={`position-card ${selectedTab === 'design' ? 'selected' : ''}`}
+          className={`bg-white border-2 ${
+            selectedTab === 'design' ? 'border-[#007bff]' : 'border-transparent'
+          } rounded-2xl p-5 w-[200px] cursor-pointer shadow-[0_4px_8px_rgba(0,0,0,0.05)] transition-all duration-200 ease-in-out text-center hover:-translate-y-1 hover:shadow-[0_6px_12px_rgba(0,0,0,0.1)]`}
           onClick={() => setSelectedTab('design')}
         >
-          <img src={Designer} alt="Designer" className="position-image" />
-          <button className="position-label">Designer</button>
+          <img src={Designer} alt="Designer" className="w-full rounded-xl mb-3" />
+          <button
+            className={`bg-none border border-[#007bff] rounded-full px-3 py-1.5 text-[0.9rem] cursor-pointer ${
+              selectedTab === 'design' ? 'bg-[#007bff] text-white' : 'text-[#007bff]'
+            }`}
+          >
+            Designer
+          </button>
         </div>
       </div>
 
