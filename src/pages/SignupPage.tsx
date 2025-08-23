@@ -1,6 +1,4 @@
 import { useState } from 'react';
-import '../styles/Page.css';
-import '../styles/SignupPage.css';
 
 type EyeIconProps = {
   visible: boolean;
@@ -8,12 +6,10 @@ type EyeIconProps = {
 
 const EyeIcon: React.FC<EyeIconProps> = ({ visible }) => (
   <svg
-    className="eye-icon"
     xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
+    className="w-5 h-5 text-gray-600"
     fill="none"
+    viewBox="0 0 24 24"
     stroke="currentColor"
     strokeWidth="2"
     strokeLinecap="round"
@@ -39,50 +35,90 @@ function SignupPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   return (
-    <div className="signup-container">
-      <div className="signup-card">
-        <h2 className="signup-title">회원가입</h2>
-        <form className="signup-form" onSubmit={(e) => e.preventDefault()}>
-          <div className="input-wrapper">
-            <input type="email" placeholder="이메일" required />
-          </div>
-          <div className="input-wrapper">
-            <input type="text" placeholder="이름" required />
-          </div>
-          <div className="input-wrapper">
-            <input type="text" placeholder="닉네임" required />
-          </div>
-          <div className="input-wrapper">
-            <input type="tel" placeholder="전화번호" required />
+    <div className="flex justify-center items-center min-h-[10vh] px-4 py-20 bg-[#f9f9f9]">
+      <div className="w-full max-w-md bg-white border border-[#0070f3] rounded-xl shadow-lg px-8 py-10">
+        <h2 className="text-2xl font-bold text-center text-[#111] mb-6">회원가입</h2>
+
+        <form className="flex flex-col gap-5" onSubmit={(e) => e.preventDefault()}>
+          {/* 이메일 */}
+          <div className="relative flex items-center">
+            <input
+              type="email"
+              placeholder="이메일"
+              required
+              className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
+            />
           </div>
 
-          <div className="password-wrapper">
-            <input type={showPassword ? 'text' : 'password'} placeholder="비밀번호" required />
+          {/* 이름 */}
+          <div className="relative flex items-center">
+            <input
+              type="text"
+              placeholder="이름"
+              required
+              className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
+            />
+          </div>
+
+          {/* 닉네임 */}
+          <div className="relative flex items-center">
+            <input
+              type="text"
+              placeholder="닉네임"
+              required
+              className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
+            />
+          </div>
+
+          {/* 전화번호 */}
+          <div className="relative flex items-center">
+            <input
+              type="tel"
+              placeholder="전화번호"
+              required
+              className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
+            />
+          </div>
+
+          {/* 비밀번호 */}
+          <div className="relative flex items-center">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="비밀번호"
+              required
+              className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base pr-10 focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
+            />
             <button
               type="button"
-              className="toggle-button"
+              className="absolute right-3 p-1 hover:opacity-70"
               onClick={() => setShowPassword(!showPassword)}
             >
               <EyeIcon visible={showPassword} />
             </button>
           </div>
 
-          <div className="password-wrapper">
+          {/* 비밀번호 확인 */}
+          <div className="relative flex items-center">
             <input
               type={showConfirmPassword ? 'text' : 'password'}
               placeholder="비밀번호 확인"
               required
+              className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base pr-10 focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
             />
             <button
               type="button"
-              className="toggle-button"
+              className="absolute right-3 p-1 hover:opacity-70"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             >
               <EyeIcon visible={showConfirmPassword} />
             </button>
           </div>
 
-          <select required>
+          {/* 직군 선택 */}
+          <select
+            required
+            className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base appearance-none focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
+          >
             <option value="">직군 선택</option>
             <option value="기획">기획</option>
             <option value="디자인">디자인</option>
@@ -92,17 +128,22 @@ function SignupPage() {
             <option value="ai">AI/데이터</option>
           </select>
 
-          <label className="checkbox-label">
+          {/* 체크박스 */}
+          <label className="flex items-center gap-2 text-sm text-gray-700">
             <input type="checkbox" required />
             안내 메일 수신에 동의합니다
           </label>
 
-          <label className="checkbox-label">
+          <label className="flex items-center gap-2 text-sm text-gray-700">
             <input type="checkbox" required />
             이용약관 및 개인정보처리방침에 동의합니다
           </label>
 
-          <button type="submit" className="basic-button">
+          {/* 회원가입 버튼 */}
+          <button
+            type="submit"
+            className="bg-[#0052cc] hover:bg-[#003f9e] text-white font-semibold text-lg py-3 rounded-lg transition-colors"
+          >
             회원가입
           </button>
         </form>
