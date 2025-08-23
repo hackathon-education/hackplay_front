@@ -10,7 +10,21 @@
 }
 
 @theme {
+  /** Font **/
   --font-freesentation: 'FreesentationVF', sans-serif;
+
+  /** Font Weight **/
+  --font-weight-590: 590;
+
+  /** Border Radius **/
+  --radius-xs: 0.313rem; /* 5px */
+  --radius-sm: 0.438rem; /* 7px */
+  --radius-md: 0.563rem; /* 9px */
+  --radius-lg: 0.625rem; /* 10px */
+  --radius-xl: 0.75rem; /* 12px */
+  --radius-2xl: 1.25rem; /* 20px */
+  --radius-3xl: 1.844rem; /* 29.5px */
+  --radius-4xl: 2.281rem; /* 36.5px */
 
   /** Colors **/
   --color-blue-100: #cddefe;
@@ -53,4 +67,16 @@
 
   /* Layer 5: 토스트, 알림 (최상위) */
   --z-index-toast: 20000;
+}
+
+.dot {
+  @apply w-1 h-1 sm:w-1.5 sm:h-1.5 md:w-2 md:h-2 lg:w-2.5 lg:h-2.5 xl:w-3 xl:h-3 bg-gray-200 rounded-full;
+}
+
+.page-container {
+  @apply max-w-[600px] mx-auto my-[50px] p-[30px] border-2 border-[#0059b3] rounded-[10px] bg-[#f9f9f9] text-center;
+}
+
+.basic-button {
+  @apply bg-[#0059b3] text-white border-none px-5 py-2.5 mt-5 text-base cursor-pointer rounded-[5px] hover:bg-[#004080];
 }
