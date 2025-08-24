@@ -2,17 +2,45 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import logoIcon from '../assets/logo_icon.png';
+import { useLockModal } from '../hooks/useLockModal';
+import LockModal from './LockModal';
 
 function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const { isLockModalOpen, closeLockModal, handleLockedItemClick } = useLockModal();
 
   const isActive = (path: string) => location.pathname === path;
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
+  };
+
+  const handleRankingClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    handleLockedItemClick(e);
+  };
+
+  const handleMyPageClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    handleLockedItemClick(e);
+  };
+
+  const handleContactClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    handleLockedItemClick(e);
+  };
+
+  const handleAccountSettingsClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    handleLockedItemClick(e);
+  };
+
+  const handleProjectsClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    handleLockedItemClick(e);
   };
 
   useEffect(() => {
@@ -67,7 +95,8 @@ function Header() {
               className={isActive('/projects') ? 'font-bold text-black' : 'font-medium text-[#555]'}
             >
               <button
-                onClick={() => navigate('/projects')}
+                // onClick={() => navigate('/projects')}
+                onClick={handleProjectsClick}
                 className="bg-none border-none text-lg px-3 py-2 cursor-pointer"
               >
                 프로젝트 모집
@@ -77,7 +106,7 @@ function Header() {
               className={isActive('/ranking') ? 'font-bold text-black' : 'font-medium text-[#555]'}
             >
               <button
-                onClick={() => navigate('/ranking')}
+                onClick={handleRankingClick}
                 className="bg-none border-none text-lg px-3 py-2 cursor-pointer"
               >
                 랭킹
@@ -90,7 +119,7 @@ function Header() {
         <div className="flex items-center gap-4">
           <button
             className="bg-white px-5 py-2 rounded-full text-[1.05rem] font-medium cursor-pointer flex items-center gap-1 text-black"
-            onClick={() => navigate('/login')}
+            onClick={() => navigate('/signin')}
           >
             로그인 <span className="text-base">〉</span>
           </button>
@@ -106,19 +135,19 @@ function Header() {
               <div className="absolute top-12 right-0 bg-white border border-[#ddd] rounded-lg shadow-lg flex flex-col py-2 z-50 min-w-[160px]">
                 <button
                   className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
-                  onClick={() => alert('계정설정')}
+                  onClick={handleAccountSettingsClick}
                 >
                   계정설정
                 </button>
                 <button
                   className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
-                  onClick={() => alert('문의하기')}
+                  onClick={handleContactClick}
                 >
                   문의하기
                 </button>
                 <button
                   className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
-                  onClick={() => navigate('/mypage')}
+                  onClick={handleMyPageClick}
                 >
                   마이페이지
                 </button>
@@ -133,6 +162,8 @@ function Header() {
           </div>
         </div>
       </div>
+
+      <LockModal isOpen={isLockModalOpen} onClose={closeLockModal} />
     </header>
   );
 }

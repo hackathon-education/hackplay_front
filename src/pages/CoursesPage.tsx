@@ -4,13 +4,26 @@ import { useNavigate } from 'react-router-dom';
 import Backend from '../assets/backend.png';
 import Designer from '../assets/designer.png';
 import Frontend from '../assets/frontend.png';
+import LockModal from '../components/LockModal';
+import { useLockModal } from '../hooks/useLockModal';
 
 function CoursesPage() {
   const [selectedTab, setSelectedTab] = useState('front');
   const navigate = useNavigate();
+  const { isLockModalOpen, closeLockModal, handleLockedItemClick } = useLockModal();
 
   const handleBeginnerClick = () => {
     navigate('/front/beginner');
+  };
+
+  const handleBackendClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    handleLockedItemClick(e);
+  };
+
+  const handleDesignerClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    handleLockedItemClick(e);
   };
 
   return (
@@ -38,7 +51,8 @@ function CoursesPage() {
           className={`bg-white border-2 ${
             selectedTab === 'back' ? 'border-[#007bff]' : 'border-transparent'
           } rounded-2xl p-5 w-[200px] cursor-pointer shadow-[0_4px_8px_rgba(0,0,0,0.05)] transition-all duration-200 ease-in-out text-center hover:-translate-y-1 hover:shadow-[0_6px_12px_rgba(0,0,0,0.1)]`}
-          onClick={() => setSelectedTab('back')}
+          // onClick={() => setSelectedTab('back')}
+          onClick={handleBackendClick}
         >
           <img src={Backend} alt="Back end" className="w-full rounded-xl mb-3" />
           <button
@@ -54,7 +68,8 @@ function CoursesPage() {
           className={`bg-white border-2 ${
             selectedTab === 'design' ? 'border-[#007bff]' : 'border-transparent'
           } rounded-2xl p-5 w-[200px] cursor-pointer shadow-[0_4px_8px_rgba(0,0,0,0.05)] transition-all duration-200 ease-in-out text-center hover:-translate-y-1 hover:shadow-[0_6px_12px_rgba(0,0,0,0.1)]`}
-          onClick={() => setSelectedTab('design')}
+          // onClick={() => setSelectedTab('design')}
+          onClick={handleDesignerClick}
         >
           <img src={Designer} alt="Designer" className="w-full rounded-xl mb-3" />
           <button
@@ -84,6 +99,7 @@ function CoursesPage() {
           </div>
         )}
       </div>
+      <LockModal isOpen={isLockModalOpen} onClose={closeLockModal} />
     </div>
   );
 }
