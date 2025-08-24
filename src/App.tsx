@@ -24,7 +24,7 @@ function App() {
 
             {/* Auth */}
             <Route path="/signup" element={<SignupPage />} />
-            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signin" element={<LoginPage />} />
 
             {/* 단계별 학습 */}
             <Route path="/courses" element={<CoursesPage />} />
