@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import logoIcon from '../assets/logo_icon.png';
+import logo from '../assets/logo.svg';
 import { useLockModal } from '../hooks/useLockModal';
 import LockModal from './LockModal';
 
@@ -62,13 +62,12 @@ function Header() {
     <header className="w-full bg-[#fafafa] border-b border-[#eee] px-10 py-3">
       <div className="flex items-center justify-between max-w-[1200px] mx-auto">
         {/* 로고 */}
-        <div
-          className="flex items-center gap-2 bg-white px-4 py-2 rounded-full cursor-pointer"
+        <button
+          className="w-full max-w-30 sm:max-w-36 md:max-w-40 lg:max-w-44 xl:max-w-[223px] aspect-[223/73] rounded-4xl bg-white px-5 py-3 sm:px-6 sm:py-3.5 md:px-7 md:py-4 lg:px-8 lg:py-5 xl:px-[2.313rem] xl:pt-[1.438rem] xl:pb-[1.378rem]"
           onClick={() => navigate('/')}
         >
-          <img src={logoIcon} alt="logo-icon" className="w-8 h-8" />
-          <span className="text-[#0070f3] font-bold text-xl">hackplay</span>
-        </div>
+          <img src={logo} alt="logo" className="w-full" />
+        </button>
 
         {/* 네비게이션 */}
         <nav>
