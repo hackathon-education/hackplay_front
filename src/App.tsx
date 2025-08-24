@@ -1,37 +1,48 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import MainPage from './pages/MainPage';
-import CoursesPage from './pages/CoursesPage';
-import ProjectsPage from './pages/ProjectsPage';
-import LoginPage from './pages/LoginPage';
-import Header from './components/Header';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+
 import Footer from './components/Footer';
-import FrontBeginnerPage from './pages/FrontBeginnerPage';
-import TeamProjectPage from './pages/TeamProjectPage';
+import Header from './components/Header';
 import BasicLearningPage from './pages/BasicLearningPage';
-import ToolPage from './pages/ToolPage';
-import GitPage from './pages/GitPage';
+import CoursesPage from './pages/CoursesPage';
+import LectureDetailPage from './pages/LectureDetailPage';
+import LectureListPage from './pages/LectureListPage';
+import LectureMainPage from './pages/LectureMainPage';
+import LoginPage from './pages/LoginPage';
+import MainPage from './pages/MainPage';
+import ProjectsPage from './pages/ProjectsPage';
 import SignupPage from './pages/SignupPage';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Header />
-      <main style={{ flexGrow: 1 }}>
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/courses" element={<CoursesPage />} />
-          <Route path="/projects" element={<ProjectsPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/front/beginner" element={<FrontBeginnerPage />} />
-          <Route path="/front/beginner/team-project" element={<TeamProjectPage />} />
-          <Route path="/front/basic-learning" element={<BasicLearningPage />} />
-          <Route path="/front/basic/git" element={<GitPage />} />
-          <Route path="/front/basic/tool" element={<ToolPage />} />
-        </Routes>
-      </main>
-      <Footer />
-    </BrowserRouter>
+    <div className="flex flex-col min-h-screen">
+      <Router>
+        <Header />
+        <main className="flex-grow">
+          <Routes>
+            {/* 메인 */}
+            <Route path="/" element={<MainPage />} />
+
+            {/* Auth */}
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/login" element={<LoginPage />} />
+
+            {/* 단계별 학습 */}
+            <Route path="/courses" element={<CoursesPage />} />
+            <Route path="/courses/:job/:level" element={<LectureListPage />} />
+            <Route path="/courses/:job/:level/:lectureId" element={<LectureMainPage />} />
+            <Route path="/courses/:job/:level/:lectureId/detail" element={<LectureDetailPage />} />
+
+            {/* 기초 학습 */}
+            <Route path="/learning/basic" element={<BasicLearningPage />} />
+            <Route path="/learning/basic/:lectureId" element={<LectureDetailPage />} />
+
+            {/* 팀 프로젝트 */}
+            <Route path="/projects" element={<ProjectsPage />} />
+          </Routes>
+        </main>
+        <Footer />
+      </Router>
+    </div>
   );
 }
 
