@@ -23,3 +23,7 @@ div,
 span {
   line-height: 1;
 }
+
+button {
+  cursor: pointer;
+}
