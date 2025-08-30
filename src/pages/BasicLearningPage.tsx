@@ -4,7 +4,7 @@ function BasicLearningPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="max-w-[600px] mx-auto my-[50px] p-[30px] border-2 border-[#0059b3] rounded-[10px] bg-[#f9f9f9] text-center">
+    <div className="max-w-[600px] mx-auto my-[50px] p-[30px] border-2 border-[#0059b3] rounded-[10px] text-center">
       <h2 className="text-[1.8rem] mb-[30px] text-center">기초학습</h2>
       <div className="flex justify-center gap-10 flex-wrap">
         <div

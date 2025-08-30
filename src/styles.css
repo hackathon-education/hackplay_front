@@ -74,7 +74,7 @@
 }
 
 .page-container {
-  @apply max-w-[600px] mx-auto my-[50px] p-[30px] border-2 border-[#0059b3] rounded-[10px] bg-[#f9f9f9] text-center;
+  @apply max-w-[600px] mx-auto my-[50px] p-[30px] border-2 border-[#0059b3] rounded-[10px] text-center;
 }
 
 .basic-button {

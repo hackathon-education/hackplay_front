@@ -27,7 +27,7 @@ function CoursesPage() {
   };
 
   return (
-    <div className="max-w-[600px] mx-auto my-[50px] p-[30px] border-2 border-[#0059b3] rounded-[10px] bg-[#f9f9f9] text-center">
+    <div className="max-w-[600px] mx-auto my-[50px] p-[30px] border-2 border-[#0059b3] rounded-[10px] text-center">
       <h2 className="text-[1.5rem] font-bold text-center mb-10">나의 포지션 선택</h2>
 
       <div className="flex justify-center gap-10 mb-10 flex-nowrap overflow-x-auto py-2.5">

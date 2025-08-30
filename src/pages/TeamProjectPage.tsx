@@ -23,7 +23,7 @@ function TeamProjectPage() {
           <div className="inline-block bg-[#3498db] text-white text-sm rounded px-3 py-1">MVP</div>
         </div>
 
-        <div className="bg-[#f7f7f7] p-5 rounded-lg text-sm leading-relaxed min-w-[220px]">
+        <div className="p-5 rounded-lg text-sm leading-relaxed min-w-[220px]">
           <div>총 학습 시간: 약 2시간</div>
           <div>강의 수: 6개</div>
           <div>퀴즈: 3개</div>
