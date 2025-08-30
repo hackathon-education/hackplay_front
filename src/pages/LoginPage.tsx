@@ -4,7 +4,7 @@ function LoginPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex justify-center items-start pt-[60px] min-h-[80vh] bg-[#fafafa]">
+    <div className="flex justify-center items-start pt-[60px] min-h-[80vh]">
       <div className="flex flex-col w-[200%] max-w-[500px] px-[50px] mx-auto">
         <h3 className="text-[2.4rem] font-bold mb-[6px] text-[#111]">환영합니다!</h3>
         <p className="text-[2rem] text-[#444] mb-6">서비스 사용을 위해 로그인 해주세요</p>
