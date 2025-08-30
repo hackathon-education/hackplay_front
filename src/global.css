@@ -8,9 +8,26 @@
 html,
 body {
   font-family: 'FreesentationVF', sans-serif;
+
+  color: var(--color-black);
+  background-color: var(--color-gray-50);
+
+  height: 100%;
+  margin: 0;
+  box-sizing: border-box;
+
+  overflow-wrap: break-word; /* 긴 단어 줄바꿈 */
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: var(--color-black);
+  -webkit-text-size-adjust: 100%; /* iOS/Safari에서 텍스트 자동 확대 방지 */
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+  -webkit-tap-highlight-color: transparent; /* 모바일 터치 시 하이라이트 제거 */
 }
 
 h1,
