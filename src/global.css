@@ -10,6 +10,7 @@ body {
   font-family: 'FreesentationVF', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: var(--color-black);
 }
 
 h1,

@@ -72,7 +72,7 @@ function Header() {
         {/* 네비게이션 */}
         <nav>
           <ul className="flex gap-8 list-none bg-white px-8 py-2 rounded-full border border-[#eee]">
-            <li className={isActive('/') ? 'font-bold text-black' : 'font-medium text-[#555]'}>
+            <li className={isActive('/') ? 'font-bold' : 'font-medium text-[#555]'}>
               <button
                 onClick={() => navigate('/')}
                 className="bg-none border-none text-lg px-3 py-2 cursor-pointer"
@@ -81,7 +81,7 @@ function Header() {
               </button>
             </li>
             <li
-              className={isActive('/courses') ? 'font-bold text-black' : 'font-medium text-[#555]'}
+              className={isActive('/courses') ? 'font-bold' : 'font-medium text-[#555]'}
             >
               <button
                 onClick={() => navigate('/courses')}
@@ -91,7 +91,7 @@ function Header() {
               </button>
             </li>
             <li
-              className={isActive('/projects') ? 'font-bold text-black' : 'font-medium text-[#555]'}
+              className={isActive('/projects') ? 'font-bold' : 'font-medium text-[#555]'}
             >
               <button
                 // onClick={() => navigate('/projects')}
@@ -102,7 +102,7 @@ function Header() {
               </button>
             </li>
             <li
-              className={isActive('/ranking') ? 'font-bold text-black' : 'font-medium text-[#555]'}
+              className={isActive('/ranking') ? 'font-bold' : 'font-medium text-[#555]'}
             >
               <button
                 onClick={handleRankingClick}
@@ -117,7 +117,7 @@ function Header() {
         {/* 우측 액션 */}
         <div className="flex items-center gap-4">
           <button
-            className="bg-white px-5 py-2 rounded-full text-[1.05rem] font-medium cursor-pointer flex items-center gap-1 text-black"
+            className="bg-white px-5 py-2 rounded-full text-[1.05rem] font-medium cursor-pointer flex items-center gap-1"
             onClick={() => navigate('/signin')}
           >
             로그인 <span className="text-base">〉</span>

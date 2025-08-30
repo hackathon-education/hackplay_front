@@ -4,7 +4,7 @@ function MainPage() {
   return (
     <div className="w-full mx-auto pt-16 sm:pt-20 md:pt-24 lg:pt-28 xl:pt-[8.125rem] text-center px-4 sm:px-6 md:px-8 lg: px-10 xl:px-[12.375rem]">
       <header>
-        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-[3.384rem] font-590 text-black">
+        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-[3.384rem] font-590">
           웹 개발 입문부터 실전 프로젝트까지!
           <br />
           <span className="block mt-[0.188rem]">체계적으로 성장할 수 있는 실습형 학습 플랫폼</span>
