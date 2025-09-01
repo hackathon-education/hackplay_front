@@ -59,7 +59,7 @@ const Header = () => {
   }, [isMenuOpen]);
 
   return (
-    <header className="w-full border-b border-[#eee] px-10 py-3">
+    <header className="bg-gray-50 w-full z-nav">
       <div className="flex items-center justify-between max-w-[1200px] mx-auto">
         {/* 로고 */}
         <button
