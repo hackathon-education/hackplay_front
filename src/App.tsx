@@ -14,7 +14,7 @@ import SignupPage from './pages/SignupPage';
 
 function App() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div>
       <Router>
         <Header />
         <main className="flex-grow">
