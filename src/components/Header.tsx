@@ -5,7 +5,7 @@ import logo from '../assets/logo.svg';
 import { useLockModal } from '../hooks/useLockModal';
 import LockModal from './LockModal';
 
-function Header() {
+const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -80,9 +80,7 @@ function Header() {
                 소개
               </button>
             </li>
-            <li
-              className={isActive('/courses') ? 'font-bold' : 'font-medium text-[#555]'}
-            >
+            <li className={isActive('/courses') ? 'font-bold' : 'font-medium text-[#555]'}>
               <button
                 onClick={() => navigate('/courses')}
                 className="bg-none border-none text-lg px-3 py-2 cursor-pointer"
@@ -90,9 +88,7 @@ function Header() {
                 단계별 학습
               </button>
             </li>
-            <li
-              className={isActive('/projects') ? 'font-bold' : 'font-medium text-[#555]'}
-            >
+            <li className={isActive('/projects') ? 'font-bold' : 'font-medium text-[#555]'}>
               <button
                 // onClick={() => navigate('/projects')}
                 onClick={handleProjectsClick}
@@ -101,9 +97,7 @@ function Header() {
                 프로젝트 모집
               </button>
             </li>
-            <li
-              className={isActive('/ranking') ? 'font-bold' : 'font-medium text-[#555]'}
-            >
+            <li className={isActive('/ranking') ? 'font-bold' : 'font-medium text-[#555]'}>
               <button
                 onClick={handleRankingClick}
                 className="bg-none border-none text-lg px-3 py-2 cursor-pointer"
@@ -165,6 +159,6 @@ function Header() {
       <LockModal isOpen={isLockModalOpen} onClose={closeLockModal} />
     </header>
   );
-}
+};
 
 export default Header;
