@@ -60,17 +60,19 @@ const Header = () => {
 
   return (
     <header className="bg-gray-50 w-full z-nav">
-      <div className="flex items-center justify-between max-w-[1200px] mx-auto">
+      <div className="flex mx-auto w-full h-[5.625rem] max-w-[1782px]">
+        {/* items-center justify-between */}
         {/* 로고 */}
         <button
-          className="w-full max-w-30 sm:max-w-36 md:max-w-40 lg:max-w-44 xl:max-w-[223px] aspect-[223/73] rounded-4xl bg-white px-5 py-3 sm:px-6 sm:py-3.5 md:px-7 md:py-4 lg:px-8 lg:py-5 xl:px-[2.313rem] xl:pt-[1.438rem] xl:pb-[1.378rem]"
+          className="mr-[1.813rem]"
+          // className="w-full max-w-30 sm:max-w-36 md:max-w-40 lg:max-w-44 xl:max-w-[223px] aspect-[223/73] rounded-4xl bg-white px-5 py-3 sm:px-6 sm:py-3.5 md:px-7 md:py-4 lg:px-8 lg:py-5 xl:px-[2.313rem] xl:pt-[1.438rem] xl:pb-[1.378rem]"
           onClick={() => navigate('/')}
         >
           <img src={logo} alt="logo" className="w-full" />
         </button>
 
         {/* 네비게이션 */}
-        <nav>
+        <nav className="mr-4">
           <ul className="flex gap-8 list-none bg-white px-8 py-2 rounded-full border border-[#eee]">
             <li className={isActive('/') ? 'font-bold' : 'font-medium text-[#555]'}>
               <button
@@ -109,13 +111,18 @@ const Header = () => {
         </nav>
 
         {/* 우측 액션 */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center">
+          <button className="mr-5">학습 이어하기</button>
+
           <button
-            className="bg-white px-5 py-2 rounded-full text-[1.05rem] font-medium cursor-pointer flex items-center gap-1"
+            className="mr-[1.563rem]"
+            // className="bg-white px-5 py-2 rounded-full text-[1.05rem] font-medium cursor-pointer flex items-center gap-1"
             onClick={() => navigate('/signin')}
           >
             로그인 <span className="text-base">〉</span>
           </button>
+
+          <button className="mr-7">profile</button>
 
           <div className="relative" ref={menuRef}>
             <button
