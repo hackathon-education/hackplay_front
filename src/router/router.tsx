@@ -1,15 +1,15 @@
 import { Route, Routes } from 'react-router-dom';
 
-import { ROUTES } from '../constants/routes';
-import BasicLearningPage from '../pages/BasicLearningPage';
-import CoursesPage from '../pages/CoursesPage';
-import LectureDetailPage from '../pages/LectureDetailPage';
-import LectureListPage from '../pages/LectureListPage';
-import LectureMainPage from '../pages/LectureMainPage';
-import LoginPage from '../pages/LoginPage';
-import MainPage from '../pages/MainPage';
-import ProjectsPage from '../pages/ProjectsPage';
-import SignupPage from '../pages/SignupPage';
+import { ROUTES } from '@/constants/routes';
+import BasicLearningPage from '@/pages/BasicLearningPage';
+import CoursesPage from '@/pages/CoursesPage';
+import LectureDetailPage from '@/pages/LectureDetailPage';
+import LectureListPage from '@/pages/LectureListPage';
+import LectureMainPage from '@/pages/LectureMainPage';
+import LoginPage from '@/pages/LoginPage';
+import MainPage from '@/pages/MainPage';
+import ProjectsPage from '@/pages/ProjectsPage';
+import SignupPage from '@/pages/SignupPage';
 
 const Router = () => {
   return (
