@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 
-import logo from '../assets/logo.svg';
-import { useLockModal } from '../hooks/useLockModal';
+import logo from '@/assets/logo.svg';
+import { NAV_ITEMS } from '@/constants/menuData';
+import { ROUTES } from '@/constants/routes';
+import { useLockModal } from '@/hooks/useLockModal';
+
 import LockModal from './LockModal';
 
 const Header = () => {
@@ -11,8 +14,6 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const { isLockModalOpen, closeLockModal, handleLockedItemClick } = useLockModal();
-
-  const isActive = (path: string) => location.pathname === path;
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
@@ -59,20 +60,32 @@ const Header = () => {
   }, [isMenuOpen]);
 
   return (
-    <header className="bg-gray-50 w-full z-nav">
-      <div className="flex mx-auto w-full h-[5.625rem] max-w-[1782px]">
-        {/* items-center justify-between */}
+    <header className="bg-gray-50 w-full z-nav pt-[2.188rem]">
+      <nav className="flex mx-auto w-full h-[5.625rem] max-w-[1782px] items-center">
+        {/* justify-between */}
+
         {/* 로고 */}
-        <button
-          className="mr-[1.813rem]"
-          // className="w-full max-w-30 sm:max-w-36 md:max-w-40 lg:max-w-44 xl:max-w-[223px] aspect-[223/73] rounded-4xl bg-white px-5 py-3 sm:px-6 sm:py-3.5 md:px-7 md:py-4 lg:px-8 lg:py-5 xl:px-[2.313rem] xl:pt-[1.438rem] xl:pb-[1.378rem]"
-          onClick={() => navigate('/')}
+        <NavLink
+          to={ROUTES.MAIN}
+          className="mr-[1.813rem] flex items-center overflow-hidden w-[13.938rem] h-[4.563rem] rounded-4xl bg-white pt-[1.438rem] px-[2.313rem] pb-[1.378rem]"
         >
-          <img src={logo} alt="logo" className="w-full" />
-        </button>
+          <img src={logo} alt="logo" className="object-contain" />
+        </NavLink>
 
         {/* 네비게이션 */}
-        <nav className="mr-4">
+        <ul>
+          {NAV_ITEMS.map((item) => (
+            <li key={item.label}>
+              {item.locked ? (
+                <button onClick={handleLockedItemClick}>{item.label}</button>
+              ) : (
+                <NavLink to={item.path ?? '#'}>{item.label}</NavLink>
+              )}
+            </li>
+          ))}
+        </ul>
+
+        {/* <nav className="mr-4">
           <ul className="flex gap-8 list-none bg-white px-8 py-2 rounded-full border border-[#eee]">
             <li className={isActive('/') ? 'font-bold' : 'font-medium text-[#555]'}>
               <button
@@ -108,7 +121,7 @@ const Header = () => {
               </button>
             </li>
           </ul>
-        </nav>
+        </nav> */}
 
         {/* 우측 액션 */}
         <div className="flex items-center">
@@ -161,7 +174,7 @@ const Header = () => {
             )}
           </div>
         </div>
-      </div>
+      </nav>
 
       <LockModal isOpen={isLockModalOpen} onClose={closeLockModal} />
     </header>
