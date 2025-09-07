@@ -35,7 +35,7 @@ function SignupPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   return (
-    <div className="flex justify-center items-center min-h-[10vh] px-4 py-20 bg-[#f9f9f9]">
+    <div className="flex justify-center items-center min-h-[10vh] px-4 py-20">
       <div className="w-full max-w-md bg-white border border-[#0070f3] rounded-xl shadow-lg px-8 py-10">
         <h2 className="text-2xl font-bold text-center text-[#111] mb-6">회원가입</h2>
 

@@ -1,26 +1,25 @@
 import { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { AiOutlineMenu } from 'react-icons/ai';
+import { HiOutlineUser } from 'react-icons/hi';
+import { TfiAngleRight } from 'react-icons/tfi';
+import { Link, NavLink } from 'react-router-dom';
 
-import logo from '../assets/logo.svg';
-import { useLockModal } from '../hooks/useLockModal';
+import logo from '@/assets/logo.svg';
+import { NAV_ITEMS } from '@/constants/menuData';
+import { ROUTES } from '@/constants/routes';
+import { useLockModal } from '@/hooks/useLockModal';
+
 import LockModal from './LockModal';
 
-function Header() {
-  const navigate = useNavigate();
-  const location = useLocation();
+const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showHeaderShadow, setShowHeaderShadow] = useState(false);
+
   const menuRef = useRef<HTMLDivElement | null>(null);
   const { isLockModalOpen, closeLockModal, handleLockedItemClick } = useLockModal();
 
-  const isActive = (path: string) => location.pathname === path;
-
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
-  };
-
-  const handleRankingClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    handleLockedItemClick(e);
   };
 
   const handleMyPageClick = (e: React.MouseEvent) => {
@@ -38,10 +37,27 @@ function Header() {
     handleLockedItemClick(e);
   };
 
-  const handleProjectsClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    handleLockedItemClick(e);
-  };
+  // 스크롤 감지
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY =
+        window.scrollY ||
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop ||
+        0;
+
+      setShowHeaderShadow(scrollY > 0);
+    };
+
+    handleScroll();
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -59,112 +75,106 @@ function Header() {
   }, [isMenuOpen]);
 
   return (
-    <header className="w-full bg-[#fafafa] border-b border-[#eee] px-10 py-3">
-      <div className="flex items-center justify-between max-w-[1200px] mx-auto">
-        {/* 로고 */}
-        <button
-          className="w-full max-w-30 sm:max-w-36 md:max-w-40 lg:max-w-44 xl:max-w-[223px] aspect-[223/73] rounded-4xl bg-white px-5 py-3 sm:px-6 sm:py-3.5 md:px-7 md:py-4 lg:px-8 lg:py-5 xl:px-[2.313rem] xl:pt-[1.438rem] xl:pb-[1.378rem]"
-          onClick={() => navigate('/')}
-        >
-          <img src={logo} alt="logo" className="w-full" />
-        </button>
+    <>
+      {/* 상단 여백 */}
+      <div className="bg-gray-50 w-full h-[2.188rem]"></div>
 
-        {/* 네비게이션 */}
-        <nav>
-          <ul className="flex gap-8 list-none bg-white px-8 py-2 rounded-full border border-[#eee]">
-            <li className={isActive('/') ? 'font-bold text-black' : 'font-medium text-[#555]'}>
-              <button
-                onClick={() => navigate('/')}
-                className="bg-none border-none text-lg px-3 py-2 cursor-pointer"
-              >
-                소개
-              </button>
-            </li>
-            <li
-              className={isActive('/courses') ? 'font-bold text-black' : 'font-medium text-[#555]'}
-            >
-              <button
-                onClick={() => navigate('/courses')}
-                className="bg-none border-none text-lg px-3 py-2 cursor-pointer"
-              >
-                단계별 학습
-              </button>
-            </li>
-            <li
-              className={isActive('/projects') ? 'font-bold text-black' : 'font-medium text-[#555]'}
-            >
-              <button
-                // onClick={() => navigate('/projects')}
-                onClick={handleProjectsClick}
-                className="bg-none border-none text-lg px-3 py-2 cursor-pointer"
-              >
-                프로젝트 모집
-              </button>
-            </li>
-            <li
-              className={isActive('/ranking') ? 'font-bold text-black' : 'font-medium text-[#555]'}
-            >
-              <button
-                onClick={handleRankingClick}
-                className="bg-none border-none text-lg px-3 py-2 cursor-pointer"
-              >
-                랭킹
-              </button>
-            </li>
-          </ul>
-        </nav>
-
-        {/* 우측 액션 */}
-        <div className="flex items-center gap-4">
-          <button
-            className="bg-white px-5 py-2 rounded-full text-[1.05rem] font-medium cursor-pointer flex items-center gap-1 text-black"
-            onClick={() => navigate('/signin')}
+      {/* 헤더 */}
+      <header
+        className={`sticky top-0 z-nav bg-gray-50 w-full transition-shadow ${
+          showHeaderShadow ? 'shadow-4' : ''
+        }`}
+      >
+        <nav className="flex mx-auto w-full h-[5.625rem] max-w-[1782px] items-center py-[0.531rem]">
+          {/* 로고 */}
+          <NavLink
+            to={ROUTES.MAIN}
+            className="mr-[1.813rem] flex items-center overflow-hidden w-full max-w-[13.938rem] h-[4.563rem] rounded-4xl bg-white pt-[1.438rem] px-[2.313rem] pb-[1.378rem]"
           >
-            로그인 <span className="text-base">〉</span>
-          </button>
+            <img src={logo} alt="logo" className="object-contain" />
+          </NavLink>
 
-          <div className="relative" ref={menuRef}>
-            <button
-              className="bg-[#4da3ff] text-white w-10 h-10 rounded-full text-lg cursor-pointer flex items-center justify-center"
-              onClick={toggleMenu}
-            >
-              ☰
+          {/* 내비게이션 */}
+          <ul className="flex w-full max-w-[60.25rem] h-full mr-4 px-[4.281rem] rounded-4xl bg-white shadow-1 text-gray-600 justify-between">
+            {NAV_ITEMS.map((item) => (
+              <li key={item.label} className="h-full flex items-center tracking-[0.04em]">
+                {item.locked ? (
+                  <button onClick={handleLockedItemClick} className="h-full">
+                    {item.label}
+                  </button>
+                ) : (
+                  <NavLink
+                    to={item.path ?? '#'}
+                    className="h-full flex items-center aria-[current=page]:text-black"
+                  >
+                    {item.label}
+                  </NavLink>
+                )}
+              </li>
+            ))}
+          </ul>
+
+          {/* 우측 액션 */}
+          <div className="flex w-full max-w-[34.375rem] h-full items-center tracking-[0.04em]">
+            <button className="mr-5 w-full h-full max-w-[11.813rem] bg-white rounded-4xl shadow-1">
+              학습 이어하기
             </button>
-            {isMenuOpen && (
-              <div className="absolute top-12 right-0 bg-white border border-[#ddd] rounded-lg shadow-lg flex flex-col py-2 z-50 min-w-[160px]">
-                <button
-                  className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
-                  onClick={handleAccountSettingsClick}
-                >
-                  계정설정
-                </button>
-                <button
-                  className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
-                  onClick={handleContactClick}
-                >
-                  문의하기
-                </button>
-                <button
-                  className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
-                  onClick={handleMyPageClick}
-                >
-                  마이페이지
-                </button>
-                <button
-                  className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
-                  onClick={() => alert('로그아웃')}
-                >
-                  로그아웃
-                </button>
-              </div>
-            )}
+
+            <Link
+              to={ROUTES.SIGNIN}
+              className="mr-[1.563rem] w-full max-w-[8.875rem] h-full flex items-center justify-between rounded-4xl bg-white shadow-1 pl-[2.125rem] pr-[1.8rem]"
+            >
+              로그인 <TfiAngleRight />
+            </Link>
+
+            <button className="mr-7 flex items-center justify-center w-full max-w-[4.563rem] h-full rounded-4xl shadow-1 bg-blue-300 p-5">
+              <HiOutlineUser className="text-white w-full h-full stroke-1" />
+            </button>
+
+            <div className="relative w-full max-w-[4.563rem] h-full rounded-4xl" ref={menuRef}>
+              <button
+                className="flex items-center justify-center w-full h-full rounded-4xl bg-blue-300 shadow-1"
+                onClick={toggleMenu}
+              >
+                <AiOutlineMenu className="text-white" />
+              </button>
+
+              {isMenuOpen && (
+                <div className="absolute top-12 right-0 bg-white border border-[#ddd] rounded-lg shadow-lg flex flex-col py-2 z-50 min-w-[160px]">
+                  <button
+                    className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
+                    onClick={handleAccountSettingsClick}
+                  >
+                    계정설정
+                  </button>
+                  <button
+                    className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
+                    onClick={handleContactClick}
+                  >
+                    문의하기
+                  </button>
+                  <button
+                    className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
+                    onClick={handleMyPageClick}
+                  >
+                    마이페이지
+                  </button>
+                  <button
+                    className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
+                    onClick={() => alert('로그아웃')}
+                  >
+                    로그아웃
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      </div>
+        </nav>
+      </header>
 
       <LockModal isOpen={isLockModalOpen} onClose={closeLockModal} />
-    </header>
+    </>
   );
-}
+};
 
 export default Header;
