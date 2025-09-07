@@ -13,6 +13,8 @@ import LockModal from './LockModal';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showHeaderShadow, setShowHeaderShadow] = useState(false);
+
   const menuRef = useRef<HTMLDivElement | null>(null);
   const { isLockModalOpen, closeLockModal, handleLockedItemClick } = useLockModal();
 
@@ -35,6 +37,28 @@ const Header = () => {
     handleLockedItemClick(e);
   };
 
+  // 스크롤 감지
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY =
+        window.scrollY ||
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop ||
+        0;
+
+      setShowHeaderShadow(scrollY > 0);
+    };
+
+    handleScroll();
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
@@ -56,7 +80,11 @@ const Header = () => {
       <div className="bg-gray-50 w-full h-[2.188rem]"></div>
 
       {/* 헤더 */}
-      <header className="sticky top-0 z-nav bg-gray-50 w-full">
+      <header
+        className={`sticky top-0 z-nav bg-gray-50 w-full transition-shadow ${
+          showHeaderShadow ? 'shadow-4' : ''
+        }`}
+      >
         <nav className="flex mx-auto w-full h-[5.625rem] max-w-[1782px] items-center py-[0.531rem]">
           {/* 로고 */}
           <NavLink
