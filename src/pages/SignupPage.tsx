@@ -104,8 +104,6 @@ function SignupPage() {
             <option value="디자인">디자인</option>
             <option value="frontend">Frontend</option>
             <option value="backend">Backend</option>
-            <option value="마케팅">마케팅</option>
-            <option value="ai">AI/데이터</option>
           </select>
 
           {/* 체크박스 */}
