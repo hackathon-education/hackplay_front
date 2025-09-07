@@ -94,12 +94,12 @@ function SignupPage() {
             </button>
           </div>
 
-          {/* 직군 선택 */}
+          {/* 직무 선택 */}
           <select
             required
             className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base appearance-none focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
           >
-            <option value="">직군 선택</option>
+            <option value="">직무 선택</option>
             <option value="기획">기획</option>
             <option value="디자인">디자인</option>
             <option value="frontend">Frontend</option>
