@@ -50,31 +50,11 @@ function SignupPage() {
             />
           </div>
 
-          {/* 이름 */}
-          <div className="relative flex items-center">
-            <input
-              type="text"
-              placeholder="이름"
-              required
-              className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
-            />
-          </div>
-
           {/* 닉네임 */}
           <div className="relative flex items-center">
             <input
               type="text"
               placeholder="닉네임"
-              required
-              className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
-            />
-          </div>
-
-          {/* 전화번호 */}
-          <div className="relative flex items-center">
-            <input
-              type="tel"
-              placeholder="전화번호"
               required
               className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
             />
