@@ -12,7 +12,7 @@ type FormValues = {
   agreeTerms: boolean;
 };
 
-function SignupPage() {
+const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -55,7 +55,11 @@ function SignupPage() {
               className="absolute right-3 p-1 hover:opacity-70"
               onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword ? <TbEyeOff className="w-5 h-5 text-gray-600" /> : <TbEye className="w-5 h-5 text-gray-600" />}
+              {showPassword ? (
+                <TbEyeOff className="w-5 h-5 text-gray-600" />
+              ) : (
+                <TbEye className="w-5 h-5 text-gray-600" />
+              )}
             </button>
           </div>
 
@@ -72,7 +76,11 @@ function SignupPage() {
               className="absolute right-3 p-1 hover:opacity-70"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             >
-              {showConfirmPassword ? <TbEyeOff className="w-5 h-5 text-gray-600" /> : <TbEye className="w-5 h-5 text-gray-600" />}
+              {showConfirmPassword ? (
+                <TbEyeOff className="w-5 h-5 text-gray-600" />
+              ) : (
+                <TbEye className="w-5 h-5 text-gray-600" />
+              )}
             </button>
           </div>
 
@@ -110,6 +118,6 @@ function SignupPage() {
       </div>
     </div>
   );
-}
+};
 
 export default SignupPage;
