@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { TbEye, TbEyeOff } from 'react-icons/tb';
 
 type FormValues = {
   email: string;
@@ -10,36 +11,6 @@ type FormValues = {
   agreeMail: boolean;
   agreeTerms: boolean;
 };
-
-type EyeIconProps = {
-  visible: boolean;
-};
-
-const EyeIcon: React.FC<EyeIconProps> = ({ visible }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="w-5 h-5 text-gray-600"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    {visible ? (
-      <>
-        <path d="M1 1l22 22" stroke="gray" />
-        <path d="M17.94 17.94A10.94 10.94 0 0112 19c-5.52 0-10.27-3.94-11-9 0-1.63 1.5-4 3.56-5.94" />
-        <path d="M10.29 10.29a3 3 0 014.24 4.24" />
-      </>
-    ) : (
-      <>
-        <path d="M1 12S5 5 12 5s11 7 11 7-4 7-11 7S1 12 1 12z" />
-        <circle cx="12" cy="12" r="3" />
-      </>
-    )}
-  </svg>
-);
 
 function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -84,7 +55,7 @@ function SignupPage() {
               className="absolute right-3 p-1 hover:opacity-70"
               onClick={() => setShowPassword(!showPassword)}
             >
-              <EyeIcon visible={showPassword} />
+              {showPassword ? <TbEyeOff className="w-5 h-5 text-gray-600" /> : <TbEye className="w-5 h-5 text-gray-600" />}
             </button>
           </div>
 
@@ -101,7 +72,7 @@ function SignupPage() {
               className="absolute right-3 p-1 hover:opacity-70"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             >
-              <EyeIcon visible={showConfirmPassword} />
+              {showConfirmPassword ? <TbEyeOff className="w-5 h-5 text-gray-600" /> : <TbEye className="w-5 h-5 text-gray-600" />}
             </button>
           </div>
 
