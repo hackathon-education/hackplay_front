@@ -1,4 +1,15 @@
 import { useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+
+type FormValues = {
+  email: string;
+  nickname: string;
+  password: string;
+  confirmPassword: string;
+  job: string;
+  agreeMail: boolean;
+  agreeTerms: boolean;
+};
 
 type EyeIconProps = {
   visible: boolean;
