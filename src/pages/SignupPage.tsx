@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { TbEye, TbEyeOff } from 'react-icons/tb';
 
+import { axiosInstance } from '@/api/axios';
+
 type FormValues = {
   email: string;
   nickname: string;
   password: string;
   confirmPassword: string;
-  job: string;
+  role: string;
   agreeMail: boolean;
   agreeTerms: boolean;
 };
@@ -15,6 +17,37 @@ type FormValues = {
 const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const {
+    register,
+    watch,
+    getValues,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>();
+
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    try {
+      const response = await axiosInstance.post('/v1/auth/signup', {
+        nickname: data.nickname,
+        email: data.email,
+        role: data.role,
+        password: data.password,
+        confirmPassword: data.confirmPassword,
+        agreeMail: data.agreeMail,
+        agreeTerms: data.agreeTerms,
+      });
+
+      alert('회원가입이 완료되었습니다!');
+      // TODO: 회원가입 완료 후 페이지 이동 또는 상태 처리
+    } catch (error: any) {
+      if (error.response) {
+        alert(`회원가입 실패: ${error.response.data.message || '알 수 없는 오류'}`);
+      } else {
+        alert('회원가입 중 오류가 발생했습니다.');
+      }
+    }
+  };
 
   return (
     <div className="flex justify-center items-center min-h-[10vh] px-4 py-20">
@@ -90,10 +123,10 @@ const SignupPage = () => {
             className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base appearance-none focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
           >
             <option value="">직무 선택</option>
-            <option value="기획">기획</option>
-            <option value="디자인">디자인</option>
-            <option value="frontend">Frontend</option>
-            <option value="backend">Backend</option>
+            <option value="PLAN">기획</option>
+            <option value="DESIGN">디자인</option>
+            <option value="FRONT">Frontend</option>
+            <option value="BACK">Backend</option>
           </select>
 
           {/* 체크박스 */}
