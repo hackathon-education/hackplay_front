@@ -1,8 +1,8 @@
-import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import { axiosInstance } from '@/api/axios';
+import { ROUTES } from '@/constants/routes';
 
 interface FormValues {
   email: string;
@@ -34,7 +34,7 @@ const LoginPage = () => {
       localStorage.setItem('profileImageUrl', result.data.profileImageUrl);
       localStorage.setItem('role', result.data.role);
 
-      // 직전 접근 시도 페이지로 이동
+      navigate(ROUTES.MAIN);
     } catch (error: any) {
       if (error.response?.data?.message) {
         alert(error.response.data.message);
@@ -113,7 +113,7 @@ const LoginPage = () => {
           처음 방문하셨나요?
           <button
             className="bg-none border-none text-[#0070f3] font-semibold text-[0.95rem] ml-[6px] cursor-pointer underline"
-            onClick={() => navigate('/signup')}
+            onClick={() => navigate(ROUTES.SIGNUP)}
           >
             회원 가입
           </button>
