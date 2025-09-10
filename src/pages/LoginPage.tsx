@@ -10,8 +10,8 @@ function LoginPage() {
         <p className="text-[2rem] text-[#444] mb-6">서비스 사용을 위해 로그인 해주세요</p>
         <form className="flex flex-col gap-[14px] mt-5 mb-7">
           <input
-            type="text"
-            placeholder="아이디"
+            type="email"
+            placeholder="이메일"
             required
             className="p-[14px] text-[1.05rem] border border-[#ccc] rounded-[6px]"
           />
