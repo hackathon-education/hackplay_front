@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { TbEye, TbEyeOff } from 'react-icons/tb';
+import { useNavigate } from 'react-router-dom';
 
 import { axiosInstance } from '@/api/axios';
+import { ROUTES } from '@/constants/routes';
 
 type FormValues = {
   email: string;
@@ -15,6 +17,8 @@ type FormValues = {
 };
 
 const SignupPage = () => {
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -37,7 +41,7 @@ const SignupPage = () => {
     try {
       const response = await axiosInstance.post('/v1/auth/signup', data);
       alert('회원가입이 완료되었습니다!');
-      // TODO: 회원가입 완료 후 페이지 이동 또는 상태 처리
+      navigate(ROUTES.SIGNIN);
     } catch (error: any) {
       if (error.response) {
         alert(`회원가입 실패: ${error.response.data.message || '알 수 없는 오류'}`);
