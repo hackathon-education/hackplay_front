@@ -1,5 +1,8 @@
+import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+
+import { axiosInstance } from '@/api/axios';
 
 interface FormValues {
   email: string;
@@ -20,7 +23,25 @@ const LoginPage = () => {
   const canSubmit = isValid;
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    // 로그인 API 호출
+    try {
+      const response = await axiosInstance.post('/v1/auth/signin', data);
+
+      const result = response.data;
+
+      sessionStorage.setItem('accessToken', result.data.accessToken);
+      localStorage.setItem('nickname', result.data.nickname);
+      localStorage.setItem('email', result.data.email);
+      localStorage.setItem('profileImageUrl', result.data.profileImageUrl);
+      localStorage.setItem('role', result.data.role);
+
+      // 직전 접근 시도 페이지로 이동
+    } catch (error: any) {
+      if (error.response?.data?.message) {
+        alert(error.response.data.message);
+      } else {
+        alert('서버와 연결할 수 없습니다. 잠시 후 다시 시도해주세요.');
+      }
+    }
   };
 
   return (
