@@ -104,49 +104,51 @@ const SignupPage = () => {
           </div>
 
           {/* 비밀번호 */}
-          <div className="relative flex items-center">
-            <input
-              type={showPassword ? 'text' : 'password'}
-              placeholder="비밀번호"
-              maxLength={64}
-              {...register('password', {
-                required: '비밀번호를 입력해주세요',
-                validate: (value) => {
-                  if (value.length < 8 || value.length > 64) {
-                    return '비밀번호는 8~64자 사이여야 합니다.';
-                  }
-                  if (!/^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+$/.test(value)) {
-                    return '비밀번호는 영문, 숫자, 특수문자만 사용할 수 있습니다.';
-                  }
+          <div className="relative flex flex-col">
+            <div className="flex items-center">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                placeholder="비밀번호"
+                maxLength={64}
+                {...register('password', {
+                  required: '비밀번호를 입력해주세요',
+                  validate: (value) => {
+                    if (value.length < 8 || value.length > 64) {
+                      return '비밀번호는 8~64자 사이여야 합니다.';
+                    }
+                    if (!/^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+$/.test(value)) {
+                      return '비밀번호는 영문, 숫자, 특수문자만 사용할 수 있습니다.';
+                    }
 
-                  const hasLetter = /[a-zA-Z]/.test(value);
-                  const hasNumber = /[0-9]/.test(value);
-                  const hasSpecial = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(value);
+                    const hasLetter = /[a-zA-Z]/.test(value);
+                    const hasNumber = /[0-9]/.test(value);
+                    const hasSpecial = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(value);
 
-                  const count = [hasLetter, hasNumber, hasSpecial].filter(Boolean).length;
-                  if (count < 2) {
-                    return '비밀번호는 영문, 숫자, 특수문자 중 2가지 이상을 포함해야 합니다.';
-                  }
+                    const count = [hasLetter, hasNumber, hasSpecial].filter(Boolean).length;
+                    if (count < 2) {
+                      return '비밀번호는 영문, 숫자, 특수문자 중 2가지 이상을 포함해야 합니다.';
+                    }
 
-                  return true;
-                },
-                onChange: () => {
-                  trigger('confirmPassword');
-                },
-              })}
-              className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base pr-10 focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
-            />
-            <button
-              type="button"
-              className="absolute right-3 p-1 hover:opacity-70"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? (
-                <TbEyeOff className="w-5 h-5 text-gray-600" />
-              ) : (
-                <TbEye className="w-5 h-5 text-gray-600" />
-              )}
-            </button>
+                    return true;
+                  },
+                  onChange: () => {
+                    trigger('confirmPassword');
+                  },
+                })}
+                className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base pr-10 focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
+              />
+              <button
+                type="button"
+                className="absolute right-3 p-1 hover:opacity-70"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <TbEyeOff className="w-5 h-5 text-gray-600" />
+                ) : (
+                  <TbEye className="w-5 h-5 text-gray-600" />
+                )}
+              </button>
+            </div>
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
             )}
