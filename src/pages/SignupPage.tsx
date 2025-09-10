@@ -23,13 +23,15 @@ const SignupPage = () => {
     watch,
     getValues,
     handleSubmit,
-    formState: { errors },
-  } = useForm<FormValues>();
+    trigger,
+    formState: { errors, isValid },
+  } = useForm<FormValues>({
+    mode: 'onChange',
+  });
 
   const password = watch('password');
-  const confirmPassword = watch('confirmPassword');
 
-  const passwordsMatch = confirmPassword && password !== confirmPassword;
+  const canSubmit = isValid;
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
@@ -80,7 +82,12 @@ const SignupPage = () => {
             <input
               type={showPassword ? 'text' : 'password'}
               placeholder="비밀번호"
-              {...register('password', { required: '비밀번호를 입력해주세요' })}
+              {...register('password', {
+                required: '비밀번호를 입력해주세요',
+                onChange: () => {
+                  trigger('confirmPassword');
+                },
+              })}
               className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base pr-10 focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
             />
             <button
@@ -105,7 +112,11 @@ const SignupPage = () => {
               <input
                 type={showConfirmPassword ? 'text' : 'password'}
                 placeholder="비밀번호 확인"
-                {...register('confirmPassword', { required: '비밀번호 확인을 입력해주세요' })}
+                {...register('confirmPassword', {
+                  required: true,
+                  validate: (value) =>
+                    value === getValues('password') || '비밀번호가 일치하지 않습니다.',
+                })}
                 className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base pr-10 focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
               />
               <button
@@ -120,10 +131,7 @@ const SignupPage = () => {
                 )}
               </button>
             </div>
-            {passwordsMatch && (
-              <p className="text-red-500 text-sm mt-1">비밀번호가 일치하지 않습니다.</p>
-            )}
-            {errors.confirmPassword && (
+            {errors.confirmPassword?.type === 'validate' && (
               <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>
             )}
           </div>
@@ -143,10 +151,7 @@ const SignupPage = () => {
 
           {/* 체크박스 */}
           <label className="flex items-center gap-2 text-sm text-gray-700">
-            <input
-              type="checkbox"
-              {...register('agreeMail', { required: '메일 동의가 필요합니다' })}
-            />
+            <input type="checkbox" {...register('agreeMail')} />
             안내 메일 수신에 동의합니다
           </label>
           {errors.agreeMail && (
@@ -167,7 +172,10 @@ const SignupPage = () => {
           {/* 회원가입 버튼 */}
           <button
             type="submit"
-            className="bg-[#0052cc] hover:bg-[#003f9e] text-white font-semibold text-lg py-3 rounded-lg transition-colors"
+            disabled={!canSubmit}
+            className={`bg-[#0052cc] text-white font-semibold text-lg py-3 rounded-lg transition-colors ${
+              canSubmit ? 'hover:bg-[#003f9e]' : 'cursor-not-allowed'
+            }`}
           >
             회원가입
           </button>
