@@ -69,11 +69,26 @@ const SignupPage = () => {
           </div>
 
           {/* 닉네임 */}
-          <div className="relative flex items-center">
+          <div className="relative flex flex-col">
             <input
               type="text"
               placeholder="닉네임"
-              {...register('nickname', { required: '닉네임을 입력해주세요' })}
+              maxLength={30}
+              {...register('nickname', {
+                required: '닉네임을 입력해주세요',
+                minLength: {
+                  value: 2,
+                  message: '닉네임은 최소 2자 이상이어야 합니다.',
+                },
+                maxLength: {
+                  value: 30,
+                  message: '닉네임은 최대 30자까지 가능합니다.',
+                },
+                pattern: {
+                  value: /^[\u1100-\u11FF\u3130-\u318F\uAC00-\uD7A3a-zA-Z\s-]+$/,
+                  message: '닉네임은 한글(완성형+자모), 영문, 공백, 하이픈만 사용할 수 있습니다.',
+                },
+              })}
               className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
             />
             {errors.nickname && (
