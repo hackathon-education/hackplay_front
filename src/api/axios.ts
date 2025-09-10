@@ -1,13 +1,13 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: `${import.meta.env.REACT_APP_SERVER_BASEURL}/api`,
+  baseURL: `${import.meta.env.VITE_SERVER_BASEURL}/api`,
   withCredentials: true,
 });
 
 axiosInstance.interceptors.request.use(
   (request) => {
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.MODE === 'development') {
       console.log('🚀 Axios Request:', {
         method: request.method?.toUpperCase(),
         fullURL: `${request.baseURL}${request.url}`,
@@ -17,7 +17,7 @@ axiosInstance.interceptors.request.use(
     return request;
   },
   (error) => {
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.MODE === 'development') {
       console.error('❌ Axios Request Error:', error);
     }
     return Promise.reject(error);
@@ -26,7 +26,7 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   (response) => {
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.MODE === 'development') {
       console.log('✅ Axios Response:', {
         status: response.status,
         url: response.config.url,
@@ -36,7 +36,7 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.MODE === 'development') {
       console.error('❌ Axios Response Error:', {
         status: error.response?.status,
         statusText: error.response?.statusText,
