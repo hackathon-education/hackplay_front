@@ -58,11 +58,18 @@ const SignupPage = () => {
 
         <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
           {/* 이메일 */}
-          <div className="relative flex items-center">
+          <div className="relative flex flex-col">
             <input
               type="email"
               placeholder="이메일"
-              {...register('email', { required: '이메일을 입력해주세요' })}
+              {...register('email', {
+                required: '이메일을 입력해주세요',
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: '올바른 이메일 형식이 아닙니다.',
+                },
+                // 이메일 중복 검사 API 추가 예정
+              })}
               className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
             />
             {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
