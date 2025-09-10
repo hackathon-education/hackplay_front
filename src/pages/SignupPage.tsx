@@ -1,148 +1,229 @@
 import { useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { TbEye, TbEyeOff } from 'react-icons/tb';
+import { useNavigate } from 'react-router-dom';
 
-type EyeIconProps = {
-  visible: boolean;
+import { axiosInstance } from '@/api/axios';
+import { ROUTES } from '@/constants/routes';
+
+type FormValues = {
+  email: string;
+  nickname: string;
+  password: string;
+  confirmPassword: string;
+  role: string;
+  agreeMail: boolean;
+  agreeTerms: boolean;
 };
 
-const EyeIcon: React.FC<EyeIconProps> = ({ visible }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="w-5 h-5 text-gray-600"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    {visible ? (
-      <>
-        <path d="M1 1l22 22" stroke="gray" />
-        <path d="M17.94 17.94A10.94 10.94 0 0112 19c-5.52 0-10.27-3.94-11-9 0-1.63 1.5-4 3.56-5.94" />
-        <path d="M10.29 10.29a3 3 0 014.24 4.24" />
-      </>
-    ) : (
-      <>
-        <path d="M1 12S5 5 12 5s11 7 11 7-4 7-11 7S1 12 1 12z" />
-        <circle cx="12" cy="12" r="3" />
-      </>
-    )}
-  </svg>
-);
+const SignupPage = () => {
+  const navigate = useNavigate();
 
-function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const {
+    register,
+    watch,
+    getValues,
+    handleSubmit,
+    trigger,
+    formState: { errors, isValid },
+  } = useForm<FormValues>({
+    mode: 'onChange',
+  });
+
+  const password = watch('password');
+
+  const canSubmit = isValid;
+
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    try {
+      const response = await axiosInstance.post('/v1/auth/signup', data);
+      alert('회원가입이 완료되었습니다!');
+      navigate(ROUTES.SIGNIN);
+    } catch (error: any) {
+      if (error.response) {
+        alert(`회원가입 실패: ${error.response.data.message || '알 수 없는 오류'}`);
+      } else {
+        alert('회원가입 중 오류가 발생했습니다.');
+      }
+    }
+  };
 
   return (
     <div className="flex justify-center items-center min-h-[10vh] px-4 py-20">
       <div className="w-full max-w-md bg-white border border-[#0070f3] rounded-xl shadow-lg px-8 py-10">
         <h2 className="text-2xl font-bold text-center text-[#111] mb-6">회원가입</h2>
 
-        <form className="flex flex-col gap-5" onSubmit={(e) => e.preventDefault()}>
+        <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
           {/* 이메일 */}
-          <div className="relative flex items-center">
+          <div className="relative flex flex-col">
             <input
               type="email"
               placeholder="이메일"
-              required
+              {...register('email', {
+                required: '이메일을 입력해주세요',
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: '올바른 이메일 형식이 아닙니다.',
+                },
+                // 이메일 중복 검사 API 추가 예정
+              })}
               className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
             />
-          </div>
-
-          {/* 이름 */}
-          <div className="relative flex items-center">
-            <input
-              type="text"
-              placeholder="이름"
-              required
-              className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
-            />
+            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
           </div>
 
           {/* 닉네임 */}
-          <div className="relative flex items-center">
+          <div className="relative flex flex-col">
             <input
               type="text"
               placeholder="닉네임"
-              required
+              maxLength={30}
+              {...register('nickname', {
+                required: '닉네임을 입력해주세요',
+                minLength: {
+                  value: 2,
+                  message: '닉네임은 최소 2자 이상이어야 합니다.',
+                },
+                maxLength: {
+                  value: 30,
+                  message: '닉네임은 최대 30자까지 가능합니다.',
+                },
+                pattern: {
+                  value: /^[\u1100-\u11FF\u3130-\u318F\uAC00-\uD7A3a-zA-Z\s-]+$/,
+                  message: '닉네임은 한글(완성형+자모), 영문, 공백, 하이픈만 사용할 수 있습니다.',
+                },
+              })}
               className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
             />
-          </div>
-
-          {/* 전화번호 */}
-          <div className="relative flex items-center">
-            <input
-              type="tel"
-              placeholder="전화번호"
-              required
-              className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
-            />
+            {errors.nickname && (
+              <p className="text-red-500 text-sm mt-1">{errors.nickname.message}</p>
+            )}
           </div>
 
           {/* 비밀번호 */}
-          <div className="relative flex items-center">
-            <input
-              type={showPassword ? 'text' : 'password'}
-              placeholder="비밀번호"
-              required
-              className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base pr-10 focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
-            />
-            <button
-              type="button"
-              className="absolute right-3 p-1 hover:opacity-70"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              <EyeIcon visible={showPassword} />
-            </button>
+          <div className="relative flex flex-col">
+            <div className="flex items-center">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                placeholder="비밀번호"
+                maxLength={64}
+                {...register('password', {
+                  required: '비밀번호를 입력해주세요',
+                  validate: (value) => {
+                    if (value.length < 8 || value.length > 64) {
+                      return '비밀번호는 8~64자 사이여야 합니다.';
+                    }
+                    if (!/^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+$/.test(value)) {
+                      return '비밀번호는 영문, 숫자, 특수문자만 사용할 수 있습니다.';
+                    }
+
+                    const hasLetter = /[a-zA-Z]/.test(value);
+                    const hasNumber = /[0-9]/.test(value);
+                    const hasSpecial = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(value);
+
+                    const count = [hasLetter, hasNumber, hasSpecial].filter(Boolean).length;
+                    if (count < 2) {
+                      return '비밀번호는 영문, 숫자, 특수문자 중 2가지 이상을 포함해야 합니다.';
+                    }
+
+                    return true;
+                  },
+                  onChange: () => {
+                    trigger('confirmPassword');
+                  },
+                })}
+                className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base pr-10 focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
+              />
+              <button
+                type="button"
+                className="absolute right-3 p-1 hover:opacity-70"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <TbEyeOff className="w-5 h-5 text-gray-600" />
+                ) : (
+                  <TbEye className="w-5 h-5 text-gray-600" />
+                )}
+              </button>
+            </div>
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+            )}
           </div>
 
           {/* 비밀번호 확인 */}
-          <div className="relative flex items-center">
-            <input
-              type={showConfirmPassword ? 'text' : 'password'}
-              placeholder="비밀번호 확인"
-              required
-              className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base pr-10 focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
-            />
-            <button
-              type="button"
-              className="absolute right-3 p-1 hover:opacity-70"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            >
-              <EyeIcon visible={showConfirmPassword} />
-            </button>
+          <div className="relative flex flex-col">
+            <div className="flex items-center">
+              <input
+                type={showConfirmPassword ? 'text' : 'password'}
+                placeholder="비밀번호 확인"
+                {...register('confirmPassword', {
+                  required: true,
+                  validate: (value) =>
+                    value === getValues('password') || '비밀번호가 일치하지 않습니다.',
+                })}
+                className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base pr-10 focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
+              />
+              <button
+                type="button"
+                className="absolute right-3 p-1 hover:opacity-70"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? (
+                  <TbEyeOff className="w-5 h-5 text-gray-600" />
+                ) : (
+                  <TbEye className="w-5 h-5 text-gray-600" />
+                )}
+              </button>
+            </div>
+            {errors.confirmPassword?.type === 'validate' && (
+              <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>
+            )}
           </div>
 
-          {/* 직군 선택 */}
+          {/* 직무 선택 */}
           <select
-            required
+            {...register('role', { required: '직무를 선택해주세요' })}
             className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base appearance-none focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
           >
-            <option value="">직군 선택</option>
-            <option value="기획">기획</option>
-            <option value="디자인">디자인</option>
-            <option value="frontend">Frontend</option>
-            <option value="backend">Backend</option>
-            <option value="마케팅">마케팅</option>
-            <option value="ai">AI/데이터</option>
+            <option value="">직무 선택</option>
+            <option value="PLAN">기획</option>
+            <option value="DESIGN">디자인</option>
+            <option value="FRONT">Frontend</option>
+            <option value="BACK">Backend</option>
           </select>
+          {errors.role && <p className="text-red-500 text-sm mt-1">{errors.role.message}</p>}
 
           {/* 체크박스 */}
           <label className="flex items-center gap-2 text-sm text-gray-700">
-            <input type="checkbox" required />
+            <input type="checkbox" {...register('agreeMail')} />
             안내 메일 수신에 동의합니다
           </label>
+          {errors.agreeMail && (
+            <p className="text-red-500 text-sm mt-1">{errors.agreeMail.message}</p>
+          )}
 
           <label className="flex items-center gap-2 text-sm text-gray-700">
-            <input type="checkbox" required />
+            <input
+              type="checkbox"
+              {...register('agreeTerms', { required: '약관 동의가 필요합니다' })}
+            />
             이용약관 및 개인정보처리방침에 동의합니다
           </label>
+          {errors.agreeTerms && (
+            <p className="text-red-500 text-sm mt-1">{errors.agreeTerms.message}</p>
+          )}
 
           {/* 회원가입 버튼 */}
           <button
             type="submit"
-            className="bg-[#0052cc] hover:bg-[#003f9e] text-white font-semibold text-lg py-3 rounded-lg transition-colors"
+            disabled={!canSubmit}
+            className={`bg-[#0052cc] text-white font-semibold text-lg py-3 rounded-lg transition-colors ${
+              canSubmit ? 'hover:bg-[#003f9e]' : 'cursor-not-allowed'
+            }`}
           >
             회원가입
           </button>
@@ -150,6 +231,6 @@ function SignupPage() {
       </div>
     </div>
   );
-}
+};
 
 export default SignupPage;
