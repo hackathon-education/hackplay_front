@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { ROUTES } from '@/constants/routes';
+
 import Backend from '../assets/backend.png';
 import Designer from '../assets/designer.png';
 import Frontend from '../assets/frontend.png';
@@ -13,7 +15,7 @@ function CoursesPage() {
   const { isLockModalOpen, closeLockModal, handleLockedItemClick } = useLockModal();
 
   const handleBeginnerClick = () => {
-    navigate('/front/beginner');
+    navigate(ROUTES.COURSES.LECTURE_LIST('fe', 'beginner'));
   };
 
   const handleBackendClick = (e: React.MouseEvent) => {
