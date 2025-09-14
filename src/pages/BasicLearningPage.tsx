@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
+import { ROUTES } from '@/constants/routes';
+
 function BasicLearningPage() {
   const navigate = useNavigate();
 
@@ -9,7 +11,7 @@ function BasicLearningPage() {
       <div className="flex justify-center gap-10 flex-wrap">
         <div
           className="bg-gradient-to-br from-[#74ebd5] to-[#ACB6E5] w-[280px] p-[25px] rounded-[20px] shadow-[0_10px_20px_rgba(0,0,0,0.1)] transition-all duration-200 ease-in-out cursor-pointer text-left text-[#333] relative hover:-translate-y-[5px] hover:shadow-[0_12px_24px_rgba(0,0,0,0.15)]"
-          onClick={() => navigate('/front/basic/git')}
+          onClick={() => navigate(ROUTES.BASIC_LEARNING.LECTURE_DETAIL('git'))}
         >
           <h3 className="mb-2.5 text-[1.3rem]">깃 사용법</h3>
           <p className="text-[0.95rem] text-[#222] mb-[15px]">MVP 개발을 위한 버전 관리 시작하기</p>
@@ -19,7 +21,7 @@ function BasicLearningPage() {
         </div>
         <div
           className="bg-gradient-to-br from-[#74ebd5] to-[#ACB6E5] w-[280px] p-[25px] rounded-[20px] shadow-[0_10px_20px_rgba(0,0,0,0.1)] transition-all duration-200 ease-in-out cursor-pointer text-left text-[#333] relative hover:-translate-y-[5px] hover:shadow-[0_12px_24px_rgba(0,0,0,0.15)]"
-          onClick={() => navigate('/front/basic/tool')}
+          onClick={() => navigate(ROUTES.BASIC_LEARNING.LECTURE_DETAIL('tool'))}
         >
           <h3 className="mb-2.5 text-[1.3rem]">Tool 설정법</h3>
           <p className="text-[0.95rem] text-[#222] mb-[15px]">개발 환경 셋업부터 Vite까지</p>

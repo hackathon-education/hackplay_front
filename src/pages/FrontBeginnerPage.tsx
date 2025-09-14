@@ -1,10 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 
+import { ROUTES } from '@/constants/routes';
+
 function FrontBeginnerPage() {
   const navigate = useNavigate();
 
   const goToTeamProject = () => {
-    navigate('/front/beginner/team-project');
+    navigate(ROUTES.COURSES.LECTURE_MAIN('fe', 'beginner', 'team-project'));
   };
 
   return (
