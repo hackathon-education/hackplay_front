@@ -166,18 +166,7 @@ function CoursesPage() {
           </AnimatePresence>
         </div>
       </div>
-
-      <div className="tab-wrapper">
-        {selectedTab === 'front' && (
-          <div className="level-tab-wrapper">
-            <div className="level-tab level-beginner" onClick={handleBeginnerClick}>
-              초급
-            </div>
-            <div className="level-tab level-intermediate locked">중급 - 추후 개발 🔒</div>
-            <div className="level-tab level-advanced locked">고급 - 추후 개발 🔒</div>
-          </div>
-        )}
-      </div>
+      
       <LockModal isOpen={isLockModalOpen} onClose={closeLockModal} />
     </div>
   );
