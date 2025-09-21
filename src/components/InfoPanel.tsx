@@ -40,23 +40,29 @@ const InfoPanel = ({ type, onClose }: InfoPanelProps) => {
 
   return (
     <motion.div
-      initial={{ x: isLeft ? '-100%' : '100%' }}
-      animate={{ x: 0 }}
-      exit={{ x: isLeft ? '-100%' : '100%' }}
+      initial={{ x: isLeft ? '-20%' : '20%', opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      exit={{ x: isLeft ? '-20%' : '20%', opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className={`fixed top-0 ${isLeft ? 'left-0' : 'right-0'} w-[350px] h-full bg-white shadow-lg p-6 z-50`}
+      className={`info-panel absolute top-0 ${isLeft ? 'right-full mr-4' : 'left-full ml-4'} 
+                  w-[250px] bg-white shadow-lg p-4 rounded-xl z-dropdown`}
+      onClick={(e) => e.stopPropagation()}
     >
-      <button className="mb-4" onClick={onClose}>
+      <button
+        className="mb-2 text-sm text-gray-500"
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
+      >
         닫기
       </button>
-      <h2 className="text-xl font-bold mb-2">{panelContent[type].title}</h2>
-      <div className="space-y-2">
+      <h2 className="text-lg font-bold mb-2">{panelContent[type].title}</h2>
+      <ul className="space-y-1 text-sm text-gray-700">
         {panelContent[type].desc.map((item, index) => (
-          <div key={index} className="text-gray-700">
-            <p>{item}</p>
-          </div>
+          <li key={index}>• {item}</li>
         ))}
-      </div>
+      </ul>
     </motion.div>
   );
 };
