@@ -50,6 +50,7 @@
   --shadow-3: 1px 1px 39.4px -9px rgba(0, 113, 188, 0.76);
   --shadow-4: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
   --shadow-5: 0px 10px 19.9px 0px rgba(0, 0, 0, 0.28);
+  --shadow-6: 1px 1px 50px 0px rgba(0, 0, 0, 0.4);
 
   /** z-index 계층 구조 **/
 
