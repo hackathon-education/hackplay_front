@@ -3,9 +3,10 @@ import { AnimatePresence, motion } from 'framer-motion';
 interface LockModalProps {
   isOpen: boolean;
   onClose: () => void;
+  message?: string;
 }
 
-const LockModal: React.FC<LockModalProps> = ({ isOpen, onClose }) => {
+const LockModal: React.FC<LockModalProps> = ({ isOpen, onClose, message }) => {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -24,12 +25,7 @@ const LockModal: React.FC<LockModalProps> = ({ isOpen, onClose }) => {
             transition={{ duration: 0.25, ease: 'easeOut' }}
           >
             <div className="text-6xl mb-4">🔒</div>
-            <h3 className="text-xl font-bold mb-4 text-gray-800">추후 제공 예정입니다</h3>
-            <p className="text-gray-600 mb-6">
-              해당 기능은 현재 개발 중입니다.
-              <br />
-              조금만 기다려주세요!
-            </p>
+            <p className="text-gray-600 mb-6">{message ?? '해당 기능은 현재 개발 중입니다.'}</p>
             <button
               onClick={onClose}
               className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg transition-colors"
