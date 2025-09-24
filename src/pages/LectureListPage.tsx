@@ -10,7 +10,7 @@ type LectureListParams = {
 const LectureListPage = () => {
   const { job, level } = useParams<LectureListParams>();
 
-  return <div>{job === 'fe' && level === 'beginner' && <FrontBeginnerPage />}</div>;
+  return <div>{job === 'fe' && level === 'intermediate' && <FrontBeginnerPage />}</div>;
 };
 
 export default LectureListPage;
