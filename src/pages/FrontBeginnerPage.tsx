@@ -6,7 +6,7 @@ function FrontBeginnerPage() {
   const navigate = useNavigate();
 
   const goToTeamProject = () => {
-    navigate(ROUTES.COURSES.LECTURE_MAIN('fe', 'beginner', 'team-project'));
+    navigate(ROUTES.COURSES.LECTURE_MAIN('fe', 'intermediate', 'team-project'));
   };
 
   return (
