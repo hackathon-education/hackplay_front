@@ -14,6 +14,9 @@ import SettingsIcon from '@/assets/info-panel/settings.png';
 import TypewriterWithScreenIcon from '@/assets/info-panel/typewriter_with_screen.png';
 import WebIcon from '@/assets/info-panel/web.png';
 import WorkstationIcon from '@/assets/info-panel/workstation.png';
+import { useLockModal } from '@/hooks/useLockModal';
+
+import LockModal from './LockModal';
 
 interface InfoPanelProps {
   type: 'front' | 'back' | 'design';
@@ -117,6 +120,7 @@ const levels: LevelItem[] = [
 
 const InfoPanel = ({ type, onClose }: InfoPanelProps) => {
   const isLeft = type === 'design';
+  const { isLockModalOpen, closeLockModal, handleLockedItemClick } = useLockModal();
 
   return (
     <motion.div
@@ -125,7 +129,7 @@ const InfoPanel = ({ type, onClose }: InfoPanelProps) => {
       exit={{ x: isLeft ? '-20%' : '20%', opacity: 0 }}
       transition={{ duration: 0.3 }}
       className={`info-panel absolute top-0 ${isLeft ? 'right-full mr-11' : 'left-full ml-11'} 
-                  w-[38.816rem] h-[43.563rem] bg-blue-300 shadow-6 pt-[2.625rem] px-[3.563rem] pb-[2.938rem] rounded-2xl z-dropdown`}
+                  w-[38.816rem] h-[43.563rem] bg-blue-300 shadow-6 pt-[2.625rem] px-[3.563rem] pb-[2.938rem] rounded-2xl z-dropdown cursor-default`}
       onClick={(e) => e.stopPropagation()}
     >
       {/* 꼬리 */}
@@ -173,21 +177,30 @@ const InfoPanel = ({ type, onClose }: InfoPanelProps) => {
           <p className="ml-[0.063rem] text-xl leading-[1.15]">단계 선택</p>
           <ol className="mt-2 flex w-full h-full max-h-[10.188rem] gap-[0.563rem]">
             {levels.map((level) => (
-              <li
-                key={level.id}
-                className="flex-1 bg-white/75 rounded-2xl pt-6 pb-10 flex flex-col justify-between items-center"
-              >
-                <span className="text-xl leading-[1.15] text-blue-500">{level.label}</span>
-                {level.locked ? (
-                  <MdLockOutline className="w-15 h-15 text-blue-450" />
-                ) : (
-                  <MdLockOpen className="w-15 h-15 text-blue-450" />
-                )}
+              <li key={level.id} className="flex-1">
+                <button
+                  type="button"
+                  className="w-full h-full bg-white/75 rounded-2xl pt-6 pb-10 flex flex-col justify-between items-center"
+                  onClick={level.locked ? handleLockedItemClick : undefined}
+                >
+                  <span className="text-xl leading-[1.15] text-blue-500">{level.label}</span>
+                  {level.locked ? (
+                    <MdLockOutline className="w-15 h-15 text-blue-450" />
+                  ) : (
+                    <MdLockOpen className="w-15 h-15 text-blue-450" />
+                  )}
+                </button>
               </li>
             ))}
           </ol>
         </>
       </div>
+
+      <LockModal
+        isOpen={isLockModalOpen}
+        onClose={closeLockModal}
+        message="이 강의는 현재 잠겨 있습니다."
+      />
     </motion.div>
   );
 };

@@ -166,8 +166,12 @@ function CoursesPage() {
           </AnimatePresence>
         </div>
       </div>
-      
-      <LockModal isOpen={isLockModalOpen} onClose={closeLockModal} />
+
+      <LockModal
+        isOpen={isLockModalOpen}
+        onClose={closeLockModal}
+        message="이 강의는 현재 잠겨 있습니다."
+      />
     </div>
   );
 }
