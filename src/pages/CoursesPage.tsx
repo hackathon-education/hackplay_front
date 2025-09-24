@@ -13,8 +13,8 @@ import LockModal from '../components/LockModal';
 import { useLockModal } from '../hooks/useLockModal';
 
 function CoursesPage() {
-  const [selectedTab, setSelectedTab] = useState<'front' | 'back' | 'design' | null>(null);
-  const [animatingTab, setAnimatingTab] = useState<'front' | 'back' | 'design' | null>(null);
+  const [selectedTab, setSelectedTab] = useState<'fe' | 'be' | 'design' | null>(null);
+  const [animatingTab, setAnimatingTab] = useState<'fe' | 'be' | 'design' | null>(null);
   const navigate = useNavigate();
   const { isLockModalOpen, closeLockModal, handleLockedItemClick } = useLockModal();
 
@@ -25,7 +25,7 @@ function CoursesPage() {
   const handleBackendClick = (e: React.MouseEvent) => {
     e.preventDefault();
 
-    if (selectedTab === 'front' || selectedTab === 'design') {
+    if (selectedTab === 'fe' || selectedTab === 'design') {
       setSelectedTab(null);
       setAnimatingTab(null);
     }
@@ -36,7 +36,7 @@ function CoursesPage() {
   const handleDesignerClick = (e: React.MouseEvent) => {
     e.preventDefault();
 
-    if (selectedTab === 'front' || selectedTab === 'back') {
+    if (selectedTab === 'fe' || selectedTab === 'be') {
       setSelectedTab(null);
       setAnimatingTab(null);
     }
@@ -44,7 +44,7 @@ function CoursesPage() {
     handleLockedItemClick(e);
   };
 
-  const handleTabClick = (tab: 'front' | 'back' | 'design') => {
+  const handleTabClick = (tab: 'fe' | 'be' | 'design') => {
     if (selectedTab === tab) {
       setSelectedTab(null);
       setTimeout(() => setAnimatingTab(null), 300);
@@ -80,28 +80,28 @@ function CoursesPage() {
         {/* 프론트엔드 */}
         <div
           className={`position-card relative bg-white border-2 ${
-            selectedTab === 'front' ? 'border-[#007bff]' : 'border-transparent'
+            selectedTab === 'fe' ? 'border-[#007bff]' : 'border-transparent'
           } ${
-            selectedTab === 'front' || animatingTab === 'front' ? 'z-dropdown' : ''
+            selectedTab === 'fe' || animatingTab === 'fe' ? 'z-dropdown' : ''
           } rounded-2xl p-5 w-[200px] cursor-pointer shadow-[0_4px_8px_rgba(0,0,0,0.05)] transition-all duration-200 ease-in-out text-center ${
-            selectedTab !== 'front'
+            selectedTab !== 'fe'
               ? 'hover:-translate-y-1 hover:shadow-[0_6px_12px_rgba(0,0,0,0.1)]'
               : ''
           }`}
-          onClick={() => handleTabClick('front')}
+          onClick={() => handleTabClick('fe')}
         >
           <img src={Frontend} alt="Front end" className="w-full rounded-xl mb-3" />
           <button
             className={`bg-none border border-[#007bff] rounded-full px-3 py-1.5 text-[0.9rem] cursor-pointer ${
-              selectedTab === 'front' ? 'bg-[#007bff] text-white' : 'text-[#007bff]'
+              selectedTab === 'fe' ? 'bg-[#007bff] text-white' : 'text-[#007bff]'
             }`}
           >
             Front end
           </button>
 
           <AnimatePresence>
-            {selectedTab === 'front' && (
-              <InfoPanel type="front" onClose={() => setSelectedTab(null)} />
+            {selectedTab === 'fe' && (
+              <InfoPanel type="fe" onClose={() => setSelectedTab(null)} />
             )}
           </AnimatePresence>
         </div>
@@ -109,29 +109,29 @@ function CoursesPage() {
         {/* 백엔드 */}
         <div
           className={`position-card relative bg-white border-2 ${
-            selectedTab === 'back' ? 'border-[#007bff]' : 'border-transparent'
+            selectedTab === 'be' ? 'border-[#007bff]' : 'border-transparent'
           } ${
-            selectedTab === 'back' || animatingTab === 'back' ? 'z-dropdown' : ''
+            selectedTab === 'be' || animatingTab === 'be' ? 'z-dropdown' : ''
           } rounded-2xl p-5 w-[200px] cursor-pointer shadow-[0_4px_8px_rgba(0,0,0,0.05)] transition-all duration-200 ease-in-out text-center ${
-            selectedTab !== 'back'
+            selectedTab !== 'be'
               ? 'hover:-translate-y-1 hover:shadow-[0_6px_12px_rgba(0,0,0,0.1)]'
               : ''
           }`}
-          // onClick={() => handleTabClick('back')}
+          // onClick={() => handleTabClick('be')}
           onClick={handleBackendClick}
         >
           <img src={Backend} alt="Back end" className="w-full rounded-xl mb-3" />
           <button
             className={`bg-none border border-[#007bff] rounded-full px-3 py-1.5 text-[0.9rem] cursor-pointer ${
-              selectedTab === 'back' ? 'bg-[#007bff] text-white' : 'text-[#007bff]'
+              selectedTab === 'be' ? 'bg-[#007bff] text-white' : 'text-[#007bff]'
             }`}
           >
             Back end
           </button>
 
           <AnimatePresence>
-            {selectedTab === 'back' && (
-              <InfoPanel type="back" onClose={() => setSelectedTab(null)} />
+            {selectedTab === 'be' && (
+              <InfoPanel type="be" onClose={() => setSelectedTab(null)} />
             )}
           </AnimatePresence>
         </div>

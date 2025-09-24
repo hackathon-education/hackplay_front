@@ -1,4 +1,5 @@
 import { MdLockOpen, MdLockOutline } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 
 import { motion } from 'framer-motion';
 
@@ -14,12 +15,13 @@ import SettingsIcon from '@/assets/info-panel/settings.png';
 import TypewriterWithScreenIcon from '@/assets/info-panel/typewriter_with_screen.png';
 import WebIcon from '@/assets/info-panel/web.png';
 import WorkstationIcon from '@/assets/info-panel/workstation.png';
+import { ROUTES } from '@/constants/routes';
 import { useLockModal } from '@/hooks/useLockModal';
 
 import LockModal from './LockModal';
 
 interface InfoPanelProps {
-  type: 'front' | 'back' | 'design';
+  type: 'fe' | 'be' | 'design';
   onClose: () => void;
 }
 
@@ -36,7 +38,7 @@ interface LevelItem {
 }
 
 const panelContent: Record<InfoPanelProps['type'], { title: string; desc: DescItem[] }> = {
-  front: {
+  fe: {
     title: 'Frontend란?',
     desc: [
       {
@@ -61,7 +63,7 @@ const panelContent: Record<InfoPanelProps['type'], { title: string; desc: DescIt
       },
     ],
   },
-  back: {
+  be: {
     title: 'Backend란?',
     desc: [
       {
@@ -119,8 +121,13 @@ const levels: LevelItem[] = [
 ];
 
 const InfoPanel = ({ type, onClose }: InfoPanelProps) => {
+  const navigate = useNavigate();
   const isLeft = type === 'design';
   const { isLockModalOpen, closeLockModal, handleLockedItemClick } = useLockModal();
+
+  const handleLevelClick = (type: InfoPanelProps['type'], level: string) => {
+    navigate(ROUTES.COURSES.LECTURE_LIST(type, level));
+  };
 
   return (
     <motion.div
@@ -181,7 +188,9 @@ const InfoPanel = ({ type, onClose }: InfoPanelProps) => {
                 <button
                   type="button"
                   className="w-full h-full bg-white/75 rounded-2xl pt-6 pb-10 flex flex-col justify-between items-center"
-                  onClick={level.locked ? handleLockedItemClick : undefined}
+                  onClick={
+                    level.locked ? handleLockedItemClick : () => handleLevelClick(type, level.id)
+                  }
                 >
                   <span className="text-xl leading-[1.15] text-blue-500">{level.label}</span>
                   {level.locked ? (
