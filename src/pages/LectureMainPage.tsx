@@ -11,7 +11,13 @@ type LectureMainParams = {
 const LectureMainPage = () => {
   const { job, level, lectureId } = useParams<LectureMainParams>();
 
-  return <div>{lectureId === 'team-project' && <TeamProjectPage />}</div>;
+  return (
+    <div>
+      {job === 'fe' && level === 'intermediate' && lectureId === 'team-project' && (
+        <TeamProjectPage />
+      )}
+    </div>
+  );
 };
 
 export default LectureMainPage;

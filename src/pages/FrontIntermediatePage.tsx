@@ -2,11 +2,11 @@ import { useNavigate } from 'react-router-dom';
 
 import { ROUTES } from '@/constants/routes';
 
-function FrontBeginnerPage() {
+function FrontIntermediatePage() {
   const navigate = useNavigate();
 
   const goToTeamProject = () => {
-    navigate(ROUTES.COURSES.LECTURE_MAIN('fe', 'beginner', 'team-project'));
+    navigate(ROUTES.COURSES.LECTURE_MAIN('fe', 'intermediate', 'team-project'));
   };
 
   return (
@@ -31,4 +31,4 @@ function FrontBeginnerPage() {
   );
 }
 
-export default FrontBeginnerPage;
+export default FrontIntermediatePage;

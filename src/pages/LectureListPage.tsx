@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 
-import FrontBeginnerPage from './FrontBeginnerPage';
+import FrontIntermediatePage from './FrontIntermediatePage';
 
 type LectureListParams = {
   job: string;
@@ -10,7 +10,7 @@ type LectureListParams = {
 const LectureListPage = () => {
   const { job, level } = useParams<LectureListParams>();
 
-  return <div>{job === 'fe' && level === 'beginner' && <FrontBeginnerPage />}</div>;
+  return <div>{job === 'fe' && level === 'intermediate' && <FrontIntermediatePage />}</div>;
 };
 
 export default LectureListPage;
