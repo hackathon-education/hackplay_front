@@ -18,10 +18,6 @@ function CoursesPage() {
   const navigate = useNavigate();
   const { isLockModalOpen, closeLockModal, handleLockedItemClick } = useLockModal();
 
-  const handleBeginnerClick = () => {
-    navigate(ROUTES.COURSES.LECTURE_LIST('fe', 'beginner'));
-  };
-
   const handleBackendClick = (e: React.MouseEvent) => {
     e.preventDefault();
 
