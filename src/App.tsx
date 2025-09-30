@@ -9,7 +9,7 @@ function App() {
     <div>
       <BrowserRouter>
         <Header />
-        <main className="flex-grow">
+        <main>
           <Router />
         </main>
         <Footer />
