@@ -77,7 +77,7 @@
 }
 
 .page-container {
-  @apply max-w-[95rem] mx-auto text-center;
+  @apply max-w-[95rem] mx-auto text-center flex flex-col items-center;
 }
 
 .basic-button {
