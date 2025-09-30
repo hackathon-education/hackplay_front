@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { HiOutlineUser } from 'react-icons/hi';
 import { TfiAngleRight } from 'react-icons/tfi';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 
 import logo from '@/assets/logo.svg';
 import { NAV_ITEMS } from '@/constants/menuData';
@@ -14,9 +14,21 @@ import LockModal from './LockModal';
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showHeaderShadow, setShowHeaderShadow] = useState(false);
-
   const menuRef = useRef<HTMLDivElement | null>(null);
+
+  const location = useLocation();
   const { isLockModalOpen, closeLockModal, handleLockedItemClick } = useLockModal();
+
+  // 페이지별 상단 여백 높이 설정
+  const getTopSpacerHeight = () => {
+    const path = location.pathname;
+
+    if (path.startsWith('/courses/')) {
+      return '1.844rem';
+    } else {
+      return '2.188rem';
+    }
+  };
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
@@ -77,7 +89,7 @@ const Header = () => {
   return (
     <>
       {/* 상단 여백 */}
-      <div className="bg-gray-50 w-full h-[2.188rem]"></div>
+      <div className={`bg-gray-50 w-full h-[${getTopSpacerHeight()}]`}></div>
 
       {/* 헤더 */}
       <header
