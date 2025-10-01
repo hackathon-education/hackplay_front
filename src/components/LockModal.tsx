@@ -6,7 +6,7 @@ interface LockModalProps {
   message?: string;
 }
 
-const LockModal: React.FC<LockModalProps> = ({ isOpen, onClose, message }) => {
+const LockModal = ({ isOpen, onClose, message }: LockModalProps) => {
   return (
     <AnimatePresence>
       {isOpen && (
