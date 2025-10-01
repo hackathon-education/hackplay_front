@@ -54,6 +54,7 @@
   --shadow-5: 0px 10px 19.9px 0px rgba(0, 0, 0, 0.28);
   --shadow-6: 1px 1px 50px 0px rgba(0, 0, 0, 0.4);
   --shadow-7: 1px 1px 20px -9px rgba(0, 0, 0, 0.4);
+  --shadow-8: 1px 1px 30px -9px rgba(0, 0, 0, 0.4);
 
   /** z-index 계층 구조 **/
 
@@ -83,4 +84,8 @@
 
 .basic-button {
   @apply bg-[#0059b3] text-white border-none px-5 py-2.5 mt-5 text-base cursor-pointer rounded-[5px] hover:bg-[#004080];
+}
+
+.card-box {
+  @apply rounded-2xl bg-white shadow-8;
 }
