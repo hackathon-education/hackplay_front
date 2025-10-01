@@ -1,4 +1,4 @@
-function TeamProjectPage() {
+const TeamProjectPage = () => {
   // 임시 진도 데이터 (나중에 상태 기반으로 확장 가능)
   const completedUnits = 2;
   const totalUnits = 5;
@@ -114,6 +114,6 @@ function TeamProjectPage() {
       </div>
     </div>
   );
-}
+};
 
 export default TeamProjectPage;

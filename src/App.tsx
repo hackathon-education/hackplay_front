@@ -4,7 +4,7 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import Router from './router/router';
 
-function App() {
+const App = () => {
   return (
     <div>
       <BrowserRouter>
@@ -16,6 +16,6 @@ function App() {
       </BrowserRouter>
     </div>
   );
-}
+};
 
 export default App;

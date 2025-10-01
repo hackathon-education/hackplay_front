@@ -12,7 +12,7 @@ import Frontend from '../assets/frontend.png';
 import LockModal from '../components/LockModal';
 import { useLockModal } from '../hooks/useLockModal';
 
-function CoursesPage() {
+const CoursesPage = () => {
   const [selectedTab, setSelectedTab] = useState<'fe' | 'be' | 'design' | null>(null);
   const [animatingTab, setAnimatingTab] = useState<'fe' | 'be' | 'design' | null>(null);
   const navigate = useNavigate();
@@ -96,9 +96,7 @@ function CoursesPage() {
           </button>
 
           <AnimatePresence>
-            {selectedTab === 'fe' && (
-              <InfoPanel type="fe" onClose={() => setSelectedTab(null)} />
-            )}
+            {selectedTab === 'fe' && <InfoPanel type="fe" onClose={() => setSelectedTab(null)} />}
           </AnimatePresence>
         </div>
 
@@ -126,9 +124,7 @@ function CoursesPage() {
           </button>
 
           <AnimatePresence>
-            {selectedTab === 'be' && (
-              <InfoPanel type="be" onClose={() => setSelectedTab(null)} />
-            )}
+            {selectedTab === 'be' && <InfoPanel type="be" onClose={() => setSelectedTab(null)} />}
           </AnimatePresence>
         </div>
 
@@ -170,6 +166,6 @@ function CoursesPage() {
       />
     </div>
   );
-}
+};
 
 export default CoursesPage;

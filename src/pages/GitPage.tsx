@@ -1,4 +1,4 @@
-function GitPage() {
+const GitPage = () => {
   return (
     <div className="page-container">
       <h2>깃 사용법 - MVP 개발</h2>
@@ -9,6 +9,6 @@ function GitPage() {
       </ul>
     </div>
   );
-}
+};
 
 export default GitPage;

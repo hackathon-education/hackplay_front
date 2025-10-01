@@ -22,7 +22,7 @@ const OverviewItem = ({ title, content }: OverviewItemProps) => {
   );
 };
 
-function FrontIntermediatePage() {
+const FrontIntermediatePage = () => {
   const navigate = useNavigate();
 
   // 프로젝트 개요 아이템 데이터
@@ -110,6 +110,6 @@ function FrontIntermediatePage() {
       </div> */}
     </div>
   );
-}
+};
 
 export default FrontIntermediatePage;

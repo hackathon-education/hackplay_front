@@ -1,4 +1,4 @@
-function Footer() {
+const Footer = () => {
   return (
     <footer className="bg-white border-t-2 border-[#0059b3] text-center px-2.5 py-5 text-[#003366]">
       <div>© 2025 웹 개발 학습 플랫폼</div>
@@ -24,6 +24,6 @@ function Footer() {
       </div>
     </footer>
   );
-}
+};
 
 export default Footer;
