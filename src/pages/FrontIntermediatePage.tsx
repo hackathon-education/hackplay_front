@@ -1,7 +1,9 @@
 import { AiOutlineCalendar } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 
+import LockModal from '@/components/LockModal';
 import { ROUTES } from '@/constants/routes';
+import { useLockModal } from '@/hooks/useLockModal';
 
 // 프로젝트 개요 아이템 타입
 interface OverviewItemProps {
@@ -44,9 +46,12 @@ const CollaborationDots = () => {
 };
 
 // 강의 목록 아이템 컴포넌트
-const LectureItem = ({ title, locked }: LectureItemProps) => {
+const LectureItem = ({ title, onClick }: LectureItemProps & { onClick: () => void }) => {
   return (
-    <li className="bg-gray-50 h-33 flex items-center justify-center rounded-2xl">
+    <li
+      onClick={onClick}
+      className="bg-gray-50 h-33 flex items-center justify-center rounded-2xl cursor-pointer"
+    >
       <span className="text-[1.908rem] leading-[1.16] tracking-[0.03em]">{title}</span>
     </li>
   );
@@ -54,6 +59,7 @@ const LectureItem = ({ title, locked }: LectureItemProps) => {
 
 const FrontIntermediatePage = () => {
   const navigate = useNavigate();
+  const { isLockModalOpen, openLockModal, closeLockModal } = useLockModal(); // 잠금 모달 훅
 
   // 프로젝트 개요 아이템 데이터
   const overviewItems: OverviewItemProps[] = [
@@ -64,7 +70,7 @@ const FrontIntermediatePage = () => {
 
   // 강의 목록 아이템 데이터
   const lectureItems: LectureItemProps[] = [
-    { title: '프론트엔드 심화 언어를 배우고 싶다면?' },
+    { title: '프론트엔드 심화 언어를 배우고 싶다면?', locked: true },
     { title: '바로 Project 시작하기!' },
   ];
 
@@ -140,7 +146,11 @@ const FrontIntermediatePage = () => {
             {/* 강의 목록 */}
             <ul className="mt-[2.994rem] w-full h-full flex flex-col gap-[2.438rem] justify-center">
               {lectureItems.map((item, idx) => (
-                <LectureItem key={idx} title={item.title} />
+                <LectureItem
+                  key={idx}
+                  title={item.title}
+                  onClick={item.locked ? openLockModal : goToTeamProject}
+                />
               ))}
             </ul>
           </div>
@@ -154,6 +164,13 @@ const FrontIntermediatePage = () => {
           있습니다.
         </p>
       </div>
+
+      {/* 잠금 모달 */}
+      <LockModal
+        isOpen={isLockModalOpen}
+        onClose={closeLockModal}
+        message="이 강의는 현재 잠겨 있습니다."
+      />
     </div>
   );
 };
