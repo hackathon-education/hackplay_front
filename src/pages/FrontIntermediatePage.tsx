@@ -64,8 +64,7 @@ const FrontIntermediatePage = () => {
 
   // 강의 목록 아이템 데이터
   const lectureItems: LectureItemProps[] = [
-    { title: '프론트엔드 기초가 부족하다면?' },
-    { title: '아직 Git 사용법을 모른다면?' },
+    { title: '프론트엔드 심화 언어를 배우고 싶다면?' },
     { title: '바로 Project 시작하기!' },
   ];
 
@@ -139,7 +138,7 @@ const FrontIntermediatePage = () => {
             <CollaborationDots />
 
             {/* 강의 목록 */}
-            <ul className="mt-[2.994rem] w-full h-full flex flex-col justify-between">
+            <ul className="mt-[2.994rem] w-full h-full flex flex-col gap-[2.438rem] justify-center">
               {lectureItems.map((item, idx) => (
                 <LectureItem key={idx} title={item.title} />
               ))}
