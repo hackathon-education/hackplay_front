@@ -9,6 +9,12 @@ interface OverviewItemProps {
   content: string;
 }
 
+// 강의 목록 아이템 타입
+interface LectureItemProps {
+  title: string;
+  locked?: boolean;
+}
+
 // 프로젝트 개요 아이템 컴포넌트
 const OverviewItem = ({ title, content }: OverviewItemProps) => {
   return (
@@ -22,6 +28,30 @@ const OverviewItem = ({ title, content }: OverviewItemProps) => {
   );
 };
 
+// 팀원 프로필 컴포넌트
+const CollaborationDots = () => {
+  const colors = ['bg-blue-400', 'bg-blue-200', 'bg-blue-300'];
+
+  return (
+    <div className="flex max-h-[6.193rem]">
+      {colors.map((color, idx) => (
+        <div className="flex w-[6.193rem] aspect-square bg-gray-80 rounded-full -ml-[1.509rem] first:ml-0 p-[0.516rem]">
+          <div key={idx} className={`${color} w-full h-full rounded-full`}></div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// 강의 목록 아이템 컴포넌트
+const LectureItem = ({ title, locked }: LectureItemProps) => {
+  return (
+    <li className="bg-gray-50 h-33 flex items-center justify-center rounded-2xl">
+      <span className="text-[1.908rem] leading-[1.16] tracking-[0.03em]">{title}</span>
+    </li>
+  );
+};
+
 const FrontIntermediatePage = () => {
   const navigate = useNavigate();
 
@@ -30,6 +60,13 @@ const FrontIntermediatePage = () => {
     { title: 'Team', content: 'hackplay' },
     { title: 'Projects', content: '개발하기' },
     { title: 'Goals', content: '달성 완료 (1/5)' },
+  ];
+
+  // 강의 목록 아이템 데이터
+  const lectureItems: LectureItemProps[] = [
+    { title: '프론트엔드 기초가 부족하다면?' },
+    { title: '아직 Git 사용법을 모른다면?' },
+    { title: '바로 Project 시작하기!' },
   ];
 
   const goToTeamProject = () => {
@@ -49,6 +86,7 @@ const FrontIntermediatePage = () => {
         함께 프로젝트를 진행하게 되어 기뻐요. 함께 멋진 결과물을 만들어봅시다!
       </p>
 
+      {/* 메인 */}
       <div className="mt-11 flex w-full gap-[1.875rem] h-[54.813rem]">
         {/* 프로젝트 정보 */}
         <div className="flex-[659]">
@@ -88,26 +126,35 @@ const FrontIntermediatePage = () => {
           </div>
         </div>
 
+        {/* 워크스페이스 */}
         <div className="flex-[829]">
-          <div className="card-box h-full">팀 프로젝트</div>
+          <div className="card-box h-full pt-15 pb-[4.063rem] px-15 flex flex-col items-center">
+            {/* 헤더 */}
+            <h3 className="font-[590] text-4xl leading-[1.17] tracking-[0.01em]">
+              Team Project Workspace
+            </h3>
+            <p className="mt-[0.813rem] mb-[2.688rem] font-[410] text-[1.75rem] leading-[1.18] tracking-[0.01em]">
+              당신의 프로젝트 팀과 원활하게 협업해 보세요!
+            </p>
+            <CollaborationDots />
+
+            {/* 강의 목록 */}
+            <ul className="mt-[2.994rem] w-full h-full flex flex-col justify-between">
+              {lectureItems.map((item, idx) => (
+                <LectureItem key={idx} title={item.title} />
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
 
-      {/* <div className="tab-wrapper">
-        <div className="level-tab level-intermediate locked">
-          front 기초 언어 (HTML/CSS/JS) 강의 - 추후 개발 🔒
-        </div>
-        <div
-          className="level-tab level-beginner active"
-          onClick={goToTeamProject}
-          style={{ cursor: 'pointer' }}
-        >
-          실전 Team Project 해보기 강의
-        </div>
+      {/* 푸터 */}
+      <div className="flex h-[2.438rem] mt-[3.813rem] mb-38">
+        <p className="text-2xl leading-[1] text-gray-600">
+          단순한 강의 시청이 아닌, 코드를 직접 작성하고 실시간 피드백을 통해 실력을 키워나갈 수
+          있습니다.
+        </p>
       </div>
-      <div className="tab-content">
-        <p>React로 실제 프론트 MVP를 만드는 실습 강의가 이곳에 제공될 예정입니다.</p>
-      </div> */}
     </div>
   );
 };
