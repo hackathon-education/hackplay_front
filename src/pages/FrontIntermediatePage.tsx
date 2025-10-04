@@ -46,13 +46,19 @@ const CollaborationDots = () => {
 };
 
 // 강의 목록 아이템 컴포넌트
-const LectureItem = ({ title, onClick }: LectureItemProps & { onClick: () => void }) => {
+const LectureItem = ({ title, locked, onClick }: LectureItemProps & { onClick: () => void }) => {
   return (
     <li
       onClick={onClick}
       className="bg-gray-50 h-33 flex items-center justify-center rounded-2xl cursor-pointer"
     >
       <span className="text-[1.908rem] leading-[1.16] tracking-[0.03em]">{title}</span>
+      {/* 준비중 배지 */}
+      {locked && (
+        <span className="ml-1.5 bg-blue-100 rounded-sm text-blue-450 inline-flex items-center px-2.5 py-1.5 text-lg leading-[1.13] tracking-tight font-bold">
+          준비중
+        </span>
+      )}
     </li>
   );
 };
@@ -149,6 +155,7 @@ const FrontIntermediatePage = () => {
                 <LectureItem
                   key={idx}
                   title={item.title}
+                  locked={item.locked}
                   onClick={item.locked ? openLockModal : goToTeamProject}
                 />
               ))}
