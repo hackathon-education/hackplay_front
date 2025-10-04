@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { AnimatePresence, motion } from 'framer-motion';
 
 interface LockModalProps {
@@ -7,6 +9,20 @@ interface LockModalProps {
 }
 
 const LockModal = ({ isOpen, onClose, message }: LockModalProps) => {
+  // Enter 키로 모달 닫기
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   return (
     <AnimatePresence>
       {isOpen && (
