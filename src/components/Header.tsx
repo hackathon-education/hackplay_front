@@ -24,9 +24,9 @@ const Header = () => {
     const path = location.pathname;
 
     if (path.startsWith('/courses/')) {
-      return '1.844rem';
+      return 'h-[1.844rem]';
     } else {
-      return '2.188rem';
+      return 'h-[2.188rem]';
     }
   };
 
@@ -89,7 +89,7 @@ const Header = () => {
   return (
     <>
       {/* 상단 여백 */}
-      <div className={`bg-gray-50 w-full h-[${getTopSpacerHeight()}]`}></div>
+      <div className={`bg-gray-50 w-full ${getTopSpacerHeight()}`}></div>
 
       {/* 헤더 */}
       <header
