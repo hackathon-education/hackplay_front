@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
 import InfoPanel from '@/components/InfoPanel';
-import { ROUTES } from '@/constants/routes';
 
 import Backend from '../assets/backend.png';
 import Designer from '../assets/designer.png';
 import Frontend from '../assets/frontend.png';
 import LockModal from '../components/LockModal';
+import { JOB_TYPES } from '../constants/jobTypes';
 import { useLockModal } from '../hooks/useLockModal';
 
 const CoursesPage = () => {
@@ -92,7 +92,7 @@ const CoursesPage = () => {
               selectedTab === 'fe' ? 'bg-[#007bff] text-white' : 'text-[#007bff]'
             }`}
           >
-            Front end
+            {JOB_TYPES.FE}
           </button>
 
           <AnimatePresence>
@@ -120,7 +120,7 @@ const CoursesPage = () => {
               selectedTab === 'be' ? 'bg-[#007bff] text-white' : 'text-[#007bff]'
             }`}
           >
-            Back end
+            {JOB_TYPES.BE}
           </button>
 
           <AnimatePresence>
@@ -148,7 +148,7 @@ const CoursesPage = () => {
               selectedTab === 'design' ? 'bg-[#007bff] text-white' : 'text-[#007bff]'
             }`}
           >
-            Designer
+            {JOB_TYPES.DESIGN}
           </button>
 
           <AnimatePresence>

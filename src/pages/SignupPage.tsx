@@ -4,6 +4,7 @@ import { TbEye, TbEyeOff } from 'react-icons/tb';
 import { useNavigate } from 'react-router-dom';
 
 import { axiosInstance } from '@/api/axios';
+import { JOB_TYPES } from '@/constants/jobTypes';
 import { ROUTES } from '@/constants/routes';
 
 type FormValues = {
@@ -192,8 +193,8 @@ const SignupPage = () => {
             <option value="">직무 선택</option>
             <option value="PLAN">기획</option>
             <option value="DESIGN">디자인</option>
-            <option value="FRONT">Frontend</option>
-            <option value="BACK">Backend</option>
+            <option value="FRONT">{JOB_TYPES.FE}</option>
+            <option value="BACK">{JOB_TYPES.BE}</option>
           </select>
           {errors.role && <p className="text-red-500 text-sm mt-1">{errors.role.message}</p>}
 
