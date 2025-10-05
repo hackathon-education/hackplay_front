@@ -1,9 +1,21 @@
 import { AiOutlineCalendar } from 'react-icons/ai';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import LockModal from '@/components/LockModal';
+import { JOB_TYPES } from '@/constants/jobTypes';
 import { ROUTES } from '@/constants/routes';
 import { useLockModal } from '@/hooks/useLockModal';
+
+// 라우트 경로에 따른 포지션 매핑 함수
+const getPositionByRoute = (job?: string): string => {
+  const jobToPosition: Record<string, string> = {
+    fe: `${JOB_TYPES.FE} Developer`,
+    be: `${JOB_TYPES.BE} Developer`,
+    design: JOB_TYPES.DESIGN,
+  };
+
+  return jobToPosition[job ?? ''];
+};
 
 // 프로젝트 개요 아이템 타입
 interface OverviewItemProps {
@@ -65,6 +77,8 @@ const LectureItem = ({ title, locked, onClick }: LectureItemProps & { onClick: (
 
 const FrontIntermediatePage = () => {
   const navigate = useNavigate();
+  const { job } = useParams();
+  const position = getPositionByRoute(job);
   const { isLockModalOpen, openLockModal, closeLockModal } = useLockModal(); // 잠금 모달 훅
 
   // 프로젝트 개요 아이템 데이터
@@ -108,8 +122,8 @@ const FrontIntermediatePage = () => {
               <span className="font-[680]">홍길동</span>님의 포지션
             </h3>
             <div className="mt-[0.813rem] max-w-[23.438rem] py-[1.35rem] px-[4.438rem] rounded-5xl bg-linear-90 blue-gradient from-19% to-68%">
-              <span className="font-[590] text-[1.75rem] leading-[1.18] text-white">
-                Backend Developer
+              <span className="font-[590] text-[1.75rem] leading-[1.18] text-white whitespace-nowrap">
+                {position}
               </span>
             </div>
 
