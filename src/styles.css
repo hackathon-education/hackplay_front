@@ -25,6 +25,7 @@
   --radius-2xl: 1.25rem; /* 20px */
   --radius-3xl: 1.844rem; /* 29.5px */
   --radius-4xl: 2.281rem; /* 36.5px */
+  --radius-5xl: 2.604rem; /* 41.67px */
 
   /** Colors **/
   --color-blue-100: #cddefe;
@@ -35,12 +36,14 @@
   --color-blue-500: #075080;
 
   --color-gray-50: #fafafa;
+  --color-gray-80: #f6f6f6;
   --color-gray-100: #f4f4f4;
   --color-gray-200: #d9d9d9;
   --color-gray-300: #c0c0c0;
   --color-gray-400: #a8a8a8;
   --color-gray-500: #939393;
   --color-gray-600: #888888;
+  --color-gray-650: #474747;
   --color-gray-700: #363636;
 
   --color-white: #ffffff;
@@ -53,6 +56,8 @@
   --shadow-4: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
   --shadow-5: 0px 10px 19.9px 0px rgba(0, 0, 0, 0.28);
   --shadow-6: 1px 1px 50px 0px rgba(0, 0, 0, 0.4);
+  --shadow-7: 1px 1px 20px -9px rgba(0, 0, 0, 0.4);
+  --shadow-8: 1px 1px 30px -9px rgba(0, 0, 0, 0.4);
 
   /** z-index 계층 구조 **/
 
@@ -77,9 +82,17 @@
 }
 
 .page-container {
-  @apply max-w-[600px] mx-auto my-[50px] p-[30px] border-2 border-[#0059b3] rounded-[10px] text-center;
+  @apply max-w-[95rem] mx-auto text-center flex flex-col items-center;
 }
 
 .basic-button {
   @apply bg-[#0059b3] text-white border-none px-5 py-2.5 mt-5 text-base cursor-pointer rounded-[5px] hover:bg-[#004080];
+}
+
+.card-box {
+  @apply rounded-2xl bg-white shadow-8;
+}
+
+.blue-gradient {
+  @apply from-blue-400 to-blue-300;
 }

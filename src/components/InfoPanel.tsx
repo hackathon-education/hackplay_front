@@ -15,6 +15,7 @@ import SettingsIcon from '@/assets/info-panel/settings.png';
 import TypewriterWithScreenIcon from '@/assets/info-panel/typewriter_with_screen.png';
 import WebIcon from '@/assets/info-panel/web.png';
 import WorkstationIcon from '@/assets/info-panel/workstation.png';
+import { JOB_TYPES } from '@/constants/jobTypes';
 import { ROUTES } from '@/constants/routes';
 import { useLockModal } from '@/hooks/useLockModal';
 
@@ -39,7 +40,7 @@ interface LevelItem {
 
 const panelContent: Record<InfoPanelProps['type'], { title: string; desc: DescItem[] }> = {
   fe: {
-    title: 'Frontend란?',
+    title: `${JOB_TYPES.FE}란?`,
     desc: [
       {
         icon: WorkstationIcon,
@@ -64,7 +65,7 @@ const panelContent: Record<InfoPanelProps['type'], { title: string; desc: DescIt
     ],
   },
   be: {
-    title: 'Backend란?',
+    title: `${JOB_TYPES.BE}란?`,
     desc: [
       {
         icon: SettingsIcon,
@@ -89,7 +90,7 @@ const panelContent: Record<InfoPanelProps['type'], { title: string; desc: DescIt
     ],
   },
   design: {
-    title: 'Designer란?',
+    title: `${JOB_TYPES.DESIGN}란?`,
     desc: [
       {
         icon: WebIcon,

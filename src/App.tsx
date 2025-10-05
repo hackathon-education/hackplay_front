@@ -4,18 +4,18 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import Router from './router/router';
 
-function App() {
+const App = () => {
   return (
     <div>
       <BrowserRouter>
         <Header />
-        <main className="flex-grow">
+        <main>
           <Router />
         </main>
         <Footer />
       </BrowserRouter>
     </div>
   );
-}
+};
 
 export default App;

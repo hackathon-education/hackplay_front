@@ -1,6 +1,6 @@
 import Mockup from '../assets/mockup.jpg';
 
-function MainPage() {
+const MainPage = () => {
   return (
     <div className="w-full mx-auto pt-16 sm:pt-20 md:pt-24 lg:pt-28 xl:pt-[8.125rem] text-center px-4 sm:px-6 md:px-8 lg: px-10 xl:px-[12.375rem]">
       <header>
@@ -38,6 +38,6 @@ function MainPage() {
       </section>
     </div>
   );
-}
+};
 
 export default MainPage;

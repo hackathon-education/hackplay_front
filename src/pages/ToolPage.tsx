@@ -1,4 +1,4 @@
-function ToolPage() {
+const ToolPage = () => {
   return (
     <div className="page-container">
       <h2>툴 설정법 - MVP 개발</h2>
@@ -33,6 +33,6 @@ function ToolPage() {
       </div>
     </div>
   );
-}
+};
 
 export default ToolPage;

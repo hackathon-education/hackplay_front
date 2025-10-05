@@ -4,15 +4,15 @@ import { useNavigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
 import InfoPanel from '@/components/InfoPanel';
-import { ROUTES } from '@/constants/routes';
 
 import Backend from '../assets/backend.png';
 import Designer from '../assets/designer.png';
 import Frontend from '../assets/frontend.png';
 import LockModal from '../components/LockModal';
+import { JOB_TYPES } from '../constants/jobTypes';
 import { useLockModal } from '../hooks/useLockModal';
 
-function CoursesPage() {
+const CoursesPage = () => {
   const [selectedTab, setSelectedTab] = useState<'fe' | 'be' | 'design' | null>(null);
   const [animatingTab, setAnimatingTab] = useState<'fe' | 'be' | 'design' | null>(null);
   const navigate = useNavigate();
@@ -92,13 +92,11 @@ function CoursesPage() {
               selectedTab === 'fe' ? 'bg-[#007bff] text-white' : 'text-[#007bff]'
             }`}
           >
-            Front end
+            {JOB_TYPES.FE}
           </button>
 
           <AnimatePresence>
-            {selectedTab === 'fe' && (
-              <InfoPanel type="fe" onClose={() => setSelectedTab(null)} />
-            )}
+            {selectedTab === 'fe' && <InfoPanel type="fe" onClose={() => setSelectedTab(null)} />}
           </AnimatePresence>
         </div>
 
@@ -122,13 +120,11 @@ function CoursesPage() {
               selectedTab === 'be' ? 'bg-[#007bff] text-white' : 'text-[#007bff]'
             }`}
           >
-            Back end
+            {JOB_TYPES.BE}
           </button>
 
           <AnimatePresence>
-            {selectedTab === 'be' && (
-              <InfoPanel type="be" onClose={() => setSelectedTab(null)} />
-            )}
+            {selectedTab === 'be' && <InfoPanel type="be" onClose={() => setSelectedTab(null)} />}
           </AnimatePresence>
         </div>
 
@@ -152,7 +148,7 @@ function CoursesPage() {
               selectedTab === 'design' ? 'bg-[#007bff] text-white' : 'text-[#007bff]'
             }`}
           >
-            Designer
+            {JOB_TYPES.DESIGN}
           </button>
 
           <AnimatePresence>
@@ -170,6 +166,6 @@ function CoursesPage() {
       />
     </div>
   );
-}
+};
 
 export default CoursesPage;

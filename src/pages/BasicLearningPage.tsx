@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { ROUTES } from '@/constants/routes';
 
-function BasicLearningPage() {
+const BasicLearningPage = () => {
   const navigate = useNavigate();
 
   return (
@@ -32,6 +32,6 @@ function BasicLearningPage() {
       </div>
     </div>
   );
-}
+};
 
 export default BasicLearningPage;

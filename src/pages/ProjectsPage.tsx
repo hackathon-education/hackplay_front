@@ -1,5 +1,4 @@
-
-function ProjectsPage() {
+const ProjectsPage = () => {
   return (
     <div className="page-container">
       <h2>프로젝트 모집 - 추후 개발 🔒 </h2>
@@ -7,6 +6,6 @@ function ProjectsPage() {
       <button className="basic-button">팀 만들기</button>
     </div>
   );
-}
+};
 
 export default ProjectsPage;
