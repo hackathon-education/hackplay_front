@@ -1,116 +1,171 @@
+import { AiOutlineCalendar, AiOutlineTeam } from 'react-icons/ai';
+import { RiFlag2Line } from 'react-icons/ri';
+
+import { Progress } from 'antd';
+
+// 프로젝트 정보 아이템 타입
+interface ProjectInfoItemProps {
+  icon: React.ReactNode;
+  label?: string;
+  content: string;
+}
+
+// 강의 진행 상태 배지 타입
+interface StatusBadgeProps {
+  color: string;
+  label: string;
+}
+
+// 프로젝트 정보 아이템 컴포넌트
+const ProjectInfoItem = ({ icon, label, content }: ProjectInfoItemProps) => {
+  return (
+    <div className="flex gap-1.5 text-white">
+      {icon}
+      <div className="font-[410] text-[1.063rem] leading-[1.18] tracking-[0.01em]">
+        {label && `${label}: `}
+        {content}
+      </div>
+    </div>
+  );
+};
+
+// 강의 진행 상태 배지 컴포넌트
+const StatusBadge = ({ color, label }: StatusBadgeProps) => {
+  return (
+    <div className="flex items-center gap-[0.938rem]">
+      <div className={`w-5 h-5 rounded-full ${color}`} />
+      <span className="text-xl font-[410] text-gray-800 leading-[1.15]">{label}</span>
+    </div>
+  );
+};
+
+// 유닛 컴포넌트
+const UnitItem = () => {
+  return (
+    <li className="flex gap-[2.063rem]">
+      <div className="w-[4.063rem] h-[4.063rem] rounded-full bg-gray-200"></div>
+      <div className="w-full max-w-[81rem] h-[24.5rem] rounded-2.5xl bg-gray-250"></div>
+    </li>
+  );
+};
+
 const TeamProjectPage = () => {
-  // 임시 진도 데이터 (나중에 상태 기반으로 확장 가능)
-  const completedUnits = 2;
-  const totalUnits = 5;
-  const progress = (completedUnits / totalUnits) * 100;
+  // 프로젝트 정보 아이템 데이터
+  const projectInfoItems = [
+    {
+      icon: <AiOutlineCalendar className="w-5 h-5 stroke-15" />,
+      label: '시작일',
+      content: '2025년 05월 17일',
+    },
+    {
+      icon: <AiOutlineTeam className="w-5 h-5 stroke-15" />,
+      content: '8 Team Members',
+    },
+  ];
+
+  // 학습 목표 아이템 데이터
+  const learningObjectives = [
+    '• Github 협업 경험해보기',
+    '• 컴포넌트 분담 및 UI 구현',
+    '• 협업 커뮤니케이션 도구 사용',
+  ];
+
+  // 강의 진행 상태 배지 데이터
+  const statuses = [
+    { color: 'bg-green', label: '진행 완료' },
+    { color: 'bg-blue-330', label: '진행중' },
+    { color: 'bg-yellow', label: '시작 전' },
+  ];
 
   return (
-    <div className="max-w-[1000px] mx-auto p-8 bg-white font-sans">
-      {/* 헤더 */}
-      <div className="flex justify-between gap-8 pb-8 border-b border-gray-300">
-        <div className="flex-1">
-          <h1 className="text-2xl font-bold mb-2">실전 Team Project 해보기</h1>
-          <p className="text-gray-600 mb-2">
-            프론트엔드 개발 실습을 위한 실전 프로젝트입니다. HTML/CSS/React를 활용한 간단한 MVP 개발
-            과정을 체험합니다.
-          </p>
-          <div className="inline-block bg-[#3498db] text-white text-sm rounded px-3 py-1 mr-2">
-            Easy
+    <div className="page-container">
+      <div className="grid grid-cols-9 w-full gap-x-[1.875rem] mt-[4.907rem]">
+        {/* 프로젝트 프로필 */}
+        <section className="flex col-span-6 max-h-[20.375rem] max-h-[20.375rem] pl-10 pr-8 pt-[2.063rem] pb-[10.811rem] rounded-2xl bg-linear-270 from-blue-400 via-blue-350 via-19% to-blue-420 shadow-8">
+          <div className="flex max-h-[7.502rem] gap-[1.873rem]">
+            {/* 깃발 아이콘 */}
+            <div className="flex w-[7.502rem] max-w-[7.502rem] h-[7.502rem] p-7 bg-white/30 rounded-2xl items-center justify-center">
+              <RiFlag2Line className="w-15 h-15 text-white" />
+            </div>
+            {/* 프로젝트 개요 */}
+            <div className="pt-3.5 pb-[1.189rem] flex flex-col justify-between">
+              <h1 className="text-[2.839rem] font-[590] leading-[1.17] tracking-[0.02em] text-white">
+                프로젝트 내용 (프로젝트 목적)
+              </h1>
+              <div className="flex gap-[3.625rem]">
+                {projectInfoItems.map((item, idx) => (
+                  <ProjectInfoItem
+                    key={idx}
+                    icon={item.icon}
+                    label={item.label}
+                    content={item.content}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
-          <div className="inline-block bg-[#3498db] text-white text-sm rounded px-3 py-1 mr-2">
-            React
+        </section>
+
+        {/* 학습 목표 및 진행도 */}
+        <section className="col-span-3 flex flex-col text-start rounded-2xl bg-white shadow-8">
+          <div className="border-b border-gray-250 pt-[1.625rem] pb-[1.313rem] pl-[2.625rem]">
+            <h2 className="font-[590] text-4xl leading-[1.17] tracking-[0.02em]">학습 목표</h2>
           </div>
-          <div className="inline-block bg-[#3498db] text-white text-sm rounded px-3 py-1">MVP</div>
-        </div>
-
-        <div className="p-5 rounded-lg text-sm leading-relaxed min-w-[220px]">
-          <div>총 학습 시간: 약 2시간</div>
-          <div>강의 수: 6개</div>
-          <div>퀴즈: 3개</div>
-          <div className="mt-3">
-            <label className="block text-sm">진도율</label>
-            <div className="bg-gray-300 rounded h-2 overflow-hidden my-1">
-              <div
-                className="bg-[#2ecc71] h-full transition-all duration-300"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-            <span className="text-sm">{Math.round(progress)}%</span>
+          <div className="flex flex-col pt-[2.125rem] pb-7 px-[3.625rem] h-full justify-between">
+            {/* 학습 목표 */}
+            <ul className="flex flex-col gap-[1.313rem]">
+              {learningObjectives.map((item, idx) => (
+                <li key={idx} className="font-[410] text-2xl leading-[1.17]">
+                  {item}
+                </li>
+              ))}
+            </ul>
+            {/* 진행도 */}
+            <Progress
+              percent={77.5}
+              showInfo={false}
+              strokeWidth={12}
+              trailColor="var(--color-gray-200)"
+              strokeColor="var(--color-blue-400)"
+            ></Progress>
           </div>
-          <button className="mt-4 bg-[#2ecc71] text-white font-bold px-4 py-2 rounded cursor-pointer hover:bg-green-600 transition">
-            지금 시작하기
-          </button>
-        </div>
-      </div>
+        </section>
 
-      {/* 학습 목표 */}
-      <div className="mt-10">
-        <h2 className="text-xl font-semibold mb-3">학습 목표</h2>
-        <ul className="list-disc pl-6 space-y-1 leading-relaxed">
-          <li>HTML/CSS 기반의 레이아웃 구성</li>
-          <li>컴포넌트 기반 React 구조 이해</li>
-          <li>간단한 SPA 라우팅 구현</li>
-        </ul>
-      </div>
+        {/* 회사 소개 */}
+        <section className="mt-[3.563rem] col-span-9 flex flex-col text-start rounded-2xl bg-white shadow-8">
+          <div className="border-b border-gray-250 pt-[1.875rem] pb-[1.563rem] pl-12">
+            <h2 className="font-[590] text-4xl leading-[1.17] tracking-[0.02em]">회사 소개</h2>
+          </div>
+          <div className="flex px-[3.813rem] gap-[3.438rem] pt-[2.313rem] pb-[2.688rem]">
+            <div className="w-[31.375rem] h-64 bg-gray-250 rounded-2.5xl"></div>
+            <p className="pt-[0.813rem] font-[410] text-[2rem] leading-[1.16] tracking-[0.03em]">
+              텍스트를 입력하세요
+            </p>
+          </div>
+        </section>
 
-      {/* Unit 구성 */}
-      <div className="mt-10">
-        <h2 className="text-xl font-semibold mb-3">Unit 구성</h2>
-        <ol className="list-decimal pl-6 space-y-3 leading-relaxed">
-          <li className="flex gap-4 items-center py-2 border-b border-gray-200">
-            <img
-              src="https://placehold.co/100x60?text=🔒"
-              alt="locked"
-              className="w-[100px] h-[60px] rounded object-cover"
-            />
-            <div>
-              <strong>1. 프로젝트 개요 및 개발환경 구축</strong>
-              <p className="text-sm">Vite + React 개발환경 설정, 구조 설명</p>
+        {/* 주차별 타임라인 */}
+        <section className="mt-[4.625rem] mb-[17.688rem] col-span-9 flex flex-col text-start rounded-2xl bg-white shadow-8">
+          <div className="border-b border-gray-250 pt-[2.375rem] pb-[1.563rem] pl-12">
+            <h2 className="font-[590] text-4xl leading-[1.17] tracking-[0.02em]">
+              주차별 타임라인
+            </h2>
+          </div>
+          <div className="flex flex-col pt-[2.438rem] pb-[3.875rem] px-[3.906rem]">
+            <div className="flex justify-end mr-[1.563rem] gap-10">
+              {statuses.map((status, idx) => (
+                <StatusBadge key={idx} color={status.color} label={status.label} />
+              ))}
             </div>
-          </li>
-          <li className="flex gap-4 items-center py-2 border-b border-gray-200">
-            <img
-              src="https://placehold.co/100x60?text=🔒"
-              alt="locked"
-              className="w-[100px] h-[60px] rounded object-cover"
-            />
-            <div>
-              <strong>2. 기본 컴포넌트 만들기</strong>
-              <p className="text-sm">Header, Footer, Card 컴포넌트 구성</p>
-            </div>
-          </li>
-          <li className="flex gap-4 items-center py-2 border-b border-gray-200">
-            <img
-              src="https://placehold.co/100x60?text=🔒"
-              alt="locked"
-              className="w-[100px] h-[60px] rounded object-cover"
-            />
-            <div>
-              <strong>3. React Router로 페이지 연결</strong>
-              <p className="text-sm">페이지 이동 구조 구현 및 테스트</p>
-            </div>
-          </li>
-          <li className="flex gap-4 items-center py-2 border-b border-gray-200 opacity-50 italic">
-            <img
-              src="https://placehold.co/100x60?text=🔒"
-              alt="locked"
-              className="w-[100px] h-[60px] rounded object-cover"
-            />
-            <div>
-              <strong>4. 상태관리 적용 (추후 공개 🔒)</strong>
-            </div>
-          </li>
-          <li className="flex gap-4 items-center py-2 border-b border-gray-200 opacity-50 italic">
-            <img
-              src="https://placehold.co/100x60?text=🔒"
-              alt="locked"
-              className="w-[100px] h-[60px] rounded object-cover"
-            />
-            <div>
-              <strong>5. 프로젝트 최종 완성 (추후 공개 🔒)</strong>
-            </div>
-          </li>
-        </ol>
+            {/* 유닛 목록 */}
+            <ol className="mt-5 flex flex-col gap-[4.688rem]">
+              <UnitItem />
+              <UnitItem />
+              <UnitItem />
+              <UnitItem />
+            </ol>
+          </div>
+        </section>
       </div>
     </div>
   );

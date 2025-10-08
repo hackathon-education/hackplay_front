@@ -20,10 +20,15 @@ const Header = () => {
   const { isLockModalOpen, closeLockModal, handleLockedItemClick } = useLockModal();
 
   // 페이지별 상단 여백 높이 설정
-  const getTopSpacerHeight = () => {
+  const getTopSpacerHeight = (): string => {
     const path = location.pathname;
 
-    if (path.startsWith('/courses/')) {
+    const lectureListPathRegex = /^\/courses\/[^/]+\/[^/]+$/;
+    const lectureMainPathRegex = /^\/courses\/[^/]+\/[^/]+\/[^/]+$/;
+
+    if (lectureMainPathRegex.test(path)) {
+      return 'h-[1.344rem]';
+    } else if (lectureListPathRegex.test(path)) {
       return 'h-[1.844rem]';
     } else {
       return 'h-[2.188rem]';
