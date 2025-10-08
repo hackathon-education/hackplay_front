@@ -23,6 +23,7 @@
   --radius-lg: 0.625rem; /* 10px */
   --radius-xl: 0.75rem; /* 12px */
   --radius-2xl: 1.25rem; /* 20px */
+  --radius-2.5xl: 1.398rem; /* 22.36px */
   --radius-3xl: 1.844rem; /* 29.5px */
   --radius-4xl: 2.281rem; /* 36.5px */
   --radius-5xl: 2.604rem; /* 41.67px */
@@ -31,6 +32,7 @@
   --color-blue-100: #cddefe;
   --color-blue-200: #9bbdfd;
   --color-blue-300: #4a98e0;
+  --color-blue-330: #42a7ff;
   --color-blue-350: #41a2e3;
   --color-blue-400: #0071bc;
   --color-blue-420: #266db0;
@@ -51,6 +53,8 @@
 
   --color-white: #ffffff;
   --color-black: #000000;
+  --color-green: #1CD200;
+  --color-yellow: #FFD23D;
 
   /** Shadow **/
   --shadow-1: 1px 1px 1px 0px rgba(0, 0, 0, 0.1);
