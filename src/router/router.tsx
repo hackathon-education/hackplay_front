@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 
 import { ROUTES } from '@/constants/routes';
 import BasicLearningPage from '@/pages/BasicLearningPage';
+import CodeEditorPage from '@/pages/CodeEditorPage';
 import CoursesPage from '@/pages/CoursesPage';
 import LectureDetailPage from '@/pages/LectureDetailPage';
 import LectureListPage from '@/pages/LectureListPage';
@@ -32,6 +33,9 @@ const Router = () => {
         path={ROUTES.COURSES.LECTURE_DETAIL(':job', ':level', ':lectureId')}
         element={<LectureDetailPage />}
       />
+
+      {/* 코드 에디터 */}
+      <Route path={ROUTES.WORKSPACE(':lectureId')} element={<CodeEditorPage />} />
 
       {/* 기초 학습 */}
       <Route path={ROUTES.BASIC_LEARNING.ROOT} element={<BasicLearningPage />} />
