@@ -103,3 +103,7 @@
 .blue-gradient {
   @apply from-blue-400 to-blue-300;
 }
+
+.header-white-box {
+  @apply rounded-4xl bg-white shadow-1;
+}
