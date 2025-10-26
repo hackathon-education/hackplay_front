@@ -2,24 +2,38 @@ import { useState } from 'react';
 import { AiFillFileText } from 'react-icons/ai';
 import { BiSolidUser } from 'react-icons/bi';
 import { BsPencilFill } from 'react-icons/bs';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 
+import BEDeveloperImg from '@/assets/backend.png';
+import DesignerImg from '@/assets/designer.png';
+import FEDeveloperImg from '@/assets/frontend.png';
+import PlannerImg from '@/assets/planner.png';
 import { JOB_TYPES } from '@/constants/jobTypes';
 
-// 좌측 패널 탭 아이템 인터페이스
+// 좌측 패널 - 탭 아이템 인터페이스
 interface tabItem {
   key: 'overview' | 'request' | 'answer';
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   sizeClass?: string;
 }
 
-// 좌측 패널 실습 개요 아이템 인터페이스
+// 좌측 패널 - 실습 개요(첫 번째 탭) 아이템 인터페이스
 interface overviewItem {
   title: string;
   content: string;
 }
 
+// 좌측 패널 - 직무별 요청사항(두 번째 탭) 인터페이스
+interface request {
+  role: string;
+  image: string;
+  content: string;
+}
+
 const CodeEditorPage = () => {
+  const userRole = JOB_TYPES.FE; // 사용자 직무
   const [activeTab, setActiveTab] = useState<'overview' | 'request' | 'answer'>('overview');
+  const [requestIndex, setRequestIndex] = useState<number>(0); // 직무별 요청사항 인덱스
 
   // 좌측 패널 상단 탭 데이터
   const tabs: tabItem[] = [
@@ -36,6 +50,30 @@ const CodeEditorPage = () => {
       content: `- 깃 연결 → main 브랜치를 기준으로 작업 브랜치 checkout (예: feat/saved-posts-api)\n- 페이지 구성 (라우팅 구현)\n- 홈(피드): 게시물 카드 우하단에 저장(북마크) 아이콘 배치 → 클릭 시 저장/해제 API 호출\n- 프로필(/:username)에 Saved(저장됨) 탭/섹션 추가 → 진입 시 저장 목록 조회 API 호출해 렌더링\n- API 연동\n- POST /api/v1/saved: { postId } 저장\n- DELETE /api/v1/saved/{postId}: 저장 해제\n- GET /api/v1/saved: 내가 저장한 게시물 목록 조회\n- 모든 요청에 Authorization: Bearer <JWT> 헤더 포함(2~3주차 로그인에서 저장한 토큰 사용)\n- UI/동작 세부\n- 저장/해제 시 아이콘 상태 즉시 토글 → 실패 시 롤백 & 에러 안내\n- 프로필 Saved 섹션: 그리드 카드로 표시(모바일 1열, 데스크톱 2열 이상)\n- 비로그인 상태에서 저장 시도 → 안내 alert 후 /login으로 리다이렉션\n- 오류/로딩 처리\n- 버튼/아이콘에 로딩 상태 반영(중복 클릭 방지)\n- 백엔드 오류코드별 메시지 노출(아래 문서 섹션 참고)\n- 기능 동작 확인 후 작업 브랜치 push\n- 작업 브랜치 → main으로 Pull Request 생성\n⇒ 위 동작들은 Hackplay에 삽입된 Code Editor 내에서 수행 가능해야 함`,
     },
     { title: '실습 결과', content: '텍스트를 입력하세요 (실습 결과)' },
+  ];
+
+  // 좌측 패널 - 직무별 요청사항(두 번째 탭) 데이터
+  const requests: request[] = [
+    {
+      role: JOB_TYPES.PLAN,
+      // image: PlannerImg,
+      image: FEDeveloperImg,
+      content:
+        '회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요.',
+    },
+    {
+      role: JOB_TYPES.DESIGN,
+      image: DesignerImg,
+      content:
+        '회원가입 시안은 피그마에 있어요. 폰트는 Pretendard, 버튼 색 #0070f3 / hover #005bb5. placeholder는 ‘이름 입력’, ‘이메일 주소 입력’, ‘비밀번호 입력’, ‘비밀번호 확인’. 에러 메시지는 입력창 하단 **빨간색(#FF4D4F)**으로 표시해주세요. 모바일에선 입력창 100% 폭, 버튼 하단 여백 16px.',
+    },
+    { role: JOB_TYPES.FE, image: FEDeveloperImg, content: '텍스트를 입력하세요. (요청사항)' },
+    {
+      role: JOB_TYPES.BE,
+      image: BEDeveloperImg,
+      content:
+        '회원가입 시안은 피그마에 있어요. 폰트는 Pretendard, 버튼 색 #0070f3 / hover #005bb5. placeholder는 ‘이름 입력’, ‘이메일 주소 입력’, ‘비밀번호 입력’, ‘비밀번호 확인’. 에러 메시지는 입력창 하단 **빨간색(#FF4D4F)**으로 표시해주세요. 모바일에선 입력창 100% 폭, 버튼 하단 여백 16px.',
+    },
   ];
 
   return (
@@ -58,14 +96,14 @@ const CodeEditorPage = () => {
         </div>
 
         {/* 좌측 패널 - 내용 */}
-        <div className="bg-white h-full rounded-2xl -mt-6 overflow-auto scrollbar-thin scrollbar-thumb-sky-700">
+        <div className="bg-white h-full rounded-2xl -mt-6 overflow-auto shadow-1">
           {/* 1. 실습 개요 패널 */}
           {activeTab === 'overview' && (
             <div className="flex flex-col pt-6 px-7 pb-[4.063rem]">
               {/* 직무 배지 */}
               <div className="flex ml-[0.175rem] mb-[0.419rem] bg-blue-300 w-fit rounded-2.7xl px-[0.419rem] py-[0.134rem]">
                 <span className="font-[590] text-[0.542rem]/[1.25] tracking-[0.03em] text-white">
-                  {JOB_TYPES.FE}
+                  {userRole}
                 </span>
               </div>
 
@@ -89,6 +127,41 @@ const CodeEditorPage = () => {
                   </p>
                 </div>
               ))}
+            </div>
+          )}
+
+          {/* 2. 요청 사항 패널 */}
+          {activeTab === 'request' && (
+            <div className="h-full pt-[1.919rem] px-[1.375rem] pb-[2.875rem]">
+              <div className="h-full overflow-x-hidden flex">
+                {requests.map(
+                  (request) =>
+                    request.role !== userRole && (
+                      <div className="flex flex-col items-center min-w-full">
+                        {/* 직무 배지 */}
+                        <div className="flex px-[1.527rem] py-[0.363rem] bg-blue-400 rounded-1.5xl mb-[0.231rem]">
+                          <span className="text-[0.938rem]/[1.2] text-white">{request.role}</span>
+                        </div>
+
+                        {/* 직무 아바타 */}
+                        <div className="flex w-[11.563rem] h-[18.063rem] mb-3.5">
+                          <img src={request.image} alt="" className="object-contain" />
+                        </div>
+
+                        {/* 요청사항 및 화살표 버튼 */}
+                        <div className="flex w-full h-[25.813rem] items-center gap-[0.719rem]">
+                          <button className="flex w-8 h-8 bg-white shadow-9 rounded-full items-center justify-center">
+                            <FaChevronLeft className="text-blue-400 w-2 stroke-30" />
+                          </button>
+                          <div className="flex-1 h-full">request</div>
+                          <button className="flex w-8 h-8 bg-white shadow-9 rounded-full items-center justify-center">
+                            <FaChevronRight className="text-blue-400 w-2 stroke-30" />
+                          </button>
+                        </div>
+                      </div>
+                    ),
+                )}
+              </div>
             </div>
           )}
         </div>
