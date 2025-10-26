@@ -33,7 +33,7 @@ interface request {
 const CodeEditorPage = () => {
   const userRole = JOB_TYPES.FE; // 사용자 직무
   const [activeTab, setActiveTab] = useState<'overview' | 'request' | 'answer'>('overview');
-  const [requestIndex, setRequestIndex] = useState<number>(0); // 직무별 요청사항 인덱스
+  const [currentRequestIndex, setCurrentRequestIndex] = useState<number>(0); // 직무별 요청사항 현재 인덱스
 
   // 좌측 패널 상단 탭 데이터
   const tabs: tabItem[] = [
@@ -56,8 +56,7 @@ const CodeEditorPage = () => {
   const requests: request[] = [
     {
       role: JOB_TYPES.PLAN,
-      // image: PlannerImg,
-      image: FEDeveloperImg,
+      image: PlannerImg,
       content:
         '회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요.',
     },
@@ -72,9 +71,19 @@ const CodeEditorPage = () => {
       role: JOB_TYPES.BE,
       image: BEDeveloperImg,
       content:
-        '회원가입 시안은 피그마에 있어요. 폰트는 Pretendard, 버튼 색 #0070f3 / hover #005bb5. placeholder는 ‘이름 입력’, ‘이메일 주소 입력’, ‘비밀번호 입력’, ‘비밀번호 확인’. 에러 메시지는 입력창 하단 **빨간색(#FF4D4F)**으로 표시해주세요. 모바일에선 입력창 100% 폭, 버튼 하단 여백 16px.',
+        '회원가입 API는 **/api/v1/register**로 POST입니다. Body에 name, email, password 주세요. 성공 시 201 Created로 사용자 정보를 JSON으로 반환하고, 토큰은 발급하지 않아요(로그인은 3주차에서 별도 진행). 실패 시 400/409/422/500 등 상태 코드로 내려줄게요.',
     },
   ];
+
+  const filteredRequests = requests.filter((request) => request.role !== userRole); // 직무별 요청사항 필터링 - 사용자 직무 제외
+
+  // 직무별 요청사항 인덱스 이동
+  const handlePrevRequest = () => {
+    setCurrentRequestIndex((prev) => (prev > 0 ? prev - 1 : filteredRequests.length - 1));
+  };
+  const handleNextRequest = () => {
+    setCurrentRequestIndex((prev) => (prev < filteredRequests.length - 1 ? prev + 1 : 0));
+  };
 
   return (
     <div className="px-[3.164rem] pt-[1.009rem] pb-[2.688rem] flex gap-[0.813rem] h-[calc(100vh-5.095rem)]">
@@ -132,35 +141,61 @@ const CodeEditorPage = () => {
 
           {/* 2. 요청 사항 패널 */}
           {activeTab === 'request' && (
-            <div className="h-full pt-[1.919rem] px-[1.375rem] pb-[2.875rem]">
-              <div className="h-full overflow-x-hidden flex">
-                {requests.map(
-                  (request) =>
-                    request.role !== userRole && (
-                      <div className="flex flex-col items-center min-w-full">
-                        {/* 직무 배지 */}
-                        <div className="flex px-[1.527rem] py-[0.363rem] bg-blue-400 rounded-1.5xl mb-[0.231rem]">
-                          <span className="text-[0.938rem]/[1.2] text-white">{request.role}</span>
-                        </div>
-
-                        {/* 직무 아바타 */}
-                        <div className="flex w-[11.563rem] h-[18.063rem] mb-3.5">
-                          <img src={request.image} alt="" className="object-contain" />
-                        </div>
-
-                        {/* 요청사항 및 화살표 버튼 */}
-                        <div className="flex w-full h-[25.813rem] items-center gap-[0.719rem]">
-                          <button className="flex w-8 h-8 bg-white shadow-9 rounded-full items-center justify-center">
-                            <FaChevronLeft className="text-blue-400 w-2 stroke-30" />
-                          </button>
-                          <div className="flex-1 h-full">request</div>
-                          <button className="flex w-8 h-8 bg-white shadow-9 rounded-full items-center justify-center">
-                            <FaChevronRight className="text-blue-400 w-2 stroke-30" />
-                          </button>
-                        </div>
+            <div className="h-full pt-[1.919rem] px-[1.375rem] pb-[2.875rem] flex flex-col">
+              <div className="flex-1 overflow-x-hidden flex">
+                <div
+                  className="flex w-full h-full transition-transform duration-300 ease-in-out"
+                  style={{ transform: `translateX(-${currentRequestIndex * 100}%)` }}
+                >
+                  {filteredRequests.map((request, index) => (
+                    <div key={index} className="flex flex-col items-center min-w-full">
+                      {/* 직무 배지 */}
+                      <div className="flex px-[1.527rem] py-[0.363rem] bg-blue-400 rounded-1.5xl mb-[0.231rem]">
+                        <span className="text-[0.938rem]/[1.2] text-white">{request.role}</span>
                       </div>
-                    ),
-                )}
+
+                      {/* 직무 아바타 */}
+                      <div className="flex w-[11.563rem] h-[18.063rem] mb-3.5">
+                        <img src={request.image} alt="" className="object-contain" />
+                      </div>
+
+                      {/* 요청사항 및 화살표 버튼 */}
+                      <div className="flex flex-1 w-full max-h-[25.813rem] items-center gap-[0.719rem]">
+                        <button
+                          onClick={handlePrevRequest}
+                          className="flex w-8 h-8 bg-white shadow-9 rounded-full items-center justify-center text-blue-400 hover:bg-blue-400 hover:text-white transition-colors hover:shadow-4 transition-shadow"
+                        >
+                          <FaChevronLeft className="w-2 stroke-30" />
+                        </button>
+                        <div className="flex-1 h-full bg-gray-90 rounded-lg px-[1.813rem] py-[1.125rem] overflow-auto flex flex-col gap-[0.438rem]">
+                          <h4 className="font-[590] text-2xl/[1.17] tracking-[0.03em]">요청사항</h4>
+                          <p className="font-[410] text-[0.938rem]/[1.33] whitespace-pre-wrap">
+                            {request.content}
+                          </p>
+                        </div>
+                        <button
+                          onClick={handleNextRequest}
+                          className="flex w-8 h-8 bg-white shadow-9 rounded-full items-center justify-center text-blue-400 hover:bg-blue-400 hover:text-white transition-colors hover:shadow-4 transition-shadow"
+                        >
+                          <FaChevronRight className="w-2 stroke-30" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 인디케이터 */}
+              <div className="flex justify-center gap-[0.563rem] mt-[1.875rem]">
+                {filteredRequests.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentRequestIndex(index)}
+                    className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
+                      index === currentRequestIndex ? 'bg-blue-400' : 'bg-gray-200'
+                    }`}
+                  />
+                ))}
               </div>
             </div>
           )}
