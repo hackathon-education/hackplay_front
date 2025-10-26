@@ -142,7 +142,7 @@ const CodeEditorPage = () => {
           {/* 2. 요청 사항 패널 */}
           {activeTab === 'request' && (
             <div className="h-full pt-[1.919rem] px-[1.375rem] pb-[2.875rem] flex flex-col">
-              <div className="flex-1 overflow-x-hidden flex">
+              <div className="flex-1 overflow-x-hidden flex relative">
                 <div
                   className="flex w-full h-full transition-transform duration-300 ease-in-out"
                   style={{ transform: `translateX(-${currentRequestIndex * 100}%)` }}
@@ -159,29 +159,33 @@ const CodeEditorPage = () => {
                         <img src={request.image} alt="" className="object-contain" />
                       </div>
 
-                      {/* 요청사항 및 화살표 버튼 */}
-                      <div className="flex flex-1 w-full max-h-[25.813rem] items-center gap-[0.719rem]">
-                        <button
-                          onClick={handlePrevRequest}
-                          className="flex w-8 h-8 bg-white shadow-9 rounded-full items-center justify-center text-blue-400 hover:bg-blue-400 hover:text-white transition-colors hover:shadow-4 transition-shadow"
-                        >
-                          <FaChevronLeft className="w-2 stroke-30" />
-                        </button>
+                      {/* 요청사항 박스 */}
+                      <div className="flex flex-1 w-full max-h-[25.813rem] px-[2.719rem]">
                         <div className="flex-1 h-full bg-gray-90 rounded-lg px-[1.813rem] py-[1.125rem] overflow-auto flex flex-col gap-[0.438rem]">
                           <h4 className="font-[590] text-2xl/[1.17] tracking-[0.03em]">요청사항</h4>
                           <p className="font-[410] text-[0.938rem]/[1.33] whitespace-pre-wrap">
                             {request.content}
                           </p>
                         </div>
-                        <button
-                          onClick={handleNextRequest}
-                          className="flex w-8 h-8 bg-white shadow-9 rounded-full items-center justify-center text-blue-400 hover:bg-blue-400 hover:text-white transition-colors hover:shadow-4 transition-shadow"
-                        >
-                          <FaChevronRight className="w-2 stroke-30" />
-                        </button>
                       </div>
                     </div>
                   ))}
+                </div>
+
+                {/* 직무별 요청사항 - 좌우 이동 버튼 */}
+                <div className="absolute flex inset-0 justify-between top-[70.37%]">
+                  <button
+                    onClick={handlePrevRequest}
+                    className="flex w-8 h-8 bg-white shadow-9 rounded-full items-center justify-center text-blue-400 hover:bg-blue-400 hover:text-white transition-colors hover:shadow-4 transition-shadow"
+                  >
+                    <FaChevronLeft className="w-2 stroke-30" />
+                  </button>
+                  <button
+                    onClick={handleNextRequest}
+                    className="flex w-8 h-8 bg-white shadow-9 rounded-full items-center justify-center text-blue-400 hover:bg-blue-400 hover:text-white transition-colors hover:shadow-4 transition-shadow"
+                  >
+                    <FaChevronRight className="w-2 stroke-30" />
+                  </button>
                 </div>
               </div>
 
