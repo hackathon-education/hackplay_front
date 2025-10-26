@@ -22,6 +22,7 @@
   --radius-md: 0.563rem; /* 9px */
   --radius-lg: 0.625rem; /* 10px */
   --radius-xl: 0.75rem; /* 12px */
+  --radius-1.5xl: 0.925rem; /* 14.8px */
   --radius-2xl: 1.25rem; /* 20px */
   --radius-2.5xl: 1.398rem; /* 22.36px */
   --radius-2.7xl: 1.737rem; /* 27.79px */
@@ -69,6 +70,7 @@
   --shadow-6: 1px 1px 50px 0px rgba(0, 0, 0, 0.4);
   --shadow-7: 1px 1px 20px -9px rgba(0, 0, 0, 0.4);
   --shadow-8: 1px 1px 30px -9px rgba(0, 0, 0, 0.4);
+  --shadow-9: 1.455px 1.455px 1.455px rgba(0, 0, 0, 0.1);
 
   /** z-index 계층 구조 **/
 
