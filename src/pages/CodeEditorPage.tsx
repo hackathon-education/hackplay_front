@@ -3,6 +3,7 @@ import { AiFillFileText } from 'react-icons/ai';
 import { BiSolidUser } from 'react-icons/bi';
 import { BsPencilFill } from 'react-icons/bs';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
+import { useLocation } from 'react-router-dom';
 
 import BEDeveloperImg from '@/assets/backend.png';
 import DesignerImg from '@/assets/designer.png';
@@ -24,16 +25,40 @@ interface overviewItem {
 }
 
 // 좌측 패널 - 직무별 요청사항(두 번째 탭) 인터페이스
-interface request {
+interface Request {
   role: string;
   image: string;
   content: string;
 }
 
+// 요청사항 및 작업 절차 박스 인터페이스
+interface RequestBoxProps {
+  title: string;
+  content: string;
+}
+
+// 요청사항 및 작업 절차 박스 컴포넌트
+const RequestBox = ({ title, content }: RequestBoxProps) => (
+  <div
+    className={`flex flex-1 w-full ${
+      title === '요청사항' ? 'h-[25.813rem] px-[2.719rem]' : ''
+    }`}
+  >
+    <div className="flex-1 max-w-full bg-gray-90 rounded-lg px-[1.813rem] py-[1.125rem] flex flex-col gap-[0.438rem]">
+      <h4 className="font-[590] text-2xl/[1.17] tracking-[0.03em]">{title}</h4>
+      <p className="font-[410] text-[0.938rem]/[1.33] whitespace-pre-wrap">{content}</p>
+    </div>
+  </div>
+);
+
 const CodeEditorPage = () => {
+  const location = useLocation();
+  const path = location.pathname;
+
   const userRole = JOB_TYPES.FE; // 사용자 직무
   const [activeTab, setActiveTab] = useState<'overview' | 'request' | 'answer'>('overview');
   const [currentRequestIndex, setCurrentRequestIndex] = useState<number>(0); // 직무별 요청사항 현재 인덱스
+  const noRequest = path === '/workspaces/team-project-1' || path === '/workspaces/team-project-2'; // 1, 2주차는 요청사항 없음
 
   // 좌측 패널 상단 탭 데이터
   const tabs: tabItem[] = [
@@ -53,12 +78,13 @@ const CodeEditorPage = () => {
   ];
 
   // 좌측 패널 - 직무별 요청사항(두 번째 탭) 데이터
-  const requests: request[] = [
+  const requests: Request[] = [
     {
       role: JOB_TYPES.PLAN,
       image: PlannerImg,
       content:
-        '회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요.',
+      // '회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요.'
+        '회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요.',
     },
     {
       role: JOB_TYPES.DESIGN,
@@ -141,66 +167,159 @@ const CodeEditorPage = () => {
 
           {/* 2. 요청 사항 패널 */}
           {activeTab === 'request' && (
-            <div className="h-full pt-[1.919rem] px-[1.375rem] pb-[2.875rem] flex flex-col">
-              <div className="flex-1 overflow-x-hidden flex relative">
-                <div
-                  className="flex w-full h-full transition-transform duration-300 ease-in-out"
-                  style={{ transform: `translateX(-${currentRequestIndex * 100}%)` }}
-                >
-                  {filteredRequests.map((request, index) => (
-                    <div key={index} className="flex flex-col items-center min-w-full">
-                      {/* 직무 배지 */}
-                      <div className="flex px-[1.527rem] py-[0.363rem] bg-blue-400 rounded-1.5xl mb-[0.231rem]">
-                        <span className="text-[0.938rem]/[1.2] text-white">{request.role}</span>
-                      </div>
+            <div className={'min-h-full pt-[1.919rem] pb-[2.875rem] flex flex-col px-[1.375rem]'}>
+              {/* 작업 절차 */}
+              {noRequest ? (
+                <RequestBox
+                  title="작업 절차"
+                  content="### Version Control & Github Repository 연결
+- Git Workflow 전략
+    - 브랜치 전략 : Git Flow 방식
+        
+        main (배포용)
+        ├── dev (작업용)
+        ├── feature/register (2주차 회원가입)
+        ├── feature/login-out (3주차 로그인/로그아웃)
+        └── feature/post-save (4주차 게시물 저장)
+        
+    - 브랜치 명명 규칙
+        - `feature/기능명`: 새로운 기능 개발
+        - `bugfix/버그명`: 버그 수정
+        - `hotfix/긴급수정명`: 프로덕션 긴급 수정
+        - `release/버전명`: 릴리즈 준비
+- 작업 디렉토리 생성
+    
+    mkdir insta-company && cd insta-company
+    
+- Frontend Github Repo 연결
+    
+    git clone https://github.com/hackathon-education/insta_clone_front.git
+    
+- Backend Github Repo 연결
+    
+    git clone [https://github.com/hackathon-education/insta_clone_back.git](https://github.com/hackathon-education/insta_clone_front.git)
+    
+- 프론트/백엔드를 **각각 별도 리포지토리**로 운영
 
-                      {/* 직무 아바타 */}
-                      <div className="flex w-[11.563rem] h-[18.063rem] mb-3.5">
-                        <img src={request.image} alt="" className="object-contain" />
-                      </div>
+### DataBase 설정 (추후 공개 DB로 제공)
 
-                      {/* 요청사항 박스 */}
-                      <div className="flex flex-1 w-full max-h-[25.813rem] px-[2.719rem]">
-                        <div className="flex-1 h-full bg-gray-90 rounded-lg px-[1.813rem] py-[1.125rem] overflow-auto flex flex-col gap-[0.438rem]">
-                          <h4 className="font-[590] text-2xl/[1.17] tracking-[0.03em]">요청사항</h4>
-                          <p className="font-[410] text-[0.938rem]/[1.33] whitespace-pre-wrap">
-                            {request.content}
-                          </p>
+- MongoDB 설치
+    - mongoDB Compass 설치 - GUI로 확인
+        
+        https://www.mongodb.com/try/download/compass
+        
+    - mongoDB Community 서버 설치
+        
+        https://www.mongodb.com/try/download/community
+        
+- Database 생성
+    - Add Connection
+        
+        ![image.png](attachment:63d242a4-e9c3-4509-ba0a-b7c548185cf0:image.png)
+        
+    - Name : InstaDB
+    - → Save & Connect
+    - 백엔드 Backend\src\main\resources\application.properties 파일 내용
+        
+        ```bash
+        spring.application.name=Backend
+        spring.data.mongodb.uri=mongodb://localhost:27017/InstaDB
+        server.port=1010
+        
+        # JWT
+        app.jwt.secret=change-this-to-a-long-random-secret
+        app.jwt.exp-min=60
+        ```
+        
+- Table(스키마) 생성 → 백엔드 연결 시 자동 생성
+- 더미 Data 삽입 → 자동 삽입
+    - 유저 data : 회원가입 시 자동 삽입
+    - 게시물 data : 게시물 저장 기능 구현 시 사용 (삽입문 제공)
+
+### Figma 디자인 확인
+
+- Figma URL : [URL]
+- 확인 사항
+    - 컬러 팔레트
+    - 타이포그래피
+    - 컴포넌트 라이브러리
+    - 레이아웃 가이드
+
+### 동작 검증(연결 테스트)
+
+- Frontend 검증
+    - 의존성 설치 : npm install
+    - 실행 : npm run dev
+    - Port : 5173
+- Backend 검증
+    - 의존성 설치 : .\mvnw.cmd clean install
+    - 실행 : .\mvnw.cmd spring-boot:run
+    - Port : 1010
+- Database 검증
+- 연결 테스트
+    - Backend에서 MongoDB 연결 확인
+    - Frontend에서 Backend API 호출 테스트"
+                />
+              ) : (
+                <>
+                  <div className="flex-1 overflow-x-hidden flex relative">
+                    <div
+                      className="flex w-full min-h-full transition-transform duration-300 ease-in-out"
+                      style={{ transform: `translateX(-${currentRequestIndex * 100}%)` }}
+                    >
+                      {filteredRequests.map((request, index) => (
+                        <div key={index} className="flex flex-col items-center min-w-full min-h-full">
+                          <>
+                            {/* 직무 배지 */}
+                            <div className="flex px-[1.527rem] py-[0.363rem] bg-blue-400 rounded-1.5xl mb-[0.231rem]">
+                              <span className="text-[0.938rem]/[1.2] text-white">
+                                {request.role}
+                              </span>
+                            </div>
+
+                            {/* 직무 아바타 */}
+                            <div className="flex w-[11.563rem] h-[18.063rem] mb-3.5">
+                              <img src={request.image} alt="" className="object-contain" />
+                            </div>
+
+                            {/* 요청사항 박스 */}
+                            <RequestBox title="요청사항" content={request.content} />
+                          </>
                         </div>
-                      </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
 
-                {/* 직무별 요청사항 - 좌우 이동 버튼 */}
-                <div className="absolute flex inset-0 justify-between top-[70.37%]">
-                  <button
-                    onClick={handlePrevRequest}
-                    className="flex w-8 h-8 bg-white shadow-9 rounded-full items-center justify-center text-blue-400 hover:bg-blue-400 hover:text-white transition-colors hover:shadow-4 transition-shadow"
-                  >
-                    <FaChevronLeft className="w-2 stroke-30" />
-                  </button>
-                  <button
-                    onClick={handleNextRequest}
-                    className="flex w-8 h-8 bg-white shadow-9 rounded-full items-center justify-center text-blue-400 hover:bg-blue-400 hover:text-white transition-colors hover:shadow-4 transition-shadow"
-                  >
-                    <FaChevronRight className="w-2 stroke-30" />
-                  </button>
-                </div>
-              </div>
+                    {/* 직무별 요청사항 - 좌우 이동 버튼 */}
+                    <div className="absolute flex inset-0 justify-between top-[70.37%]">
+                      <button
+                        onClick={handlePrevRequest}
+                        className="flex w-8 h-8 bg-white shadow-9 rounded-full items-center justify-center text-blue-400 hover:bg-blue-400 hover:text-white transition-colors hover:shadow-4 transition-shadow"
+                      >
+                        <FaChevronLeft className="w-2 stroke-30" />
+                      </button>
+                      <button
+                        onClick={handleNextRequest}
+                        className="flex w-8 h-8 bg-white shadow-9 rounded-full items-center justify-center text-blue-400 hover:bg-blue-400 hover:text-white transition-colors hover:shadow-4 transition-shadow"
+                      >
+                        <FaChevronRight className="w-2 stroke-30" />
+                      </button>
+                    </div>
+                  </div>
 
-              {/* 인디케이터 */}
-              <div className="flex justify-center gap-[0.563rem] mt-[1.875rem]">
-                {filteredRequests.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentRequestIndex(index)}
-                    className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
-                      index === currentRequestIndex ? 'bg-blue-400' : 'bg-gray-200'
-                    }`}
-                  />
-                ))}
-              </div>
+                  {/* 인디케이터 */}
+                  <div className="flex justify-center gap-[0.563rem] mt-[1.875rem]">
+                    {filteredRequests.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentRequestIndex(index)}
+                        className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
+                          index === currentRequestIndex ? 'bg-blue-400' : 'bg-gray-200'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           )}
         </div>
