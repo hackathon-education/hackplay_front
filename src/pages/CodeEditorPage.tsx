@@ -40,9 +40,7 @@ interface RequestBoxProps {
 // 요청사항 및 작업 절차 박스 컴포넌트
 const RequestBox = ({ title, content }: RequestBoxProps) => (
   <div
-    className={`flex flex-1 w-full ${
-      title === '요청사항' ? 'h-[25.813rem] px-[2.719rem]' : ''
-    }`}
+    className={`flex flex-1 w-full ${title === '요청사항' ? 'h-[25.813rem] px-[2.719rem]' : ''}`}
   >
     <div className="flex-1 max-w-full bg-gray-90 rounded-lg px-[1.813rem] py-[1.125rem] flex flex-col gap-[0.438rem]">
       <h4 className="font-[590] text-2xl/[1.17] tracking-[0.03em]">{title}</h4>
@@ -83,7 +81,7 @@ const CodeEditorPage = () => {
       role: JOB_TYPES.PLAN,
       image: PlannerImg,
       content:
-      // '회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요.'
+        // '회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요.',
         '회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요.',
     },
     {
@@ -131,48 +129,49 @@ const CodeEditorPage = () => {
         </div>
 
         {/* 좌측 패널 - 내용 */}
-        <div className="bg-white h-full rounded-2xl -mt-6 overflow-auto shadow-1">
-          {/* 1. 실습 개요 패널 */}
-          {activeTab === 'overview' && (
-            <div className="flex flex-col pt-6 px-7 pb-[4.063rem]">
-              {/* 직무 배지 */}
-              <div className="flex ml-[0.175rem] mb-[0.419rem] bg-blue-300 w-fit rounded-2.7xl px-[0.419rem] py-[0.134rem]">
-                <span className="font-[590] text-[0.542rem]/[1.25] tracking-[0.03em] text-white">
-                  {userRole}
-                </span>
-              </div>
-
-              {overviewItems.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col gap-[0.43rem] mb-[3.353rem] last:mb-0 pr-15 last:pr-0"
-                >
-                  <h3 className="font-[590] text-2xl/[1.17] tracking-wider">{item.title}</h3>
-                  {item.title === '실습 결과' && (
-                    <div className="mt-[0.787rem] mb-[0.695rem] bg-gray-90 h-64 flex items-center justify-center rounded-xs">
-                      <span className="font-[410] text-[0.938rem]/[1.33] tracking-[0.03em]">
-                        (실습 내용 사진)
-                      </span>
-                    </div>
-                  )}
-                  <p
-                    className={`font-[410] leading-[1.33] tracking-[0.03em] whitespace-pre-line ${item.title === '실습 결과' ? 'text-[0.938rem]' : 'text-[0.812rem]'}`}
-                  >
-                    {item.content}
-                  </p>
+        <div className="relative bg-white h-full rounded-2xl -mt-6 shadow-1 overflow-hidden">
+          <div className="overflow-auto h-full">
+            {/* 1. 실습 개요 패널 */}
+            {activeTab === 'overview' && (
+              <div className="flex flex-col pt-6 px-7 pb-[4.063rem]">
+                {/* 직무 배지 */}
+                <div className="flex ml-[0.175rem] mb-[0.419rem] bg-blue-300 w-fit rounded-2.7xl px-[0.419rem] py-[0.134rem]">
+                  <span className="font-[590] text-[0.542rem]/[1.25] tracking-[0.03em] text-white">
+                    {userRole}
+                  </span>
                 </div>
-              ))}
-            </div>
-          )}
 
-          {/* 2. 요청 사항 패널 */}
-          {activeTab === 'request' && (
-            <div className={'min-h-full pt-[1.919rem] pb-[2.875rem] flex flex-col px-[1.375rem]'}>
-              {/* 작업 절차 */}
-              {noRequest ? (
-                <RequestBox
-                  title="작업 절차"
-                  content="### Version Control & Github Repository 연결
+                {overviewItems.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col gap-[0.43rem] mb-[3.353rem] last:mb-0 pr-15 last:pr-0"
+                  >
+                    <h3 className="font-[590] text-2xl/[1.17] tracking-wider">{item.title}</h3>
+                    {item.title === '실습 결과' && (
+                      <div className="mt-[0.787rem] mb-[0.695rem] bg-gray-90 h-64 flex items-center justify-center rounded-xs">
+                        <span className="font-[410] text-[0.938rem]/[1.33] tracking-[0.03em]">
+                          (실습 내용 사진)
+                        </span>
+                      </div>
+                    )}
+                    <p
+                      className={`font-[410] leading-[1.33] tracking-[0.03em] whitespace-pre-line ${item.title === '실습 결과' ? 'text-[0.938rem]' : 'text-[0.812rem]'}`}
+                    >
+                      {item.content}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* 2. 요청 사항 패널 */}
+            {activeTab === 'request' && (
+              <div className={'min-h-full pt-[1.919rem] pb-[2.875rem] flex flex-col px-[1.375rem]'}>
+                {/* 작업 절차 */}
+                {noRequest ? (
+                  <RequestBox
+                    title="작업 절차"
+                    content="### Version Control & Github Repository 연결
 - Git Workflow 전략
     - 브랜치 전략 : Git Flow 방식
         
@@ -259,67 +258,73 @@ const CodeEditorPage = () => {
 - 연결 테스트
     - Backend에서 MongoDB 연결 확인
     - Frontend에서 Backend API 호출 테스트"
-                />
-              ) : (
-                <>
-                  <div className="flex-1 overflow-x-hidden flex relative">
-                    <div
-                      className="flex w-full min-h-full transition-transform duration-300 ease-in-out"
-                      style={{ transform: `translateX(-${currentRequestIndex * 100}%)` }}
-                    >
-                      {filteredRequests.map((request, index) => (
-                        <div key={index} className="flex flex-col items-center min-w-full min-h-full">
-                          <>
-                            {/* 직무 배지 */}
-                            <div className="flex px-[1.527rem] py-[0.363rem] bg-blue-400 rounded-1.5xl mb-[0.231rem]">
-                              <span className="text-[0.938rem]/[1.2] text-white">
-                                {request.role}
-                              </span>
-                            </div>
+                  />
+                ) : (
+                  <>
+                    <div className="flex-1 overflow-x-hidden flex">
+                      <div
+                        className="flex w-full min-h-full transition-transform duration-300 ease-in-out"
+                        style={{ transform: `translateX(-${currentRequestIndex * 100}%)` }}
+                      >
+                        {filteredRequests.map((request, index) => (
+                          <div
+                            key={index}
+                            className="flex flex-col items-center min-w-full min-h-full"
+                          >
+                            <>
+                              {/* 직무 배지 */}
+                              <div className="flex px-[1.527rem] py-[0.363rem] bg-blue-400 rounded-1.5xl mb-[0.231rem]">
+                                <span className="text-[0.938rem]/[1.2] text-white">
+                                  {request.role}
+                                </span>
+                              </div>
 
-                            {/* 직무 아바타 */}
-                            <div className="flex w-[11.563rem] h-[18.063rem] mb-3.5">
-                              <img src={request.image} alt="" className="object-contain" />
-                            </div>
+                              {/* 직무 아바타 */}
+                              <div className="flex w-[11.563rem] h-[18.063rem] mb-3.5 items-center justify-center">
+                                <img src={request.image} alt="" className="object-contain" />
+                              </div>
 
-                            {/* 요청사항 박스 */}
-                            <RequestBox title="요청사항" content={request.content} />
-                          </>
-                        </div>
+                              {/* 요청사항 박스 */}
+                              <RequestBox title="요청사항" content={request.content} />
+                            </>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* 인디케이터 */}
+                    <div className="flex justify-center gap-[0.563rem] mt-[1.875rem]">
+                      {filteredRequests.map((_, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setCurrentRequestIndex(index)}
+                          className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
+                            index === currentRequestIndex ? 'bg-blue-400' : 'bg-gray-200'
+                          }`}
+                        />
                       ))}
                     </div>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
 
-                    {/* 직무별 요청사항 - 좌우 이동 버튼 */}
-                    <div className="absolute flex inset-0 justify-between top-[70.37%]">
-                      <button
-                        onClick={handlePrevRequest}
-                        className="flex w-8 h-8 bg-white shadow-9 rounded-full items-center justify-center text-blue-400 hover:bg-blue-400 hover:text-white transition-colors hover:shadow-4 transition-shadow"
-                      >
-                        <FaChevronLeft className="w-2 stroke-30" />
-                      </button>
-                      <button
-                        onClick={handleNextRequest}
-                        className="flex w-8 h-8 bg-white shadow-9 rounded-full items-center justify-center text-blue-400 hover:bg-blue-400 hover:text-white transition-colors hover:shadow-4 transition-shadow"
-                      >
-                        <FaChevronRight className="w-2 stroke-30" />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* 인디케이터 */}
-                  <div className="flex justify-center gap-[0.563rem] mt-[1.875rem]">
-                    {filteredRequests.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setCurrentRequestIndex(index)}
-                        className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
-                          index === currentRequestIndex ? 'bg-blue-400' : 'bg-gray-200'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                </>
-              )}
+          {/* 직무별 요청사항 - 좌우 이동 버튼 */}
+          {activeTab === 'request' && !noRequest && (
+            <div className="absolute flex inset-0 justify-between top-[64.73%] mx-[1.375rem] pointer-events-none">
+              <button
+                onClick={handlePrevRequest}
+                className="flex w-8 h-8 bg-white shadow-9 rounded-full items-center justify-center text-blue-400 hover:bg-blue-400 hover:text-white transition-colors hover:shadow-4 transition-shadow pointer-events-auto"
+              >
+                <FaChevronLeft className="w-2 stroke-30" />
+              </button>
+              <button
+                onClick={handleNextRequest}
+                className="flex w-8 h-8 bg-white shadow-9 rounded-full items-center justify-center text-blue-400 hover:bg-blue-400 hover:text-white transition-colors hover:shadow-4 transition-shadow pointer-events-auto"
+              >
+                <FaChevronRight className="w-2 stroke-30" />
+              </button>
             </div>
           )}
         </div>
