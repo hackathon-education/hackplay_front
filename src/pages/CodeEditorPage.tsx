@@ -9,7 +9,9 @@ import BEDeveloperImg from '@/assets/backend.png';
 import DesignerImg from '@/assets/designer.png';
 import FEDeveloperImg from '@/assets/frontend.png';
 import PlannerImg from '@/assets/planner.png';
+import LockModal from '@/components/LockModal';
 import { JOB_TYPES } from '@/constants/jobTypes';
+import { useLockModal } from '@/hooks/useLockModal';
 
 // 좌측 패널 - 탭 아이템 인터페이스
 interface tabItem {
@@ -58,6 +60,7 @@ const RequestBox = ({ title, content }: RequestBoxProps) => (
 const CodeEditorPage = () => {
   const location = useLocation();
   const path = location.pathname;
+  const { isLockModalOpen, closeLockModal, handleLockedItemClick } = useLockModal();
 
   const userRole = JOB_TYPES.FE; // 사용자 직무
   const [activeTab, setActiveTab] = useState<'overview' | 'request' | 'answer'>('overview');
@@ -115,6 +118,12 @@ const CodeEditorPage = () => {
     setCurrentRequestIndex((prev) => (prev < filteredRequests.length - 1 ? prev + 1 : 0));
   };
 
+  // 정답 탭 클릭 시 안내 모달 열기
+  const handleAnswerTabClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    handleLockedItemClick(e);
+  };
+
   return (
     <div className="px-[3.164rem] pt-[1.009rem] pb-[2.688rem] flex gap-[0.813rem] h-[calc(100vh-5.095rem)]">
       {/* 좌측 패널 */}
@@ -125,7 +134,14 @@ const CodeEditorPage = () => {
             return (
               <button
                 key={tab.key}
-                onClick={() => setActiveTab(tab.key)}
+                onClick={(e) => {
+                  if (tab.key === 'answer') {
+                    handleAnswerTabClick(e);
+                    return;
+                  } else {
+                    setActiveTab(tab.key);
+                  }
+                }}
                 className={`basis-1/3 rounded-t-2xl h-[4.375rem] flex justify-center shadow-1 last:shadow-none ${activeTab === tab.key ? 'bg-white' : 'bg-gray-150'}`}
               >
                 <tab.icon className={`translate-y-1/2 ${tab.sizeClass ?? ''}`} />
@@ -336,6 +352,12 @@ const CodeEditorPage = () => {
         </div>
       </div>
       <div>코드 에디터</div>
+
+      <LockModal
+        isOpen={isLockModalOpen}
+        onClose={closeLockModal}
+        message="정답을 보시겠습니까? 점수를 얻을 수 없습니다."
+      />
     </div>
   );
 };
