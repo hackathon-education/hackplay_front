@@ -3,7 +3,7 @@ import { AiFillFileText } from 'react-icons/ai';
 import { BiSolidUser } from 'react-icons/bi';
 import { BsPencilFill } from 'react-icons/bs';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import BEDeveloperImg from '@/assets/backend.png';
 import DesignerImg from '@/assets/designer.png';
@@ -45,6 +45,12 @@ const RequestBox = ({ title, content }: RequestBoxProps) => (
     <div className="flex-1 max-w-full bg-gray-90 rounded-lg px-[1.813rem] py-[1.125rem] flex flex-col gap-[0.438rem]">
       <h4 className="font-[590] text-2xl/[1.17] tracking-[0.03em]">{title}</h4>
       <p className="font-[410] text-[0.938rem]/[1.33] whitespace-pre-wrap">{content}</p>
+      <Link
+        to="https://www.notion.so/VSCode-259a586dfb0d80acb42ed1b52dac5a95?source=copy_link"
+        target="_blank"
+      >
+        노션
+      </Link>
     </div>
   </div>
 );
