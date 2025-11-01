@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { AiOutlineMenu } from 'react-icons/ai';
+import { FaArrowLeft } from 'react-icons/fa';
 import { HiOutlineUser } from 'react-icons/hi';
 import { TfiAngleRight } from 'react-icons/tfi';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 import logo from '@/assets/logo.svg';
 import { NAV_ITEMS } from '@/constants/menuData';
@@ -17,6 +18,7 @@ const Header = () => {
   const menuRef = useRef<HTMLDivElement | null>(null);
 
   const location = useLocation();
+  const navigate = useNavigate();
   const path = location.pathname;
   const codeEditorPathRegex = /^\/workspaces\/[^/]+$/;
   const isCodeEditorPage = codeEditorPathRegex.test(path);
@@ -108,6 +110,12 @@ const Header = () => {
         <nav
           className={`flex mx-auto w-full items-center py-[0.531rem] ${isCodeEditorPage ? 'h-[3.813rem]' : 'h-[5.625rem]'}`}
         >
+          {isCodeEditorPage && (
+            <button onClick={() => navigate(-1)}>
+              <FaArrowLeft className="w-5 h-5" />
+            </button>
+          )}
+
           {/* 로고 */}
           <NavLink
             to={ROUTES.MAIN}
