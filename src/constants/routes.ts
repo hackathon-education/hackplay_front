@@ -15,6 +15,9 @@ export const ROUTES = {
       `/courses/${job}/${level}/${lectureId}/detail`,
   },
 
+  // 코드 에디터
+  WORKSPACE: (lectureId: string) => `/workspaces/${lectureId}`,
+
   // 기초 학습
   BASIC_LEARNING: {
     ROOT: '/learning/basic',

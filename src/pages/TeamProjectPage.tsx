@@ -1,7 +1,10 @@
 import { AiOutlineCalendar, AiOutlineTeam } from 'react-icons/ai';
 import { RiFlag2Line } from 'react-icons/ri';
+import { Link } from 'react-router-dom';
 
 import { Progress } from 'antd';
+
+import { ROUTES } from '@/constants/routes';
 
 // 프로젝트 정보 아이템 타입
 interface ProjectInfoItemProps {
@@ -14,6 +17,11 @@ interface ProjectInfoItemProps {
 interface StatusBadgeProps {
   color: string;
   label: string;
+}
+
+// 유닛 아이템 타입
+interface UnitItemProps {
+  path: string;
 }
 
 // 프로젝트 정보 아이템 컴포넌트
@@ -39,12 +47,14 @@ const StatusBadge = ({ color, label }: StatusBadgeProps) => {
   );
 };
 
-// 유닛 컴포넌트
-const UnitItem = () => {
+// 유닛 아이템 컴포넌트
+const UnitItem = ({ path }: UnitItemProps) => {
   return (
     <li className="flex gap-[2.063rem]">
       <div className="w-[4.063rem] h-[4.063rem] rounded-full bg-gray-200"></div>
-      <div className="w-full max-w-[81rem] h-[24.5rem] rounded-2.5xl bg-gray-250"></div>
+      <div className="w-full max-w-[81rem] h-[24.5rem] rounded-2.5xl bg-gray-250">
+        <Link to={ROUTES.WORKSPACE(path)}>학습하기</Link>
+      </div>
     </li>
   );
 };
@@ -75,6 +85,14 @@ const TeamProjectPage = () => {
     { color: 'bg-green', label: '진행 완료' },
     { color: 'bg-blue-330', label: '진행중' },
     { color: 'bg-yellow', label: '시작 전' },
+  ];
+
+  // 유닛 아이템 데이터
+  const unitItems = [
+    { path: 'team-project-1' },
+    { path: 'team-project-2' },
+    { path: 'team-project-3' },
+    { path: 'team-project-4' },
   ];
 
   return (
@@ -159,10 +177,9 @@ const TeamProjectPage = () => {
             </div>
             {/* 유닛 목록 */}
             <ol className="mt-5 flex flex-col gap-[4.688rem]">
-              <UnitItem />
-              <UnitItem />
-              <UnitItem />
-              <UnitItem />
+              {unitItems.map((item, idx) => (
+                <UnitItem key={idx} path={item.path} />
+              ))}
             </ol>
           </div>
         </section>
