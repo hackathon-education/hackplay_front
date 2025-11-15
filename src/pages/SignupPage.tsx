@@ -22,6 +22,7 @@ const SignupPage = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false); // 이메일 인증 중 상태
 
   const {
     register,
@@ -38,6 +39,39 @@ const SignupPage = () => {
   const email = watch('email');
 
   const canSubmit = isValid;
+
+  // 이메일 인증 처리 함수
+  const handleEmailVerification = async () => {
+    if (!email || errors.email) {
+      return;
+    }
+
+    setIsVerifying(true);
+    try {
+      // 1. 이메일 중복 여부 체크
+      const checkResponse = await axiosInstance.post('/v1/email/check', { email });
+
+      if (checkResponse.data.data === 'Y') {
+        alert('이미 사용 중인 이메일입니다.');
+        setIsVerifying(false);
+        return;
+      }
+
+      // 2. 중복이 없으면 (data === 'N') 인증코드 전송
+      if (checkResponse.data.data === 'N') {
+        await axiosInstance.post('/v1/email/send', { email });
+        alert('인증코드가 전송되었습니다. 이메일을 확인해주세요.');
+      }
+    } catch (error: any) {
+      if (error.response) {
+        alert(`오류: ${error.response.data.message || '알 수 없는 오류가 발생했습니다.'}`);
+      } else {
+        alert('인증코드 전송 중 오류가 발생했습니다.');
+      }
+    } finally {
+      setIsVerifying(false);
+    }
+  };
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
@@ -76,12 +110,15 @@ const SignupPage = () => {
               />
               <button
                 type="button"
-                disabled={!email || !!errors.email}
-                className={`bg-blue-600 text-white font-semibold text-lg whitespace-nowrap px-4 rounded-lg transition-colors ${
-                  !email || errors.email ? 'cursor-not-allowed' : 'hover:bg-blue-700'
+                disabled={!email || !!errors.email || isVerifying}
+                onClick={handleEmailVerification}
+                className={`font-semibold text-lg whitespace-nowrap px-4 rounded-lg transition-colors ${
+                  !email || errors.email || isVerifying
+                    ? 'cursor-not-allowed bg-gray-150 text-gray-600'
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
                 }`}
               >
-                인증하기
+                {isVerifying ? '전송 중...' : '인증하기'}
               </button>
             </div>
             {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
