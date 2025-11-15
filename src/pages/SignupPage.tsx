@@ -35,6 +35,7 @@ const SignupPage = () => {
   });
 
   const password = watch('password');
+  const email = watch('email');
 
   const canSubmit = isValid;
 
@@ -75,7 +76,10 @@ const SignupPage = () => {
               />
               <button
                 type="button"
-                className="bg-blue-600 text-white font-semibold text-lg whitespace-nowrap px-4 rounded-lg transition-colors hover:bg-blue-700"
+                disabled={!email || !!errors.email}
+                className={`bg-blue-600 text-white font-semibold text-lg whitespace-nowrap px-4 rounded-lg transition-colors ${
+                  !email || errors.email ? 'cursor-not-allowed' : 'hover:bg-blue-700'
+                }`}
               >
                 인증하기
               </button>
