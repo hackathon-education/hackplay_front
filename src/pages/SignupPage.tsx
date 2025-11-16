@@ -23,7 +23,7 @@ const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false); // 이메일 인증 중 상태
-  const [isCodeSent, setIsCodeSent] = useState(true); // 인증코드 전송 완료 여부
+  const [isCodeSent, setIsCodeSent] = useState(false); // 인증코드 전송 완료 여부
   const [isCodeVerified, setIsCodeVerified] = useState(false); // 인증코드 확인 완료 여부
   const [isVerifyingCode, setIsVerifyingCode] = useState(false); // 인증코드 확인 중 상태
   const [verificationCode, setVerificationCode] = useState(''); // 인증코드
@@ -118,13 +118,16 @@ const SignupPage = () => {
 
     setIsVerifyingCode(true);
     try {
-      // TODO: 인증코드 확인 API 호출
-      // const response = await axiosInstance.post('/v1/email/verify', { email, code: verificationCode });
-      // 임시로 성공 처리 (실제 API 연동 시 주석 해제)
-      await new Promise((resolve) => setTimeout(resolve, 500)); // 임시 딜레이
-      setIsCodeVerified(true);
-      setVerificationCodeError('');
-      alert('인증이 완료되었습니다.');
+      const response = await axiosInstance.post('/v1/email/verify', {
+        email,
+        verifyCode: verificationCode,
+      });
+
+      if (response.data.code === 200) {
+        setIsCodeVerified(true);
+        setVerificationCodeError('');
+        alert('인증이 완료되었습니다.');
+      }
     } catch (error: any) {
       if (error.response) {
         const errorMessage = error.response.data.message || '인증코드가 올바르지 않습니다.';
