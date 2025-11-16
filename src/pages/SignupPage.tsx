@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { TbEye, TbEyeOff } from 'react-icons/tb';
 import { useNavigate } from 'react-router-dom';
@@ -23,6 +23,11 @@ const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false); // 이메일 인증 중 상태
+  const [isCodeSent, setIsCodeSent] = useState(true); // 인증코드 전송 완료 여부
+  const [isCodeVerified, setIsCodeVerified] = useState(false); // 인증코드 확인 완료 여부
+  const [isVerifyingCode, setIsVerifyingCode] = useState(false); // 인증코드 확인 중 상태
+  const [verificationCode, setVerificationCode] = useState(''); // 인증코드
+  const [verificationCodeError, setVerificationCodeError] = useState(''); // 인증코드 에러
 
   const {
     register,
@@ -39,6 +44,28 @@ const SignupPage = () => {
   const email = watch('email');
 
   const canSubmit = isValid;
+
+  // 인증코드 검증 (영숫자 이외 문자, 6자리)
+  useEffect(() => {
+    if (!isCodeSent || isCodeVerified || !verificationCode) {
+      return;
+    }
+
+    // 영숫자 이외 문자 체크
+    if (/[^a-zA-Z0-9]/.test(verificationCode)) {
+      setVerificationCodeError('인증코드는 영문자와 숫자만 입력할 수 있습니다.');
+      return;
+    }
+
+    // 6자리 검증
+    if (!/^[a-zA-Z0-9]{6}$/.test(verificationCode)) {
+      setVerificationCodeError('인증코드는 6자리 영숫자입니다.');
+      return;
+    }
+
+    // 검증 통과 시 에러 초기화
+    setVerificationCodeError('');
+  }, [verificationCode, isCodeSent, isCodeVerified]);
 
   // 이메일 인증 처리 함수
   const handleEmailVerification = async () => {
@@ -61,6 +88,10 @@ const SignupPage = () => {
       if (checkResponse.data.data === 'N') {
         await axiosInstance.post('/v1/email/send', { email });
         alert('인증코드가 전송되었습니다. 이메일을 확인해주세요.');
+        setIsCodeSent(true);
+        setIsCodeVerified(false); // 새로운 인증코드 전송 시 인증 상태 초기화
+        setVerificationCode(''); // 인증코드 초기화
+        setVerificationCodeError(''); // 에러 초기화
       }
     } catch (error: any) {
       if (error.response) {
@@ -70,6 +101,41 @@ const SignupPage = () => {
       }
     } finally {
       setIsVerifying(false);
+    }
+  };
+
+  // 인증코드 확인 함수
+  const handleVerifyCode = async () => {
+    // 에러가 있으면 진행하지 않음
+    if (verificationCodeError) {
+      return;
+    }
+
+    if (!email) {
+      alert('이메일을 먼저 입력해주세요.');
+      return;
+    }
+
+    setIsVerifyingCode(true);
+    try {
+      // TODO: 인증코드 확인 API 호출
+      // const response = await axiosInstance.post('/v1/email/verify', { email, code: verificationCode });
+      // 임시로 성공 처리 (실제 API 연동 시 주석 해제)
+      await new Promise((resolve) => setTimeout(resolve, 500)); // 임시 딜레이
+      setIsCodeVerified(true);
+      setVerificationCodeError('');
+      alert('인증이 완료되었습니다.');
+    } catch (error: any) {
+      if (error.response) {
+        const errorMessage = error.response.data.message || '인증코드가 올바르지 않습니다.';
+        setVerificationCodeError(errorMessage);
+        alert(`인증 실패: ${errorMessage}`);
+      } else {
+        setVerificationCodeError('인증코드 확인 중 오류가 발생했습니다.');
+        alert('인증코드 확인 중 오류가 발생했습니다.');
+      }
+    } finally {
+      setIsVerifyingCode(false);
     }
   };
 
@@ -112,7 +178,7 @@ const SignupPage = () => {
                 type="button"
                 disabled={!email || !!errors.email || isVerifying}
                 onClick={handleEmailVerification}
-                className={`font-semibold text-lg whitespace-nowrap px-4 rounded-lg transition-colors ${
+                className={`font-semibold text-lg whitespace-nowrap w-29 rounded-lg transition-colors ${
                   !email || errors.email || isVerifying
                     ? 'cursor-not-allowed bg-gray-150 text-gray-600'
                     : 'bg-blue-600 text-white hover:bg-blue-700'
@@ -123,6 +189,50 @@ const SignupPage = () => {
             </div>
             {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
           </div>
+
+          {/* 인증코드 입력 */}
+          {isCodeSent && (
+            <div className="flex flex-col">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="인증코드 (6자리)"
+                  maxLength={6}
+                  value={verificationCode}
+                  disabled={isCodeVerified}
+                  onChange={(e) => {
+                    setVerificationCode(e.target.value);
+                  }}
+                  className={`w-full px-3 py-3 border rounded-lg bg-[#fefefe] text-base focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3] ${
+                    isCodeVerified ? 'border-green-500 bg-green-50' : 'border-gray-300'
+                  } ${isCodeVerified ? 'cursor-not-allowed' : ''}`}
+                />
+                <button
+                  type="button"
+                  disabled={
+                    !verificationCode ||
+                    !!verificationCodeError ||
+                    isVerifyingCode ||
+                    isCodeVerified
+                  }
+                  onClick={handleVerifyCode}
+                  className={`font-semibold text-lg whitespace-nowrap w-29 rounded-lg transition-colors ${
+                    !verificationCode || verificationCodeError || isVerifyingCode || isCodeVerified
+                      ? 'cursor-not-allowed bg-gray-150 text-gray-600'
+                      : 'bg-blue-600 text-white hover:bg-blue-700'
+                  }`}
+                >
+                  {isCodeVerified ? '인증완료' : isVerifyingCode ? '확인 중...' : '확인'}
+                </button>
+              </div>
+              {verificationCodeError && (
+                <p className="text-red-500 text-sm mt-1">{verificationCodeError}</p>
+              )}
+              {isCodeVerified && (
+                <p className="text-green-600 text-sm mt-1">✓ 이메일 인증이 완료되었습니다.</p>
+              )}
+            </div>
+          )}
 
           {/* 닉네임 */}
           <div className="relative flex flex-col">
