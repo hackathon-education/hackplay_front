@@ -165,6 +165,7 @@ const SignupPage = () => {
               <input
                 type="email"
                 placeholder="이메일"
+                disabled={isCodeVerified}
                 {...register('email', {
                   required: '이메일을 입력해주세요',
                   pattern: {
@@ -172,14 +173,16 @@ const SignupPage = () => {
                     message: '올바른 이메일 형식이 아닙니다.',
                   },
                 })}
-                className="w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3]"
+                className={`w-full px-3 py-3 border border-gray-300 rounded-lg bg-[#fefefe] text-base focus:outline-none focus:ring-2 focus:ring-[#0070f3]/30 focus:border-[#0070f3] ${
+                  isCodeVerified ? 'cursor-not-allowed bg-gray-80' : ''
+                }`}
               />
               <button
                 type="button"
-                disabled={!email || !!errors.email || isVerifying}
+                disabled={!email || !!errors.email || isVerifying || isCodeVerified}
                 onClick={handleEmailVerification}
                 className={`font-semibold text-lg whitespace-nowrap w-29 rounded-lg transition-colors ${
-                  !email || errors.email || isVerifying
+                  !email || errors.email || isVerifying || isCodeVerified
                     ? 'cursor-not-allowed bg-gray-150 text-gray-600'
                     : 'bg-blue-600 text-white hover:bg-blue-700'
                 }`}
