@@ -43,7 +43,7 @@ const SignupPage = () => {
   const password = watch('password');
   const email = watch('email');
 
-  const canSubmit = isValid;
+  const canSubmit = isValid && isCodeVerified;
 
   // 인증코드 검증 (영숫자 이외 문자, 6자리)
   useEffect(() => {
@@ -383,8 +383,10 @@ const SignupPage = () => {
           <button
             type="submit"
             disabled={!canSubmit}
-            className={`bg-blue-600 text-white font-semibold text-lg py-3 rounded-lg transition-colors ${
-              canSubmit ? 'hover:bg-blue-700' : 'cursor-not-allowed'
+            className={`font-semibold text-lg py-3 rounded-lg transition-colors ${
+              canSubmit
+                ? 'bg-blue-600 text-white hover:bg-blue-700'
+                : 'cursor-not-allowed bg-gray-150 text-gray-600'
             }`}
           >
             회원가입
