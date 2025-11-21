@@ -142,7 +142,7 @@ const CodeEditorPage = () => {
                     setActiveTab(tab.key);
                   }
                 }}
-                className={`basis-1/3 rounded-t-2xl h-[4.375rem] flex justify-center shadow-1 last:shadow-none ${activeTab === tab.key ? 'bg-white' : 'bg-gray-150'}`}
+                className={`basis-1/3 rounded-t-2xl h-[4.375rem] flex items-stretch! justify-center shadow-1 last:shadow-none ${activeTab === tab.key ? 'bg-white' : 'bg-gray-150'}`}
               >
                 <tab.icon className={`translate-y-1/2 ${tab.sizeClass ?? ''}`} />
               </button>
