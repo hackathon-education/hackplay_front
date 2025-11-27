@@ -57,12 +57,12 @@ const FileTree = ({ files, selectedPath, onFileSelect }: FileTreeProps) => {
               {isExpanded ? (
                 <FaChevronDown className="w-3.5 h-3.5 text-gray-620 mr-2.5" />
               ) : (
-                <FaChevronRight className="w-3.5 h-3.5 text-gray-260 mr-2.5" />
+                <FaChevronRight className="w-3.5 h-3.5 mr-2.5" />
               )}
               {isExpanded ? (
                 <MdFolder className="w-5 h-5 text-gray-620" />
               ) : (
-                <MdFolder className="w-5 h-5 text-gray-260" />
+                <MdFolder className="w-5 h-5" />
               )}
             </>
           ) : (
