@@ -86,7 +86,7 @@ const CodeEditorPage = () => {
   const userRole = JOB_TYPES.FE; // 사용자 직무
   const [activeTab, setActiveTab] = useState<'overview' | 'request' | 'answer'>('overview');
   const [currentRequestIndex, setCurrentRequestIndex] = useState<number>(0); // 직무별 요청사항 현재 인덱스
-  const noRequest = path === '/workspaces/team-project-1' || path === '/workspaces/team-project-2'; // 1, 2주차는 요청사항 없음
+  const noRequest = path === '/workspaces/team-project-1'; // 1주차는 요청사항 없음
 
   // 코드 에디터 관련 상태
   const [files, setFiles] = useState<FileNode[]>([
@@ -312,9 +312,13 @@ const CodeEditorPage = () => {
   }, []);
 
   return (
-    <div className="px-[3.164rem] pt-[1.009rem] pb-[2.688rem] flex gap-[0.813rem] h-[calc(100vh-5.095rem)]">
+    <div
+      className={`px-[3.164rem] pt-[1.009rem] pb-[2.688rem] flex gap-[0.813rem] h-[calc(100vh-5.095rem)] ${noRequest ? 'justify-center' : ''}`}
+    >
       {/* 좌측 패널 */}
-      <div className="bg-gray-90 p-[0.969rem] flex-[0_0_31.9%] max-w-[31.9%] rounded-2xl shadow-1 flex flex-col">
+      <div
+        className={`bg-gray-90 p-[0.969rem] rounded-2xl shadow-1 flex flex-col ${noRequest ? 'w-full max-w-1/2' : 'flex-[0_0_31.9%] max-w-[31.9%]'}`}
+      >
         {/* 좌측 패널 - 탭 */}
         <div className="flex gap-[0.063rem]">
           {leftPanelTabs.map((tab) => {
@@ -540,64 +544,66 @@ const CodeEditorPage = () => {
       </div>
 
       {/* 코드 에디터 영역 */}
-      <div className="flex-1 flex bg-gray-90 rounded-2xl shadow-1 overflow-hidden pt-[0.969rem] pl-[0.969rem]">
-        <div className="flex flex-1 overflow-hidden gap-1.5">
-          {/* 파일 트리 사이드바 */}
-          {isSidebarOpen && (
-            <div className="flex-[0_0_24%] flex-shrink-0 border-[0.5px] border-gray-200 rounded-2xl rounded-br-none overflow-hidden">
-              <FileTree
-                files={files}
-                selectedPath={editorTabs.find((t) => t.id === activeTabId)?.path}
-                onFileSelect={handleFileSelect}
+      {noRequest ? null : (
+        <div className="flex-1 flex bg-gray-90 rounded-2xl shadow-1 overflow-hidden pt-[0.969rem] pl-[0.969rem]">
+          <div className="flex flex-1 overflow-hidden gap-1.5">
+            {/* 파일 트리 사이드바 */}
+            {isSidebarOpen && (
+              <div className="flex-[0_0_24%] flex-shrink-0 border-[0.5px] border-gray-200 rounded-2xl rounded-br-none overflow-hidden">
+                <FileTree
+                  files={files}
+                  selectedPath={editorTabs.find((t) => t.id === activeTabId)?.path}
+                  onFileSelect={handleFileSelect}
+                />
+              </div>
+            )}
+
+            {/* 에디터 영역 */}
+            <div className="flex-1 flex flex-col overflow-hidden">
+              {/* 탭 바 */}
+              <EditorTabs
+                tabs={editorTabs}
+                activeTabId={activeTabId}
+                onTabClick={handleTabClick}
+                onTabClose={handleTabClose}
               />
-            </div>
-          )}
 
-          {/* 에디터 영역 */}
-          <div className="flex-1 flex flex-col overflow-hidden">
-            {/* 탭 바 */}
-            <EditorTabs
-              tabs={editorTabs}
-              activeTabId={activeTabId}
-              onTabClick={handleTabClick}
-              onTabClose={handleTabClose}
-            />
-
-            {/* Monaco Editor */}
-            <div className="flex-1 border-[0.5px] border-gray-200 rounded-tr-2xl overflow-hidden bg-white">
-              {activeTabId ? (
-                <div className="w-full h-full">
-                  <CodeEditor
-                    value={
-                      fileContents[editorTabs.find((t) => t.id === activeTabId)?.path || ''] || ''
-                    }
-                    path={editorTabs.find((t) => t.id === activeTabId)?.path || ''}
-                    onChange={handleEditorChange}
-                    onSave={handleSave}
-                  />
-                </div>
-              ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="flex items-center justify-center w-full h-full">
-                    <img
-                      src={`${import.meta.env.BASE_URL}favicon/android-chrome-512x512.png`}
-                      alt="아이콘"
-                      className="grayscale brightness-110 h-1/3"
+              {/* Monaco Editor */}
+              <div className="flex-1 border-[0.5px] border-gray-200 rounded-tr-2xl overflow-hidden bg-white">
+                {activeTabId ? (
+                  <div className="w-full h-full">
+                    <CodeEditor
+                      value={
+                        fileContents[editorTabs.find((t) => t.id === activeTabId)?.path || ''] || ''
+                      }
+                      path={editorTabs.find((t) => t.id === activeTabId)?.path || ''}
+                      onChange={handleEditorChange}
+                      onSave={handleSave}
                     />
                   </div>
-                </div>
-              )}
-            </div>
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="flex items-center justify-center w-full h-full">
+                      <img
+                        src={`${import.meta.env.BASE_URL}favicon/android-chrome-512x512.png`}
+                        alt="아이콘"
+                        className="grayscale brightness-110 h-1/3"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
 
-            {/* 하단 패널 */}
-            <BottomPanel
-              onOpenWebPage={handleOpenWebPage}
-              // onAIScoring={handleAIScoring}
-              terminalOutput={terminalOutput}
-            />
+              {/* 하단 패널 */}
+              <BottomPanel
+                onOpenWebPage={handleOpenWebPage}
+                // onAIScoring={handleAIScoring}
+                terminalOutput={terminalOutput}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       <LockModal
         isOpen={isLockModalOpen}
