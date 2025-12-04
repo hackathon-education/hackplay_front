@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FaChevronDown, FaChevronRight } from 'react-icons/fa6';
 import { MdFolder } from 'react-icons/md';
 import { MdInsertDriveFile } from 'react-icons/md';
-import { TbDownload } from 'react-icons/tb';
+import { TbFiles } from 'react-icons/tb';
 
 interface FileNode {
   name: string;
@@ -88,14 +88,7 @@ const FileTree = ({ files, selectedPath, onFileSelect }: FileTreeProps) => {
     <div className="h-full flex flex-col">
       {/* 헤더 */}
       <div className="flex items-center justify-between pt-2.5 pb-2 pl-[1.188rem] border-b-[0.5px] border-gray-200 bg-gray-150">
-        <button
-          onClick={() => {
-            // 다운로드 기능
-          }}
-          title="다운로드"
-        >
-          <TbDownload className="w-5 h-5 text-gray-620" />
-        </button>
+        <TbFiles className="w-5 h-5 text-gray-620" />
       </div>
 
       {/* 파일 트리 */}
