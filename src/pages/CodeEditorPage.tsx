@@ -593,7 +593,11 @@ const CodeEditorPage = () => {
               </div>
 
               {/* 하단 패널 */}
-              <BottomPanel onOpenWebPage={handleOpenWebPage} terminalOutput={terminalOutput} />
+              <BottomPanel
+                onOpenWebPage={handleOpenWebPage}
+                terminalOutput={terminalOutput}
+                onSave={handleSave}
+              />
             </div>
           </div>
         </div>

@@ -8,9 +8,10 @@ import '@xterm/xterm/css/xterm.css';
 interface BottomPanelProps {
   onOpenWebPage?: () => void;
   terminalOutput?: string;
+  onSave?: () => void;
 }
 
-const BottomPanel = ({ onOpenWebPage, terminalOutput = '' }: BottomPanelProps) => {
+const BottomPanel = ({ onOpenWebPage, terminalOutput = '', onSave }: BottomPanelProps) => {
   const [isTerminalExpanded, setIsTerminalExpanded] = useState(true);
 
   const terminalDivRef = useRef<HTMLDivElement | null>(null);
@@ -66,15 +67,19 @@ const BottomPanel = ({ onOpenWebPage, terminalOutput = '' }: BottomPanelProps) =
           <button onClick={handleRun}>
             <TfiControlPlay className="w-4.5 h-4.5 text-gray-620 stroke-[0.5]" />
           </button>
-          <button
-            onClick={handleStop}
-          >
+          <button onClick={handleStop}>
             <TfiControlStop className="w-4.5 h-4.5 text-gray-620 stroke-[0.5]" />
           </button>
         </div>
 
         <div className="flex items-center gap-[1.188rem]">
-          <button>
+          <button
+            onClick={() => {
+              if (onSave) {
+                onSave();
+              }
+            }}
+          >
             <TfiSave className="w-4 h-4 text-gray-620 stroke-[0.5]" />
           </button>
           <button>
