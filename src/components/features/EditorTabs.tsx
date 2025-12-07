@@ -36,22 +36,22 @@ const EditorTabs = ({ tabs, activeTabId, onTabClick, onTabClose }: EditorTabsPro
         return (
           <div
             key={tab.id}
-            className={`flex h-full items-center pt-[0.682rem] pb-[0.491rem] pl-[1.553rem] pr-2 gap-6 cursor-pointer rounded-t-2xl ${
+            className={`flex h-full items-center pt-[0.682rem] pb-[0.491rem] pl-[1.553rem] pr-2 gap-2 cursor-pointer rounded-t-2xl ${
               isActive ? 'bg-white' : 'bg-gray-150'
             }`}
             onClick={() => onTabClick(tab.id)}
           >
-            <span className="text-sm/[1] truncate flex-1 tracking-[0.01em] text-gray-630">
+            <span className={`text-sm/[1] truncate flex-1 tracking-[0.01em] ${tab.isModified ? 'text-yellow-500' : 'text-gray-630'}`}>
               {tab.name}
             </span>
-            {/* {tab.isModified && !tab.isSaved && (
-              <span className="w-2 h-2 rounded-full bg-orange-500" title="변경됨" />
+            {tab.isModified && !tab.isSaved && (
+              <span className="w-2 h-2 rounded-full bg-yellow" title="변경됨" />
             )}
             {tab.isSaved && !tab.isModified && (
               <span className="text-xs text-gray-400" title="저장됨">
                 ✓
               </span>
-            )} */}
+            )}
             <button
               className="hover:bg-gray-90 rounded p-1"
               onClick={(e) => handleClose(e, tab.id)}
