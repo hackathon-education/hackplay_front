@@ -296,12 +296,6 @@ const CodeEditorPage = () => {
     setTerminalOutput('웹 페이지를 여는 중...');
   };
 
-  // AI 셀프 채점 핸들러
-  // const handleAIScoring = () => {
-  //   // TODO: AI 셀프 채점 기능 구현
-  //   setTerminalOutput('AI 셀프 채점을 시작합니다...');
-  // };
-
   // 컴포넌트 언마운트 시 타이머 정리
   useEffect(() => {
     return () => {
@@ -597,7 +591,6 @@ const CodeEditorPage = () => {
               {/* 하단 패널 */}
               <BottomPanel
                 onOpenWebPage={handleOpenWebPage}
-                // onAIScoring={handleAIScoring}
                 terminalOutput={terminalOutput}
               />
             </div>

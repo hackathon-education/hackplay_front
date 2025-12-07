@@ -7,7 +7,6 @@ import '@xterm/xterm/css/xterm.css';
 
 interface BottomPanelProps {
   onOpenWebPage?: () => void;
-  onAIScoring?: () => void;
   terminalOutput?: string;
 }
 
@@ -68,7 +67,6 @@ const BottomPanel = ({ onOpenWebPage, terminalOutput = '' }: BottomPanelProps) =
             <TfiControlPlay className="w-4.5 h-4.5 text-gray-620 stroke-[0.5]" />
           </button>
           <button
-            // onClick={onAIScoring}
             onClick={handleStop}
           >
             <TfiControlStop className="w-4.5 h-4.5 text-gray-620 stroke-[0.5]" />
