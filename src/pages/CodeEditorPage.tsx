@@ -105,6 +105,7 @@ const CodeEditorPage = () => {
         { name: '텍스트를 입력하세요 6', type: 'file', path: '/src/텍스트를 입력하세요 6' },
         { name: '텍스트를 입력하세요 7', type: 'file', path: '/src/텍스트를 입력하세요 7' },
         { name: '텍스트를 입력하세요 8', type: 'file', path: '/src/텍스트를 입력하세요 8' },
+        { name: '텍스트를 입력하세요 9', type: 'file', path: '/src/텍스트를 입력하세요 9' },
       ],
     },
   ]);
@@ -225,9 +226,12 @@ const CodeEditorPage = () => {
     // 닫은 탭이 활성 탭이었다면 다른 탭으로 전환
     if (activeTabId === tabId) {
       if (newTabs.length > 0) {
-        setActiveTabId(newTabs[newTabs.length - 1].id);
+        // 이전 탭이 있으면 그걸, 없으면 다음 탭
+        const newActiveIdx = newTabs.findIndex((tab) => tab.id === tabId);
+        const newActiveTab = newTabs[newActiveIdx >= 0 ? newActiveIdx - 1 : 0];
+        setActiveTabId(newActiveTab.id); // 새 탭을 활성화
       } else {
-        setActiveTabId(undefined);
+        setActiveTabId(undefined); // 탭이 하나도 없으면 activeTabId를 undefined로
       }
     }
   };
@@ -589,10 +593,7 @@ const CodeEditorPage = () => {
               </div>
 
               {/* 하단 패널 */}
-              <BottomPanel
-                onOpenWebPage={handleOpenWebPage}
-                terminalOutput={terminalOutput}
-              />
+              <BottomPanel onOpenWebPage={handleOpenWebPage} terminalOutput={terminalOutput} />
             </div>
           </div>
         </div>
