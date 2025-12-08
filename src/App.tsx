@@ -1,5 +1,7 @@
 import { BrowserRouter } from 'react-router-dom';
 
+import { Toaster } from 'sonner';
+
 import ScrollToTop from '@/components/ScrollToTop';
 
 import Footer from './components/Footer';
@@ -11,6 +13,7 @@ const App = () => {
     <BrowserRouter>
       <ScrollToTop />
       <Header />
+      <Toaster richColors />
       <main>
         <Router />
       </main>

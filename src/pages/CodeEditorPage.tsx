@@ -1,15 +1,21 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AiFillFileText } from 'react-icons/ai';
 import { BiSolidUser } from 'react-icons/bi';
 import { BsPencilFill } from 'react-icons/bs';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 import { Link, useLocation } from 'react-router-dom';
 
+import { toast } from 'sonner';
+
 import BEDeveloperImg from '@/assets/backend.png';
 import DesignerImg from '@/assets/designer.png';
 import FEDeveloperImg from '@/assets/frontend.png';
 import PlannerImg from '@/assets/planner.png';
 import LockModal from '@/components/LockModal';
+import BottomPanel from '@/components/features/BottomPanel';
+import CodeEditor from '@/components/features/CodeEditor';
+import EditorTabs from '@/components/features/EditorTabs';
+import FileTree from '@/components/features/FileTree';
 import { JOB_TYPES } from '@/constants/jobTypes';
 import { useLockModal } from '@/hooks/useLockModal';
 
@@ -39,6 +45,23 @@ interface RequestBoxProps {
   content: string;
 }
 
+// 파일 트리 노드 인터페이스
+interface FileNode {
+  name: string;
+  type: 'file' | 'folder';
+  path: string;
+  children?: FileNode[];
+}
+
+// 탭 인터페이스
+interface Tab {
+  id: string;
+  path: string;
+  name: string;
+  isModified: boolean;
+  isSaved: boolean;
+}
+
 // 요청사항 및 작업 절차 박스 컴포넌트
 const RequestBox = ({ title, content }: RequestBoxProps) => (
   <div
@@ -65,10 +88,48 @@ const CodeEditorPage = () => {
   const userRole = JOB_TYPES.FE; // 사용자 직무
   const [activeTab, setActiveTab] = useState<'overview' | 'request' | 'answer'>('overview');
   const [currentRequestIndex, setCurrentRequestIndex] = useState<number>(0); // 직무별 요청사항 현재 인덱스
-  const noRequest = path === '/workspaces/team-project-1' || path === '/workspaces/team-project-2'; // 1, 2주차는 요청사항 없음
+  const noRequest = path === '/workspaces/team-project-1'; // 1주차는 요청사항 없음
+
+  // 코드 에디터 관련 상태
+  const [files, setFiles] = useState<FileNode[]>([
+    {
+      name: '텍스트를 입력하세요',
+      type: 'folder',
+      path: '/src',
+      children: [
+        { name: 'index.html', type: 'file', path: '/src/index.html' },
+        { name: '텍스트를 입력하세요', type: 'file', path: '/src/텍스트를 입력하세요' },
+        { name: '텍스트를 입력하세요 1', type: 'file', path: '/src/텍스트를 입력하세요 1' },
+        { name: '텍스트를 입력하세요 2', type: 'file', path: '/src/텍스트를 입력하세요 2' },
+        { name: '텍스트를 입력하세요 3', type: 'file', path: '/src/텍스트를 입력하세요 3' },
+        { name: '텍스트를 입력하세요 4', type: 'file', path: '/src/텍스트를 입력하세요 4' },
+        { name: '텍스트를 입력하세요 5', type: 'file', path: '/src/텍스트를 입력하세요 5' },
+        { name: '텍스트를 입력하세요 6', type: 'file', path: '/src/텍스트를 입력하세요 6' },
+        { name: '텍스트를 입력하세요 7', type: 'file', path: '/src/텍스트를 입력하세요 7' },
+        { name: '텍스트를 입력하세요 8', type: 'file', path: '/src/텍스트를 입력하세요 8' },
+        { name: '텍스트를 입력하세요 9', type: 'file', path: '/src/텍스트를 입력하세요 9' },
+      ],
+    },
+  ]);
+  const [editorTabs, setEditorTabs] = useState<Tab[]>([]);
+  const [activeTabId, setActiveTabId] = useState<string | undefined>();
+  const [fileContents, setFileContents] = useState<Record<string, string>>({});
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const autoSaveTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [terminalOutput, setTerminalOutput] = useState<string>('');
+
+  // 자동 저장 토글
+  const [isAutoSaveEnabled, setIsAutoSaveEnabled] = useState(() => {
+    // 초기값을 localStorage에서 읽어오기
+    const stored = localStorage.getItem('isAutoSaveEnabled');
+    return stored !== null ? JSON.parse(stored) : true;
+  });
+  useEffect(() => {
+    localStorage.setItem('isAutoSaveEnabled', JSON.stringify(isAutoSaveEnabled));
+  }, [isAutoSaveEnabled]);
 
   // 좌측 패널 상단 탭 데이터
-  const tabs: tabItem[] = [
+  const leftPanelTabs: tabItem[] = [
     { key: 'overview', icon: AiFillFileText, sizeClass: 'w-6 h-6' },
     { key: 'request', icon: BiSolidUser, sizeClass: 'w-7 h-7 translate-y-1/3' },
     { key: 'answer', icon: BsPencilFill },
@@ -91,7 +152,7 @@ const CodeEditorPage = () => {
       image: PlannerImg,
       content:
         '회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요.',
-        // '회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요.',
+      // '회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요. 회원가입은 이름/이메일/비밀번호/비밀번호 확인 4개 입력이에요. 전부 입력되기 전까지 가입 버튼 비활성화 해주세요. 성공하면 /login으로 이동하고, 실패 시 현재 페이지에서 에러만 보여주세요. 비밀번호는 최소 8자 권장 문구 넣어주세요. 로딩 중엔 버튼 라벨을 **‘가입 중…’**으로 바꿔주세요.',
     },
     {
       role: JOB_TYPES.DESIGN,
@@ -124,13 +185,167 @@ const CodeEditorPage = () => {
     handleLockedItemClick(e);
   };
 
+  // 파일 선택 핸들러
+  const handleFileSelect = (filePath: string) => {
+    // 이미 열려있는 탭인지 확인
+    const existingTab = editorTabs.find((tab) => tab.path === filePath);
+    if (existingTab) {
+      setActiveTabId(existingTab.id);
+      return;
+    }
+
+    // 최대 10개 탭 제한
+    if (editorTabs.length >= 10) {
+      alert('최대 10개까지 파일을 열 수 있습니다.');
+      return;
+    }
+
+    // 새 탭 생성
+    const fileName = filePath.split('/').pop() || 'untitled';
+    const newTab: Tab = {
+      id: `tab-${Date.now()}`,
+      path: filePath,
+      name: fileName,
+      isModified: false,
+      isSaved: true,
+    };
+
+    // 파일 내용 로드 (없으면 빈 문자열)
+    if (!fileContents[filePath]) {
+      setFileContents((prev) => ({ ...prev, [filePath]: '' }));
+    }
+
+    setEditorTabs((prev) => [...prev, newTab]);
+    setActiveTabId(newTab.id);
+  };
+
+  // 파일 삭제
+  const handleDeleteFile = (filePath: string) => {
+    const removeNode = (nodes: FileNode[]): FileNode[] =>
+      nodes
+        .filter((node) => node.path !== filePath)
+        .map((node) => (node.children ? { ...node, children: removeNode(node.children) } : node));
+
+    setFiles((prev) => removeNode(prev));
+
+    // 삭제된 파일이 현재 열린 탭이면 닫기
+    const tabToClose = editorTabs.find((t) => t.path === filePath);
+    if (tabToClose) handleTabClose(tabToClose.id);
+  };
+
+  // 탭 클릭 핸들러
+  const handleTabClick = (tabId: string) => {
+    setActiveTabId(tabId);
+  };
+
+  // 탭 닫기 핸들러
+  const handleTabClose = (tabId: string) => {
+    const tab = editorTabs.find((t) => t.id === tabId);
+    if (tab?.isModified) {
+      const shouldClose = window.confirm('저장되지 않은 변경사항이 있습니다. 정말 닫으시겠습니까?');
+      if (!shouldClose) return;
+    }
+
+    const newTabs = editorTabs.filter((t) => t.id !== tabId);
+    setEditorTabs(newTabs);
+
+    // 닫은 탭이 활성 탭이었다면 다른 탭으로 전환
+    if (activeTabId === tabId) {
+      if (newTabs.length > 0) {
+        // 이전 탭이 있으면 그걸, 없으면 다음 탭
+        const newActiveIdx = newTabs.findIndex((tab) => tab.id === tabId);
+        const newActiveTab = newTabs[newActiveIdx >= 0 ? newActiveIdx - 1 : 0];
+        setActiveTabId(newActiveTab.id); // 새 탭을 활성화
+      } else {
+        setActiveTabId(undefined); // 탭이 하나도 없으면 activeTabId를 undefined로
+      }
+    }
+  };
+
+  // 에디터 내용 변경 핸들러
+  const handleEditorChange = (value: string | undefined) => {
+    if (!activeTabId) return;
+
+    const activeTab = editorTabs.find((t) => t.id === activeTabId);
+    if (!activeTab) return;
+
+    const newValue = value || '';
+    setFileContents((prev) => ({ ...prev, [activeTab.path]: newValue }));
+
+    // 변경 상태 업데이트
+    setEditorTabs((prev) =>
+      prev.map((tab) =>
+        tab.id === activeTabId ? { ...tab, isModified: true, isSaved: false } : tab,
+      ),
+    );
+    if (!isAutoSaveEnabled) return;
+    // 자동 저장 타이머 리셋
+    if (autoSaveTimerRef.current) {
+      clearTimeout(autoSaveTimerRef.current);
+    }
+
+    // 2초 후 자동 저장
+    autoSaveTimerRef.current = setTimeout(() => {
+      handleSave();
+    }, 2000);
+  };
+
+  // 저장 핸들러
+  const handleSave = async () => {
+    if (!activeTabId) return;
+
+    const activeTab = editorTabs.find((t) => t.id === activeTabId);
+    if (!activeTab) return;
+
+    try {
+      // TODO: 실제 API 호출로 대체
+      // await axiosInstance.put(`/v1/files${activeTab.path}`, {
+      //   content: fileContents[activeTab.path],
+      // });
+
+      // 저장 성공
+      setEditorTabs((prev) =>
+        prev.map((tab) =>
+          tab.id === activeTabId ? { ...tab, isModified: false, isSaved: true } : tab,
+        ),
+      );
+
+      if (autoSaveTimerRef.current) {
+        clearTimeout(autoSaveTimerRef.current);
+        autoSaveTimerRef.current = null;
+      }
+    } catch (error) {
+      console.error('저장 실패:', error);
+      toast.error('저장 실패, 다시 시도해주세요');
+    }
+  };
+
+  // 웹 페이지 열기 핸들러
+  const handleOpenWebPage = () => {
+    // TODO: 웹 페이지 열기 기능 구현
+    setTerminalOutput('웹 페이지를 여는 중...');
+  };
+
+  // 컴포넌트 언마운트 시 타이머 정리
+  useEffect(() => {
+    return () => {
+      if (autoSaveTimerRef.current) {
+        clearTimeout(autoSaveTimerRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <div className="px-[3.164rem] pt-[1.009rem] pb-[2.688rem] flex gap-[0.813rem] h-[calc(100vh-5.095rem)]">
+    <div
+      className={`px-[3.164rem] pt-[1.009rem] pb-[2.688rem] flex gap-[0.813rem] h-[calc(100vh-5.095rem)] ${noRequest ? 'justify-center' : ''}`}
+    >
       {/* 좌측 패널 */}
-      <div className="bg-gray-90 p-[0.969rem] flex-[0_0_31.9%] max-w-[31.9%] rounded-2xl shadow-1 flex flex-col">
+      <div
+        className={`bg-gray-90 p-[0.969rem] rounded-2xl shadow-1 flex flex-col ${noRequest ? 'w-full max-w-1/2' : 'flex-[0_0_31.9%] max-w-[31.9%]'}`}
+      >
         {/* 좌측 패널 - 탭 */}
         <div className="flex gap-[0.063rem]">
-          {tabs.map((tab) => {
+          {leftPanelTabs.map((tab) => {
             return (
               <button
                 key={tab.key}
@@ -142,7 +357,7 @@ const CodeEditorPage = () => {
                     setActiveTab(tab.key);
                   }
                 }}
-                className={`basis-1/3 rounded-t-2xl h-[4.375rem] flex justify-center shadow-1 last:shadow-none ${activeTab === tab.key ? 'bg-white' : 'bg-gray-150'}`}
+                className={`basis-1/3 rounded-t-2xl h-[4.375rem] flex items-stretch! justify-center shadow-1 last:shadow-none ${activeTab === tab.key ? 'bg-white' : 'bg-gray-150'}`}
               >
                 <tab.icon className={`translate-y-1/2 ${tab.sizeClass ?? ''}`} />
               </button>
@@ -351,7 +566,71 @@ const CodeEditorPage = () => {
           )}
         </div>
       </div>
-      <div>코드 에디터</div>
+
+      {/* 코드 에디터 영역 */}
+      {noRequest ? null : (
+        <div className="flex-1 flex bg-gray-90 rounded-2xl shadow-1 overflow-hidden pt-[0.969rem] pl-[0.969rem]">
+          <div className="flex flex-1 overflow-hidden gap-1.5">
+            {/* 파일 트리 사이드바 */}
+            {isSidebarOpen && (
+              <div className="flex-[0_0_24%] flex-shrink-0 border-[0.5px] border-gray-200 rounded-2xl rounded-br-none overflow-hidden">
+                <FileTree
+                  files={files}
+                  selectedPath={editorTabs.find((t) => t.id === activeTabId)?.path}
+                  onFileSelect={handleFileSelect}
+                  onDelete={handleDeleteFile}
+                />
+              </div>
+            )}
+
+            {/* 에디터 영역 */}
+            <div className="flex-1 flex flex-col overflow-hidden">
+              {/* 탭 바 */}
+              <EditorTabs
+                tabs={editorTabs}
+                activeTabId={activeTabId}
+                onTabClick={handleTabClick}
+                onTabClose={handleTabClose}
+              />
+
+              {/* Monaco Editor */}
+              <div className="flex-1 border-[0.5px] border-gray-200 rounded-tr-2xl overflow-hidden bg-white">
+                {activeTabId ? (
+                  <div className="w-full h-full">
+                    <CodeEditor
+                      value={
+                        fileContents[editorTabs.find((t) => t.id === activeTabId)?.path || ''] || ''
+                      }
+                      path={editorTabs.find((t) => t.id === activeTabId)?.path || ''}
+                      onChange={handleEditorChange}
+                      onSave={handleSave}
+                    />
+                  </div>
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="flex items-center justify-center w-full h-full">
+                      <img
+                        src={`${import.meta.env.BASE_URL}favicon/android-chrome-512x512.png`}
+                        alt="아이콘"
+                        className="grayscale brightness-110 h-1/3"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* 하단 패널 */}
+              <BottomPanel
+                onOpenWebPage={handleOpenWebPage}
+                terminalOutput={terminalOutput}
+                onSave={handleSave}
+                isAutoSaveEnabled={isAutoSaveEnabled}
+                setIsAutoSaveEnabled={setIsAutoSaveEnabled}
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       <LockModal
         isOpen={isLockModalOpen}
