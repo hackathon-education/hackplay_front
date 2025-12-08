@@ -5,6 +5,8 @@ import { BsPencilFill } from 'react-icons/bs';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 import { Link, useLocation } from 'react-router-dom';
 
+import { toast } from 'sonner';
+
 import BEDeveloperImg from '@/assets/backend.png';
 import DesignerImg from '@/assets/designer.png';
 import FEDeveloperImg from '@/assets/frontend.png';
@@ -290,7 +292,7 @@ const CodeEditorPage = () => {
       }
     } catch (error) {
       console.error('저장 실패:', error);
-      alert('저장 실패, 다시 시도해주세요.');
+      toast.error('저장 실패, 다시 시도해주세요')
     }
   };
 
