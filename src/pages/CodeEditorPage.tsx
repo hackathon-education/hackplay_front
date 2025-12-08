@@ -117,6 +117,7 @@ const CodeEditorPage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const autoSaveTimerRef = useRef<NodeJS.Timeout | null>(null);
   const [terminalOutput, setTerminalOutput] = useState<string>('');
+  const [isAutoSaveEnabled, setIsAutoSaveEnabled] = useState(true); // 자동 저장 토글
 
   // 좌측 패널 상단 탭 데이터
   const leftPanelTabs: tabItem[] = [
@@ -254,7 +255,7 @@ const CodeEditorPage = () => {
         tab.id === activeTabId ? { ...tab, isModified: true, isSaved: false } : tab,
       ),
     );
-
+    if (!isAutoSaveEnabled) return;
     // 자동 저장 타이머 리셋
     if (autoSaveTimerRef.current) {
       clearTimeout(autoSaveTimerRef.current);
@@ -292,7 +293,7 @@ const CodeEditorPage = () => {
       }
     } catch (error) {
       console.error('저장 실패:', error);
-      toast.error('저장 실패, 다시 시도해주세요')
+      toast.error('저장 실패, 다시 시도해주세요');
     }
   };
 
@@ -599,6 +600,8 @@ const CodeEditorPage = () => {
                 onOpenWebPage={handleOpenWebPage}
                 terminalOutput={terminalOutput}
                 onSave={handleSave}
+                isAutoSaveEnabled={isAutoSaveEnabled}
+                setIsAutoSaveEnabled={setIsAutoSaveEnabled}
               />
             </div>
           </div>

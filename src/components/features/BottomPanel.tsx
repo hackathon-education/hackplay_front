@@ -9,9 +9,17 @@ interface BottomPanelProps {
   onOpenWebPage?: () => void;
   terminalOutput?: string;
   onSave?: () => void;
+  isAutoSaveEnabled: boolean;
+  setIsAutoSaveEnabled: (val: boolean) => void;
 }
 
-const BottomPanel = ({ onOpenWebPage, terminalOutput = '', onSave }: BottomPanelProps) => {
+const BottomPanel = ({
+  onOpenWebPage,
+  terminalOutput = '',
+  onSave,
+  isAutoSaveEnabled,
+  setIsAutoSaveEnabled,
+}: BottomPanelProps) => {
   const [isTerminalExpanded, setIsTerminalExpanded] = useState(true);
 
   const terminalDivRef = useRef<HTMLDivElement | null>(null);
@@ -73,6 +81,33 @@ const BottomPanel = ({ onOpenWebPage, terminalOutput = '', onSave }: BottomPanel
         </div>
 
         <div className="flex items-center gap-[1.188rem]">
+          {/* 자동 저장 토글 */}
+          <div className="flex items-center gap-2 pr-2 border-r border-gray-200">
+            <span className="text-xs text-gray-600">자동 저장</span>
+
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                className="sr-only peer"
+                checked={isAutoSaveEnabled}
+                onChange={() => setIsAutoSaveEnabled(!isAutoSaveEnabled)}
+              />
+              <div
+                className="
+                w-10 h-5 bg-gray-300 rounded-full peer
+                peer-checked:bg-blue-500 transition
+              "
+              ></div>
+              <div
+                className="
+                absolute left-0.5 top-0.5 
+                w-4 h-4 bg-white rounded-full 
+                transition-all
+                peer-checked:translate-x-5
+              "
+              ></div>
+            </label>
+          </div>
           <button
             onClick={() => {
               if (onSave) {
