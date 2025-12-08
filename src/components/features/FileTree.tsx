@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { MouseEvent, useEffect, useRef, useState } from 'react';
 import { FaChevronDown, FaChevronRight } from 'react-icons/fa6';
 import { MdFolder } from 'react-icons/md';
 import { MdInsertDriveFile } from 'react-icons/md';
@@ -15,10 +15,32 @@ interface FileTreeProps {
   files: FileNode[];
   selectedPath?: string;
   onFileSelect: (path: string) => void;
+  onDelete: (path: string) => void; // 삭제 핸들러
 }
 
-const FileTree = ({ files, selectedPath, onFileSelect }: FileTreeProps) => {
+const FileTree = ({ files, selectedPath, onFileSelect, onDelete }: FileTreeProps) => {
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
+  const [contextMenu, setContextMenu] = useState<null | { x: number; y: number; filePath: string }>(
+    null,
+  );
+
+  const menuRef = useRef<HTMLDivElement>(null);
+  // 외부 클릭 시 메뉴 닫기
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent | globalThis.MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setContextMenu(null);
+      }
+    };
+
+    if (contextMenu) {
+      window.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      window.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [contextMenu]);
 
   const toggleFolder = (path: string) => {
     const newExpanded = new Set(expandedFolders);
@@ -34,6 +56,11 @@ const FileTree = ({ files, selectedPath, onFileSelect }: FileTreeProps) => {
     const isExpanded = expandedFolders.has(node.path);
     const isSelected = selectedPath === node.path;
     const isFolder = node.type === 'folder';
+
+    const handleRightClick = (e: MouseEvent) => {
+      e.preventDefault(); // 기본 우클릭 메뉴를 막음
+      setContextMenu({ x: e.clientX, y: e.clientY, filePath: node.path });
+    };
 
     return (
       <div key={node.path}>
@@ -51,6 +78,7 @@ const FileTree = ({ files, selectedPath, onFileSelect }: FileTreeProps) => {
               onFileSelect(node.path);
             }
           }}
+          onContextMenu={handleRightClick} // 우클릭 처리
         >
           {isFolder ? (
             <>
@@ -84,6 +112,13 @@ const FileTree = ({ files, selectedPath, onFileSelect }: FileTreeProps) => {
     );
   };
 
+  const handleDelete = () => {
+    if (contextMenu) {
+      onDelete(contextMenu.filePath);
+      setContextMenu(null); // 메뉴 닫기
+    }
+  };
+
   return (
     <div className="h-full flex flex-col">
       {/* 헤더 */}
@@ -93,6 +128,26 @@ const FileTree = ({ files, selectedPath, onFileSelect }: FileTreeProps) => {
 
       {/* 파일 트리 */}
       <div className="flex-1 overflow-y-auto bg-white">{files.map((file) => renderNode(file))}</div>
+
+      {/* 우클릭 메뉴 */}
+      {contextMenu && (
+        <div
+          ref={menuRef}
+          className="absolute bg-gray-80 border border-gray-50 shadow-lg rounded-md z-dropdown overflow-hidden"
+          style={{ top: contextMenu.y, left: contextMenu.x }}
+        >
+          <ul>
+            <li>
+              <button
+                className="w-full text-left text-base px-3.5 py-1.5 hover:bg-blue-50"
+                onClick={handleDelete}
+              >
+                삭제
+              </button>
+            </li>
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

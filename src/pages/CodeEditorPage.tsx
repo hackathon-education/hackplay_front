@@ -210,6 +210,20 @@ const CodeEditorPage = () => {
     setActiveTabId(newTab.id);
   };
 
+  // 파일 삭제
+  const handleDeleteFile = (filePath: string) => {
+    const removeNode = (nodes: FileNode[]): FileNode[] =>
+      nodes
+        .filter((node) => node.path !== filePath)
+        .map((node) => (node.children ? { ...node, children: removeNode(node.children) } : node));
+
+    setFiles((prev) => removeNode(prev));
+
+    // 삭제된 파일이 현재 열린 탭이면 닫기
+    const tabToClose = editorTabs.find((t) => t.path === filePath);
+    if (tabToClose) handleTabClose(tabToClose.id);
+  };
+
   // 탭 클릭 핸들러
   const handleTabClick = (tabId: string) => {
     setActiveTabId(tabId);
@@ -555,6 +569,7 @@ const CodeEditorPage = () => {
                   files={files}
                   selectedPath={editorTabs.find((t) => t.id === activeTabId)?.path}
                   onFileSelect={handleFileSelect}
+                  onDelete={handleDeleteFile}
                 />
               </div>
             )}
