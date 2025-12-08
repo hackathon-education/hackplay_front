@@ -117,7 +117,16 @@ const CodeEditorPage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const autoSaveTimerRef = useRef<NodeJS.Timeout | null>(null);
   const [terminalOutput, setTerminalOutput] = useState<string>('');
-  const [isAutoSaveEnabled, setIsAutoSaveEnabled] = useState(true); // 자동 저장 토글
+
+  // 자동 저장 토글
+  const [isAutoSaveEnabled, setIsAutoSaveEnabled] = useState(() => {
+    // 초기값을 localStorage에서 읽어오기
+    const stored = localStorage.getItem('isAutoSaveEnabled');
+    return stored !== null ? JSON.parse(stored) : true;
+  });
+  useEffect(() => {
+    localStorage.setItem('isAutoSaveEnabled', JSON.stringify(isAutoSaveEnabled));
+  }, [isAutoSaveEnabled]);
 
   // 좌측 패널 상단 탭 데이터
   const leftPanelTabs: tabItem[] = [
