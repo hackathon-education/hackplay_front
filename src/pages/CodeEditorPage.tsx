@@ -85,7 +85,7 @@ const CodeEditorPage = () => {
   const path = location.pathname;
   const { isLockModalOpen, closeLockModal, handleLockedItemClick } = useLockModal();
 
-  const userRole = JOB_TYPES.FE; // 사용자 직무
+  const userRole = JOB_TYPES.FRONT; // 사용자 직무
   const [activeTab, setActiveTab] = useState<'overview' | 'request' | 'answer'>('overview');
   const [currentRequestIndex, setCurrentRequestIndex] = useState<number>(0); // 직무별 요청사항 현재 인덱스
   const noRequest = path === '/workspaces/team-project-1'; // 1주차는 요청사항 없음
@@ -160,9 +160,9 @@ const CodeEditorPage = () => {
       content:
         '회원가입 시안은 피그마에 있어요. 폰트는 Pretendard, 버튼 색 #0070f3 / hover #005bb5. placeholder는 ‘이름 입력’, ‘이메일 주소 입력’, ‘비밀번호 입력’, ‘비밀번호 확인’. 에러 메시지는 입력창 하단 **빨간색(#FF4D4F)**으로 표시해주세요. 모바일에선 입력창 100% 폭, 버튼 하단 여백 16px.',
     },
-    { role: JOB_TYPES.FE, image: FEDeveloperImg, content: '텍스트를 입력하세요. (요청사항)' },
+    { role: JOB_TYPES.FRONT, image: FEDeveloperImg, content: '텍스트를 입력하세요. (요청사항)' },
     {
-      role: JOB_TYPES.BE,
+      role: JOB_TYPES.BACK,
       image: BEDeveloperImg,
       content:
         '회원가입 API는 **/api/v1/register**로 POST입니다. Body에 name, email, password 주세요. 성공 시 201 Created로 사용자 정보를 JSON으로 반환하고, 토큰은 발급하지 않아요(로그인은 3주차에서 별도 진행). 실패 시 400/409/422/500 등 상태 코드로 내려줄게요.',

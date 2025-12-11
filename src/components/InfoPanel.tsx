@@ -40,7 +40,7 @@ interface LevelItem {
 
 const panelContent: Record<InfoPanelProps['type'], { title: string; desc: DescItem[] }> = {
   fe: {
-    title: `${JOB_TYPES.FE}란?`,
+    title: `${JOB_TYPES.FRONT}란?`,
     desc: [
       {
         icon: WorkstationIcon,
@@ -65,7 +65,7 @@ const panelContent: Record<InfoPanelProps['type'], { title: string; desc: DescIt
     ],
   },
   be: {
-    title: `${JOB_TYPES.BE}란?`,
+    title: `${JOB_TYPES.BACK}란?`,
     desc: [
       {
         icon: SettingsIcon,
