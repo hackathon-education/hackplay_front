@@ -22,8 +22,6 @@ const LoginPage = () => {
     mode: 'onChange',
   });
 
-  const canSubmit = isValid;
-
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
       const response = await axiosInstance.post('/v1/auth/signin', data);
@@ -104,9 +102,9 @@ const LoginPage = () => {
 
           <button
             type="submit"
-            disabled={!canSubmit}
+            disabled={!isValid}
             className={`bg-[#0066cc] text-white p-[14px] text-[1.1rem] border-none rounded-[8px]
-              ${canSubmit ? 'hover:bg-[#005bb5]' : ''}`}
+              ${isValid ? 'hover:bg-[#005bb5]' : ''}`}
           >
             로그인
           </button>
