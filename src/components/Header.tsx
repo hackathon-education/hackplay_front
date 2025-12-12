@@ -9,6 +9,7 @@ import logo from '@/assets/logo.svg';
 import { NAV_ITEMS } from '@/constants/menuData';
 import { ROUTES } from '@/constants/routes';
 import { useLockModal } from '@/hooks/useLockModal';
+import { useAuthStore } from '@/store/authStore';
 
 import LockModal from './LockModal';
 
@@ -23,6 +24,7 @@ const Header = () => {
   const codeEditorPathRegex = /^\/workspaces\/[^/]+$/;
   const isCodeEditorPage = codeEditorPathRegex.test(path);
   const { isLockModalOpen, closeLockModal, handleLockedItemClick } = useLockModal();
+  const { isLoggedIn } = useAuthStore();
 
   // 페이지별 상단 여백 높이 설정
   const getTopSpacerHeight = (): string => {
@@ -215,12 +217,14 @@ const Header = () => {
                   >
                     마이페이지
                   </button>
-                  <button
-                    className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
-                    onClick={() => alert('로그아웃')}
-                  >
-                    로그아웃
-                  </button>
+                  {isLoggedIn && (
+                    <button
+                      className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
+                      onClick={() => alert('로그아웃')}
+                    >
+                      로그아웃
+                    </button>
+                  )}
                 </div>
               )}
             </div>
