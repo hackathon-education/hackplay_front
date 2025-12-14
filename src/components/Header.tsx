@@ -12,10 +12,12 @@ import { useLockModal } from '@/hooks/useLockModal';
 import { useAuthStore } from '@/store/authStore';
 
 import LockModal from './LockModal';
+import LogoutModal from './LogoutModal';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showHeaderShadow, setShowHeaderShadow] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
   const location = useLocation();
@@ -220,7 +222,7 @@ const Header = () => {
                   {isLoggedIn && (
                     <button
                       className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
-                      onClick={() => alert('로그아웃')}
+                      onClick={() => setIsLogoutModalOpen(true)}
                     >
                       로그아웃
                     </button>
@@ -233,6 +235,14 @@ const Header = () => {
       </header>
 
       <LockModal isOpen={isLockModalOpen} onClose={closeLockModal} />
+      <LogoutModal
+        isOpen={isLogoutModalOpen}
+        onConfirm={() => {
+          setIsLogoutModalOpen(false);
+          // TODO: 로그아웃 로직 구현
+        }}
+        onCancel={() => setIsLogoutModalOpen(false)}
+      />
     </>
   );
 };
