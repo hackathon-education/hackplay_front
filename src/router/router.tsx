@@ -21,22 +21,10 @@ const Router = () => {
       <Route path={ROUTES.MAIN} element={<MainPage />} />
 
       {/* Auth */}
-      <Route
-        path={ROUTES.SIGNUP}
-        element={
-          <PublicRoute>
-            <SignupPage />
-          </PublicRoute>
-        }
-      />
-      <Route
-        path={ROUTES.SIGNIN}
-        element={
-          <PublicRoute>
-            <LoginPage />
-          </PublicRoute>
-        }
-      />
+      <Route element={<PublicRoute />}>
+        <Route path={ROUTES.SIGNUP} element={<SignupPage />} />
+        <Route path={ROUTES.SIGNIN} element={<LoginPage />} />
+      </Route>
 
       {/* 단계별 학습 */}
       <Route path={ROUTES.COURSES.ROOT} element={<CoursesPage />} />
@@ -51,14 +39,9 @@ const Router = () => {
       />
 
       {/* 코드 에디터 */}
-      <Route
-        path={ROUTES.WORKSPACE(':lectureId')}
-        element={
-          <ProtectedRoute>
-            <CodeEditorPage />
-          </ProtectedRoute>
-        }
-      />
+      <Route element={<ProtectedRoute />}>
+        <Route path={ROUTES.WORKSPACE(':lectureId')} element={<CodeEditorPage />} />
+      </Route>
 
       {/* 기초 학습 */}
       <Route path={ROUTES.BASIC_LEARNING.ROOT} element={<BasicLearningPage />} />

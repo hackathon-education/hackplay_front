@@ -1,20 +1,16 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
 import { ROUTES } from '@/constants/routes';
 import { useAuthStore } from '@/store/authStore';
 
-interface PublicRouteProps {
-  children: React.ReactNode;
-}
-
-const PublicRoute = ({ children }: PublicRouteProps) => {
+const PublicRoute = () => {
   const { isLoggedIn } = useAuthStore();
 
   if (isLoggedIn) {
     return <Navigate to={ROUTES.MAIN} replace />;
   }
 
-  return <>{children}</>;
+  return <Outlet />;
 };
 
 export default PublicRoute;
