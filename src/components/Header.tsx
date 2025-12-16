@@ -258,6 +258,7 @@ const Header = () => {
           } finally {
             logout();
             setIsLogoutModalOpen(false);
+            navigate(ROUTES.MAIN);
           }
         }}
         onCancel={() => setIsLogoutModalOpen(false)}
