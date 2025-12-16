@@ -5,6 +5,7 @@ import { HiOutlineUser } from 'react-icons/hi';
 import { TfiAngleRight } from 'react-icons/tfi';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 
+import { axiosInstance } from '@/api/axios';
 import logo from '@/assets/logo.svg';
 import { NAV_ITEMS } from '@/constants/menuData';
 import { ROUTES } from '@/constants/routes';
@@ -26,7 +27,7 @@ const Header = () => {
   const codeEditorPathRegex = /^\/workspaces\/[^/]+$/;
   const isCodeEditorPage = codeEditorPathRegex.test(path);
   const { isLockModalOpen, closeLockModal, handleLockedItemClick } = useLockModal();
-  const { isLoggedIn } = useAuthStore();
+  const { isLoggedIn, logout } = useAuthStore();
 
   // 페이지별 상단 여백 높이 설정
   const getTopSpacerHeight = (): string => {
@@ -237,9 +238,27 @@ const Header = () => {
       <LockModal isOpen={isLockModalOpen} onClose={closeLockModal} />
       <LogoutModal
         isOpen={isLogoutModalOpen}
-        onConfirm={() => {
-          setIsLogoutModalOpen(false);
-          // TODO: 로그아웃 로직 구현
+        onConfirm={async () => {
+          try {
+            const token = sessionStorage.getItem('accessToken');
+
+            if (token) {
+              await axiosInstance.post(
+                '/v1/auth/signout',
+                {},
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                },
+              );
+            }
+          } catch (error) {
+            console.error('로그아웃 요청 실패:', error);
+          } finally {
+            logout();
+            setIsLogoutModalOpen(false);
+          }
         }}
         onCancel={() => setIsLogoutModalOpen(false)}
       />
