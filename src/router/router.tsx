@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 
+import ProtectedRoute from '@/components/ProtectedRoute';
 import { ROUTES } from '@/constants/routes';
 import BasicLearningPage from '@/pages/BasicLearningPage';
 import CodeEditorPage from '@/pages/CodeEditorPage';
@@ -35,7 +36,14 @@ const Router = () => {
       />
 
       {/* 코드 에디터 */}
-      <Route path={ROUTES.WORKSPACE(':lectureId')} element={<CodeEditorPage />} />
+      <Route
+        path={ROUTES.WORKSPACE(':lectureId')}
+        element={
+          <ProtectedRoute>
+            <CodeEditorPage />
+          </ProtectedRoute>
+        }
+      />
 
       {/* 기초 학습 */}
       <Route path={ROUTES.BASIC_LEARNING.ROOT} element={<BasicLearningPage />} />
