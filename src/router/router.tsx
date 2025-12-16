@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 
 import ProtectedRoute from '@/components/ProtectedRoute';
+import PublicRoute from '@/components/PublicRoute';
 import { ROUTES } from '@/constants/routes';
 import BasicLearningPage from '@/pages/BasicLearningPage';
 import CodeEditorPage from '@/pages/CodeEditorPage';
@@ -20,8 +21,22 @@ const Router = () => {
       <Route path={ROUTES.MAIN} element={<MainPage />} />
 
       {/* Auth */}
-      <Route path={ROUTES.SIGNUP} element={<SignupPage />} />
-      <Route path={ROUTES.SIGNIN} element={<LoginPage />} />
+      <Route
+        path={ROUTES.SIGNUP}
+        element={
+          <PublicRoute>
+            <SignupPage />
+          </PublicRoute>
+        }
+      />
+      <Route
+        path={ROUTES.SIGNIN}
+        element={
+          <PublicRoute>
+            <LoginPage />
+          </PublicRoute>
+        }
+      />
 
       {/* 단계별 학습 */}
       <Route path={ROUTES.COURSES.ROOT} element={<CoursesPage />} />
