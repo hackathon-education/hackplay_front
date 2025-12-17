@@ -10,6 +10,12 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (request) => {
+    // 토큰이 있으면 헤더에 추가
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      request.headers.Authorization = `Bearer ${token}`;
+    }
+
     if (import.meta.env.MODE === 'development') {
       console.log('🚀 Axios Request:', {
         method: request.method?.toUpperCase(),
