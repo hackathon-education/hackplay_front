@@ -4,20 +4,14 @@ import { Toaster } from 'sonner';
 
 import ScrollToTop from '@/components/ScrollToTop';
 
-import Footer from './components/Footer';
-import Header from './components/Header';
 import Router from './router/router';
 
 const App = () => {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <Header />
       <Toaster richColors />
-      <main>
-        <Router />
-      </main>
-      <Footer />
+      <Router />
     </BrowserRouter>
   );
 };
