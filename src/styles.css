@@ -49,6 +49,7 @@
   --color-gray-100: #f4f4f4;
   --color-gray-120: #f3f3f3;
   --color-gray-150: #eeeeee;
+  --color-gray-180: #dddddd;
   --color-gray-200: #d9d9d9;
   --color-gray-250: #cfcfcf;
   --color-gray-260: #cacaca;
@@ -77,6 +78,7 @@
   --shadow-7: 1px 1px 20px -9px rgba(0, 0, 0, 0.4);
   --shadow-8: 1px 1px 30px -9px rgba(0, 0, 0, 0.4);
   --shadow-9: 1.455px 1.455px 1.455px rgba(0, 0, 0, 0.1);
+  --shadow-10: 1px 1px 30px -9px rgba(0, 113, 188, 1);
 
   /** z-index 계층 구조 **/
 

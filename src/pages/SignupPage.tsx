@@ -357,8 +357,8 @@ const SignupPage = () => {
             <option value="">직무 선택</option>
             <option value="PLAN">기획</option>
             <option value="DESIGN">디자인</option>
-            <option value="FRONT">{JOB_TYPES.FE}</option>
-            <option value="BACK">{JOB_TYPES.BE}</option>
+            <option value="FRONT">{JOB_TYPES.FRONT}</option>
+            <option value="BACK">{JOB_TYPES.BACK}</option>
           </select>
           {errors.role && <p className="text-red-500 text-sm mt-1">{errors.role.message}</p>}
 

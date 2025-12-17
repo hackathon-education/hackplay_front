@@ -92,7 +92,7 @@ const CoursesPage = () => {
               selectedTab === 'fe' ? 'bg-[#007bff] text-white' : 'text-[#007bff]'
             }`}
           >
-            {JOB_TYPES.FE}
+            {JOB_TYPES.FRONT}
           </button>
 
           <AnimatePresence>
@@ -120,7 +120,7 @@ const CoursesPage = () => {
               selectedTab === 'be' ? 'bg-[#007bff] text-white' : 'text-[#007bff]'
             }`}
           >
-            {JOB_TYPES.BE}
+            {JOB_TYPES.BACK}
           </button>
 
           <AnimatePresence>

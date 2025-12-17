@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { axiosInstance } from '@/api/axios';
 import { ROUTES } from '@/constants/routes';
+import { useAuthStore } from '@/store/authStore';
 
 interface FormValues {
   email: string;
@@ -11,6 +12,7 @@ interface FormValues {
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const login = useAuthStore((state) => state.login);
 
   const {
     register,
@@ -20,19 +22,19 @@ const LoginPage = () => {
     mode: 'onChange',
   });
 
-  const canSubmit = isValid;
-
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
       const response = await axiosInstance.post('/v1/auth/signin', data);
 
       const result = response.data;
 
-      sessionStorage.setItem('accessToken', result.data.accessToken);
-      localStorage.setItem('nickname', result.data.nickname);
-      localStorage.setItem('email', result.data.email);
-      localStorage.setItem('profileImageUrl', result.data.profileImageUrl);
-      localStorage.setItem('role', result.data.role);
+      login({
+        accessToken: result.data.accessToken,
+        nickname: result.data.nickname,
+        email: result.data.email,
+        profileImageUrl: result.data.profileImageUrl,
+        role: result.data.role,
+      });
 
       navigate(ROUTES.MAIN);
     } catch (error: any) {
@@ -100,9 +102,9 @@ const LoginPage = () => {
 
           <button
             type="submit"
-            disabled={!canSubmit}
+            disabled={!isValid}
             className={`bg-[#0066cc] text-white p-[14px] text-[1.1rem] border-none rounded-[8px]
-              ${canSubmit ? 'hover:bg-[#005bb5]' : ''}`}
+              ${isValid ? 'hover:bg-[#005bb5]' : ''}`}
           >
             로그인
           </button>

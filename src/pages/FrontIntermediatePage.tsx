@@ -9,8 +9,8 @@ import { useLockModal } from '@/hooks/useLockModal';
 // 라우트 경로에 따른 포지션 매핑 함수
 const getPositionByRoute = (job?: string): string => {
   const jobToPosition: Record<string, string> = {
-    fe: `${JOB_TYPES.FE} Developer`,
-    be: `${JOB_TYPES.BE} Developer`,
+    fe: `${JOB_TYPES.FRONT} Developer`,
+    be: `${JOB_TYPES.BACK} Developer`,
     design: JOB_TYPES.DESIGN,
   };
 

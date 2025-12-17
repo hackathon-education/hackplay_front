@@ -1,5 +1,8 @@
 import axios from 'axios';
 
+import { ROUTES } from '@/constants/routes';
+import { useAuthStore } from '@/store/authStore';
+
 const axiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_SERVER_BASEURL}/api`,
   withCredentials: true,
@@ -7,6 +10,12 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (request) => {
+    // 토큰이 있으면 헤더에 추가
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      request.headers.Authorization = `Bearer ${token}`;
+    }
+
     if (import.meta.env.MODE === 'development') {
       console.log('🚀 Axios Request:', {
         method: request.method?.toUpperCase(),
@@ -36,9 +45,26 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
+    const status = error.response?.status;
+
+    // 인증 만료 또는 로그아웃 이후 보호된 API 접근 시 처리
+    if (status === 401) {
+      const { isLoggedIn, logout } = useAuthStore.getState();
+
+      // 스토어/스토리지 정리
+      if (isLoggedIn) {
+        logout();
+      }
+
+      // 로그인 페이지로 이동 (이미 로그인 페이지가 아니라면)
+      if (typeof window !== 'undefined' && window.location.pathname !== ROUTES.SIGNIN) {
+        window.location.replace(ROUTES.SIGNIN);
+      }
+    }
+
     if (import.meta.env.MODE === 'development') {
       console.error('❌ Axios Response Error:', {
-        status: error.response?.status,
+        status,
         statusText: error.response?.statusText,
         fullURL: `${error.config?.baseURL}${error.config?.url}`,
         data: error.response?.data,

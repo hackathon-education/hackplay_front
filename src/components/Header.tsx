@@ -5,16 +5,22 @@ import { HiOutlineUser } from 'react-icons/hi';
 import { TfiAngleRight } from 'react-icons/tfi';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 
+import { AnimatePresence, motion } from 'framer-motion';
+
+import { axiosInstance } from '@/api/axios';
 import logo from '@/assets/logo.svg';
 import { NAV_ITEMS } from '@/constants/menuData';
 import { ROUTES } from '@/constants/routes';
 import { useLockModal } from '@/hooks/useLockModal';
+import { useAuthStore } from '@/store/authStore';
 
 import LockModal from './LockModal';
+import LogoutModal from './LogoutModal';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showHeaderShadow, setShowHeaderShadow] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
   const location = useLocation();
@@ -23,6 +29,7 @@ const Header = () => {
   const codeEditorPathRegex = /^\/workspaces\/[^/]+$/;
   const isCodeEditorPage = codeEditorPathRegex.test(path);
   const { isLockModalOpen, closeLockModal, handleLockedItemClick } = useLockModal();
+  const { isLoggedIn, logout } = useAuthStore();
 
   // 페이지별 상단 여백 높이 설정
   const getTopSpacerHeight = (): string => {
@@ -122,7 +129,7 @@ const Header = () => {
             className={`flex items-center overflow-hidden w-full rounded-4xl bg-white ${
               isCodeEditorPage
                 ? 'mr-5 max-w-[8.401rem] h-11 pt-[0.883rem] px-[1.421rem] pb-[0.846rem] shadow-1'
-                : 'mr-[1.813rem] max-w-[13.938rem] h-[4.563rem] pt-[1.438rem] px-[2.313rem] pb-[1.378rem]'
+                : 'mr-[3.438rem] max-w-[13.938rem] h-[4.563rem] pt-[1.438rem] px-[2.313rem] pb-[1.378rem]'
             }`}
           >
             <img src={logo} alt="logo" className="object-contain" />
@@ -137,7 +144,7 @@ const Header = () => {
             </div>
           ) : (
             // 내비게이션
-            <ul className="flex w-full max-w-[60.25rem] h-full mr-4 px-[4.281rem] header-white-box text-gray-600 justify-between">
+            <ul className="flex w-full h-full mr-7 px-[6.063rem] header-white-box text-gray-600 justify-between">
               {NAV_ITEMS.map((item) => (
                 <li key={item.label} className="h-full flex items-center tracking-[0.04em]">
                   {item.locked ? (
@@ -158,21 +165,23 @@ const Header = () => {
           )}
 
           {/* 우측 액션 */}
-          <div className="flex max-w-[34.375rem] h-full items-center tracking-[0.04em]">
+          <div className="flex ml-auto max-w-[34.375rem] h-full items-center tracking-[0.04em]">
             {isCodeEditorPage ? (
               <div className="mr-5 h-full w-[10.313rem] header-white-box"></div>
             ) : (
               <>
-                <button className="mr-5 h-full max-w-[11.813rem] header-white-box px-[2.564rem] whitespace-nowrap">
-                  학습 이어하기
-                </button>
-
-                <Link
-                  to={ROUTES.SIGNIN}
-                  className="mr-[1.563rem] w-[8.875rem] max-w-[8.875rem] h-full flex items-center justify-between header-white-box pl-[2.125rem] pr-[1.8rem] whitespace-nowrap"
-                >
-                  로그인 <TfiAngleRight />
-                </Link>
+                {isLoggedIn ? (
+                  <button className="mr-[2.438rem] h-full max-w-[12.375rem] header-white-box px-[2.564rem] whitespace-nowrap">
+                    학습 이어하기
+                  </button>
+                ) : (
+                  <Link
+                    to={ROUTES.SIGNIN}
+                    className="mr-[2.938rem] ml-5 w-[8.875rem] max-w-[8.875rem] h-full flex items-center justify-between header-white-box pl-[2.125rem] pr-[1.8rem] whitespace-nowrap"
+                  >
+                    로그인 <TfiAngleRight />
+                  </Link>
+                )}
               </>
             )}
 
@@ -187,6 +196,7 @@ const Header = () => {
             <div
               className={`relative w-full h-full rounded-4xl ${isCodeEditorPage ? 'max-w-11 max-h-11' : 'max-w-[4.563rem]'}`}
               ref={menuRef}
+              onMouseLeave={() => setIsMenuOpen(false)}
             >
               <button
                 className={`flex items-center justify-center w-full h-full rounded-4xl bg-blue-300 shadow-1 ${isCodeEditorPage ? 'p-3.5' : 'p-[1.594rem]'}`}
@@ -195,40 +205,77 @@ const Header = () => {
                 <AiOutlineMenu className="text-white" />
               </button>
 
-              {isMenuOpen && (
-                <div className="absolute top-12 right-0 bg-white border border-[#ddd] rounded-lg shadow-lg flex flex-col py-2 z-50 min-w-[160px]">
-                  <button
-                    className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
-                    onClick={handleAccountSettingsClick}
+              <AnimatePresence>
+                {isMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute top-12 right-0 bg-white border border-[#ddd] rounded-lg shadow-lg flex flex-col py-2 z-50 min-w-[160px]"
                   >
-                    계정설정
-                  </button>
-                  <button
-                    className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
-                    onClick={handleContactClick}
-                  >
-                    문의하기
-                  </button>
-                  <button
-                    className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
-                    onClick={handleMyPageClick}
-                  >
-                    마이페이지
-                  </button>
-                  <button
-                    className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
-                    onClick={() => alert('로그아웃')}
-                  >
-                    로그아웃
-                  </button>
-                </div>
-              )}
+                    <button
+                      className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
+                      onClick={handleAccountSettingsClick}
+                    >
+                      계정설정
+                    </button>
+                    <button
+                      className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
+                      onClick={handleContactClick}
+                    >
+                      문의하기
+                    </button>
+                    <button
+                      className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
+                      onClick={handleMyPageClick}
+                    >
+                      마이페이지
+                    </button>
+                    {isLoggedIn && (
+                      <button
+                        className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
+                        onClick={() => setIsLogoutModalOpen(true)}
+                      >
+                        로그아웃
+                      </button>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </nav>
       </header>
 
       <LockModal isOpen={isLockModalOpen} onClose={closeLockModal} />
+      <LogoutModal
+        isOpen={isLogoutModalOpen}
+        onConfirm={async () => {
+          try {
+            const token = sessionStorage.getItem('accessToken');
+
+            if (token) {
+              await axiosInstance.post(
+                '/v1/auth/signout',
+                {},
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                },
+              );
+            }
+          } catch (error) {
+            console.error('로그아웃 요청 실패:', error);
+          } finally {
+            logout();
+            setIsLogoutModalOpen(false);
+            navigate(ROUTES.MAIN);
+          }
+        }}
+        onCancel={() => setIsLogoutModalOpen(false)}
+      />
     </>
   );
 };
