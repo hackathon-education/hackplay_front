@@ -129,7 +129,7 @@ const Header = () => {
             className={`flex items-center overflow-hidden w-full rounded-4xl bg-white ${
               isCodeEditorPage
                 ? 'mr-5 max-w-[8.401rem] h-11 pt-[0.883rem] px-[1.421rem] pb-[0.846rem] shadow-1'
-                : 'mr-[1.813rem] max-w-[13.938rem] h-[4.563rem] pt-[1.438rem] px-[2.313rem] pb-[1.378rem]'
+                : 'mr-[3.438rem] max-w-[13.938rem] h-[4.563rem] pt-[1.438rem] px-[2.313rem] pb-[1.378rem]'
             }`}
           >
             <img src={logo} alt="logo" className="object-contain" />
@@ -144,7 +144,7 @@ const Header = () => {
             </div>
           ) : (
             // 내비게이션
-            <ul className="flex w-full h-full mr-4 px-[4.281rem] header-white-box text-gray-600 justify-between">
+            <ul className="flex w-full h-full mr-7 px-[6.063rem] header-white-box text-gray-600 justify-between">
               {NAV_ITEMS.map((item) => (
                 <li key={item.label} className="h-full flex items-center tracking-[0.04em]">
                   {item.locked ? (
@@ -170,14 +170,14 @@ const Header = () => {
               <div className="mr-5 h-full w-[10.313rem] header-white-box"></div>
             ) : (
               <>
-                {!isLoggedIn ? (
-                  <button className="mr-5 h-full max-w-[11.813rem] header-white-box px-[2.564rem] whitespace-nowrap">
+                {isLoggedIn ? (
+                  <button className="mr-[2.438rem] h-full max-w-[12.375rem] header-white-box px-[2.564rem] whitespace-nowrap">
                     학습 이어하기
                   </button>
                 ) : (
                   <Link
                     to={ROUTES.SIGNIN}
-                    className="mr-[1.563rem] w-[8.875rem] max-w-[8.875rem] h-full flex items-center justify-between header-white-box pl-[2.125rem] pr-[1.8rem] whitespace-nowrap"
+                    className="mr-[2.938rem] ml-5 w-[8.875rem] max-w-[8.875rem] h-full flex items-center justify-between header-white-box pl-[2.125rem] pr-[1.8rem] whitespace-nowrap"
                   >
                     로그인 <TfiAngleRight />
                   </Link>
