@@ -144,7 +144,7 @@ const Header = () => {
             </div>
           ) : (
             // 내비게이션
-            <ul className="flex w-full max-w-[60.25rem] h-full mr-4 px-[4.281rem] header-white-box text-gray-600 justify-between">
+            <ul className="flex w-full h-full mr-4 px-[4.281rem] header-white-box text-gray-600 justify-between">
               {NAV_ITEMS.map((item) => (
                 <li key={item.label} className="h-full flex items-center tracking-[0.04em]">
                   {item.locked ? (
@@ -165,21 +165,23 @@ const Header = () => {
           )}
 
           {/* 우측 액션 */}
-          <div className="flex max-w-[34.375rem] h-full items-center tracking-[0.04em]">
+          <div className="flex ml-auto max-w-[34.375rem] h-full items-center tracking-[0.04em]">
             {isCodeEditorPage ? (
               <div className="mr-5 h-full w-[10.313rem] header-white-box"></div>
             ) : (
               <>
-                <button className="mr-5 h-full max-w-[11.813rem] header-white-box px-[2.564rem] whitespace-nowrap">
-                  학습 이어하기
-                </button>
-
-                <Link
-                  to={ROUTES.SIGNIN}
-                  className="mr-[1.563rem] w-[8.875rem] max-w-[8.875rem] h-full flex items-center justify-between header-white-box pl-[2.125rem] pr-[1.8rem] whitespace-nowrap"
-                >
-                  로그인 <TfiAngleRight />
-                </Link>
+                {!isLoggedIn ? (
+                  <button className="mr-5 h-full max-w-[11.813rem] header-white-box px-[2.564rem] whitespace-nowrap">
+                    학습 이어하기
+                  </button>
+                ) : (
+                  <Link
+                    to={ROUTES.SIGNIN}
+                    className="mr-[1.563rem] w-[8.875rem] max-w-[8.875rem] h-full flex items-center justify-between header-white-box pl-[2.125rem] pr-[1.8rem] whitespace-nowrap"
+                  >
+                    로그인 <TfiAngleRight />
+                  </Link>
+                )}
               </>
             )}
 
