@@ -5,6 +5,8 @@ import { HiOutlineUser } from 'react-icons/hi';
 import { TfiAngleRight } from 'react-icons/tfi';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 
+import { AnimatePresence, motion } from 'framer-motion';
+
 import { axiosInstance } from '@/api/axios';
 import logo from '@/assets/logo.svg';
 import { NAV_ITEMS } from '@/constants/menuData';
@@ -192,6 +194,7 @@ const Header = () => {
             <div
               className={`relative w-full h-full rounded-4xl ${isCodeEditorPage ? 'max-w-11 max-h-11' : 'max-w-[4.563rem]'}`}
               ref={menuRef}
+              onMouseLeave={() => setIsMenuOpen(false)}
             >
               <button
                 className={`flex items-center justify-center w-full h-full rounded-4xl bg-blue-300 shadow-1 ${isCodeEditorPage ? 'p-3.5' : 'p-[1.594rem]'}`}
@@ -200,36 +203,44 @@ const Header = () => {
                 <AiOutlineMenu className="text-white" />
               </button>
 
-              {isMenuOpen && (
-                <div className="absolute top-12 right-0 bg-white border border-[#ddd] rounded-lg shadow-lg flex flex-col py-2 z-50 min-w-[160px]">
-                  <button
-                    className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
-                    onClick={handleAccountSettingsClick}
+              <AnimatePresence>
+                {isMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute top-12 right-0 bg-white border border-[#ddd] rounded-lg shadow-lg flex flex-col py-2 z-50 min-w-[160px]"
                   >
-                    계정설정
-                  </button>
-                  <button
-                    className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
-                    onClick={handleContactClick}
-                  >
-                    문의하기
-                  </button>
-                  <button
-                    className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
-                    onClick={handleMyPageClick}
-                  >
-                    마이페이지
-                  </button>
-                  {isLoggedIn && (
                     <button
                       className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
-                      onClick={() => setIsLogoutModalOpen(true)}
+                      onClick={handleAccountSettingsClick}
                     >
-                      로그아웃
+                      계정설정
                     </button>
-                  )}
-                </div>
-              )}
+                    <button
+                      className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
+                      onClick={handleContactClick}
+                    >
+                      문의하기
+                    </button>
+                    <button
+                      className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
+                      onClick={handleMyPageClick}
+                    >
+                      마이페이지
+                    </button>
+                    {isLoggedIn && (
+                      <button
+                        className="text-left text-sm px-4 py-2 hover:bg-[#f5f5f5]"
+                        onClick={() => setIsLogoutModalOpen(true)}
+                      >
+                        로그아웃
+                      </button>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </nav>
