@@ -19,10 +19,22 @@ interface StatusBadgeProps {
   label: string;
 }
 
+// 프로젝트 진행 상태 타입
+type ProjectStatus = 'COMPLETED' | 'IN_PROGRESS' | 'NOT_STARTED';
+
 // 유닛 아이템 타입
 interface UnitItemProps {
   path: string;
+  status: ProjectStatus;
 }
+
+// 유닛 아이템 더미 데이터 (추후 API 연동으로 대체 예정)
+const unitItemsData: UnitItemProps[] = [
+  { path: 'team-project-1', status: 'COMPLETED' },
+  { path: 'team-project-2', status: 'NOT_STARTED' },
+  { path: 'team-project-3', status: 'NOT_STARTED' },
+  { path: 'team-project-4', status: 'NOT_STARTED' },
+];
 
 // 프로젝트 정보 아이템 컴포넌트
 const ProjectInfoItem = ({ icon, label, content }: ProjectInfoItemProps) => {
@@ -85,14 +97,6 @@ const TeamProjectPage = () => {
     { color: 'bg-green', label: '진행 완료' },
     { color: 'bg-blue-330', label: '진행중' },
     { color: 'bg-yellow', label: '시작 전' },
-  ];
-
-  // 유닛 아이템 데이터
-  const unitItems = [
-    { path: 'team-project-1' },
-    { path: 'team-project-2' },
-    { path: 'team-project-3' },
-    { path: 'team-project-4' },
   ];
 
   return (
@@ -177,8 +181,8 @@ const TeamProjectPage = () => {
             </div>
             {/* 유닛 목록 */}
             <ol className="mt-5 flex flex-col gap-[4.688rem]">
-              {unitItems.map((item, idx) => (
-                <UnitItem key={idx} path={item.path} />
+              {unitItemsData.map((item, idx) => (
+                <UnitItem key={idx} path={item.path} status={item.status} />
               ))}
             </ol>
           </div>
