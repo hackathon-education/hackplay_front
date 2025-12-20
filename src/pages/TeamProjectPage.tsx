@@ -1,9 +1,10 @@
 import { AiOutlineCalendar, AiOutlineTeam } from 'react-icons/ai';
 import { RiFlag2Line } from 'react-icons/ri';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Progress } from 'antd';
 
+import { createProject } from '@/api/project';
 import { ROUTES } from '@/constants/routes';
 
 // 프로젝트 정보 아이템 타입
@@ -60,12 +61,31 @@ const StatusBadge = ({ color, label }: StatusBadgeProps) => {
 };
 
 // 유닛 아이템 컴포넌트
-const UnitItem = ({ path }: UnitItemProps) => {
+const UnitItem = ({ path, status }: UnitItemProps) => {
+  const navigate = useNavigate();
+
+  const handleClick = async () => {
+    try {
+      if (status === 'NOT_STARTED') {
+        await createProject({
+          name: 'My First React Project',
+          templateType: 'react-vite',
+          isPublic: true,
+          lecture: 'PROJECT',
+        });
+      }
+
+      navigate(ROUTES.WORKSPACE(path));
+    } catch (error) {
+      console.error('프로젝트 생성 실패', error);
+    }
+  };
+
   return (
     <li className="flex gap-[2.063rem]">
-      <div className="w-[4.063rem] h-[4.063rem] rounded-full bg-gray-200"></div>
+      <div className="w-[4.063rem] h-[4.063rem] rounded-full bg-gray-200" />
       <div className="w-full max-w-[81rem] h-[24.5rem] rounded-2.5xl bg-gray-250">
-        <Link to={ROUTES.WORKSPACE(path)}>학습하기</Link>
+        <button onClick={handleClick}>{status === 'COMPLETED' ? '완료' : '학습하기'}</button>
       </div>
     </li>
   );
