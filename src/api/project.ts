@@ -27,3 +27,31 @@ export const createProject = async (
   const response = await axiosInstance.post<CreateProjectResponse>('/v1/projects', projectData);
   return response.data;
 };
+
+// 파일 생성 요청 타입
+interface CreateFileRequest {
+  name: string;
+  content: string;
+  parentPath: string;
+}
+
+// 파일 생성 응답 타입
+interface CreateFileResponse {
+  code: number;
+  message: string;
+  data: null;
+}
+
+/**
+ * 프로젝트 내 파일 생성 API
+ * @param projectId 프로젝트 ID
+ * @param fileData 파일 생성 데이터
+ * @returns 파일 생성 응답
+ */
+export const createFile = async (
+  projectId: string,
+  fileData: CreateFileRequest,
+): Promise<CreateFileResponse> => {
+  const response = await axiosInstance.post<CreateFileResponse>(`/v1/projects/${projectId}/files`, fileData);
+  return response.data;
+};
