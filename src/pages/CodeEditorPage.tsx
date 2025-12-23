@@ -6,6 +6,7 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 import { Link, useLocation } from 'react-router-dom';
 
 import { toast } from 'sonner';
+import { createFile } from '@/api/project';
 
 import BEDeveloperImg from '@/assets/backend.png';
 import DesignerImg from '@/assets/designer.png';
@@ -231,6 +232,46 @@ const CodeEditorPage = () => {
     // 삭제된 파일이 현재 열린 탭이면 닫기
     const tabToClose = editorTabs.find((t) => t.path === filePath);
     if (tabToClose) handleTabClose(tabToClose.id);
+  };
+
+  // 파일 생성 핸들러 (API 호출 후 로컬 상태 반영)
+  const handleCreateFile = async (parentPath: string, type: 'file' | 'folder', name: string, content?: string) => {
+    try {
+      // 프로젝트 ID 추출 - 추후 API 연동
+      const segments = path.split('/').filter(Boolean);
+      const projectId = segments[segments.length - 1] ?? '';
+
+      const body = {
+        name,
+        content: content ?? '',
+        parentPath: parentPath.replace(/^\//, ''),
+      };
+
+      // 서버에 파일 생성 요청
+      await createFile(projectId, body);
+
+      // 로컬 파일 트리에 새 노드 추가
+      const normalizedParent = parentPath.startsWith('/') ? parentPath : `/${parentPath}`;
+      const newNode: FileNode = { name, type: 'file', path: `${normalizedParent}/${name}` };
+
+      const addNode = (nodes: FileNode[]): FileNode[] =>
+        nodes.map((node) => {
+          if (node.path === normalizedParent && node.type === 'folder') {
+            const children = node.children ? [...node.children, newNode] : [newNode];
+            return { ...node, children };
+          }
+          if (node.children) {
+            return { ...node, children: addNode(node.children) };
+          }
+          return node;
+        });
+
+      setFiles((prev) => addNode(prev));
+      toast.success('파일을 생성했습니다.');
+    } catch (error) {
+      console.error('파일 생성 실패', error);
+      toast.error('파일 생성에 실패했습니다.');
+    }
   };
 
   // 탭 클릭 핸들러
@@ -579,6 +620,7 @@ const CodeEditorPage = () => {
                   selectedPath={editorTabs.find((t) => t.id === activeTabId)?.path}
                   onFileSelect={handleFileSelect}
                   onDelete={handleDeleteFile}
+                  onCreate={handleCreateFile}
                 />
               </div>
             )}
