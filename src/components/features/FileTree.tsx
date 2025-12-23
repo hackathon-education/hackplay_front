@@ -16,13 +16,20 @@ interface FileTreeProps {
   selectedPath?: string;
   onFileSelect: (path: string) => void;
   onDelete: (path: string) => void; // 삭제 핸들러
+  onCreate?: (parentPath: string, type: 'file' | 'folder', name: string, content?: string) => void;
 }
 
-const FileTree = ({ files, selectedPath, onFileSelect, onDelete }: FileTreeProps) => {
+const FileTree = ({ files, selectedPath, onFileSelect, onDelete, onCreate }: FileTreeProps) => {
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
-  const [contextMenu, setContextMenu] = useState<null | { x: number; y: number; filePath: string }>(
-    null,
-  );
+  const [contextMenu, setContextMenu] = useState<null | {
+    x: number;
+    y: number;
+    filePath: string;
+    isFolder: boolean;
+  }>(null);
+  const [creatingInFolder, setCreatingInFolder] = useState<string | null>(null);
+  const [newFileName, setNewFileName] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const menuRef = useRef<HTMLDivElement>(null);
   // 외부 클릭 시 메뉴 닫기
@@ -42,6 +49,13 @@ const FileTree = ({ files, selectedPath, onFileSelect, onDelete }: FileTreeProps
     };
   }, [contextMenu]);
 
+  // 입력 필드 자동 포커스
+  useEffect(() => {
+    if (creatingInFolder && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [creatingInFolder]);
+
   const toggleFolder = (path: string) => {
     const newExpanded = new Set(expandedFolders);
     if (newExpanded.has(path)) {
@@ -59,7 +73,7 @@ const FileTree = ({ files, selectedPath, onFileSelect, onDelete }: FileTreeProps
 
     const handleRightClick = (e: MouseEvent) => {
       e.preventDefault(); // 기본 우클릭 메뉴를 막음
-      setContextMenu({ x: e.clientX, y: e.clientY, filePath: node.path });
+      setContextMenu({ x: e.clientX, y: e.clientY, filePath: node.path, isFolder });
     };
 
     return (
@@ -105,6 +119,35 @@ const FileTree = ({ files, selectedPath, onFileSelect, onDelete }: FileTreeProps
             {node.name}
           </span>
         </div>
+        {/* 인라인 파일명 입력 */}
+        {isFolder && isExpanded && creatingInFolder === node.path && (
+          <div
+            className="flex items-center"
+            style={{ paddingLeft: `${(level + 1) * 1 + 0.813}rem` }}
+          >
+            <div className='w-7.5 shrink-0'></div>
+            <MdInsertDriveFile className="w-5 h-5 shrink-0 text-gray-260" />
+            <input
+              ref={inputRef}
+              type="text"
+              value={newFileName}
+              onChange={(e) => setNewFileName(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleCreateFileInline(node.path);
+                } else if (e.key === 'Escape') {
+                  setCreatingInFolder(null);
+                  setNewFileName('');
+                }
+              }}
+              onBlur={() => {
+                setCreatingInFolder(null);
+                setNewFileName('');
+              }}
+              className="w-full h-full ml-[0.281rem] border border-blue-400 rounded text-[0.939rem]/[1.2] font-[410]"
+            />
+          </div>
+        )}
         {isFolder && isExpanded && node.children && (
           <div>{node.children.map((child) => renderNode(child, level + 1))}</div>
         )}
@@ -117,6 +160,30 @@ const FileTree = ({ files, selectedPath, onFileSelect, onDelete }: FileTreeProps
       onDelete(contextMenu.filePath);
       setContextMenu(null); // 메뉴 닫기
     }
+  };
+
+  const handleCreateFileInline = (parentPath: string) => {
+    // 검증
+    if (!newFileName.trim()) {
+      alert('파일 이름을 입력해주세요.');
+      return;
+    }
+    if (newFileName.length > 255) {
+      alert('파일 이름은 최대 255자입니다.');
+      return;
+    }
+    const validName = /^[A-Za-z0-9._-]+$/.test(newFileName);
+    if (!validName) {
+      alert("파일명은 영문, 숫자, '.', '_', '-'만 허용됩니다.");
+      return;
+    }
+
+    if (onCreate) {
+      onCreate(parentPath, 'file', newFileName, '');
+    }
+
+    setCreatingInFolder(null);
+    setNewFileName('');
   };
 
   return (
@@ -137,9 +204,22 @@ const FileTree = ({ files, selectedPath, onFileSelect, onDelete }: FileTreeProps
           style={{ top: contextMenu.y, left: contextMenu.x }}
         >
           <ul>
+            {contextMenu.isFolder && (
+              <li>
+                <button
+                  className="w-full !justify-start text-base px-3.5 py-1.5 hover:bg-blue-50"
+                  onClick={() => {
+                    setCreatingInFolder(contextMenu.filePath);
+                    setContextMenu(null);
+                  }}
+                >
+                  새 파일...
+                </button>
+              </li>
+            )}
             <li>
               <button
-                className="w-full text-left text-base px-3.5 py-1.5 hover:bg-blue-50"
+                className="w-full !justify-start text-base px-3.5 py-1.5 hover:bg-blue-50"
                 onClick={handleDelete}
               >
                 삭제
