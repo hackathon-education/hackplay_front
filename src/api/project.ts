@@ -52,6 +52,34 @@ export const createFile = async (
   projectId: string,
   fileData: CreateFileRequest,
 ): Promise<CreateFileResponse> => {
-  const response = await axiosInstance.post<CreateFileResponse>(`/v1/projects/${projectId}/files`, fileData);
+  const response = await axiosInstance.post<CreateFileResponse>(
+    `/v1/projects/${projectId}/files`,
+    fileData,
+  );
+  return response.data;
+};
+
+// 루트 디렉토리 트리 전체 조회 응답 타입
+interface DirTreeNode {
+  name: string;
+  path: string;
+  type: 'DIRECTORY' | 'FILE';
+  children: DirTreeNode[];
+}
+
+interface GetDirTreeResponse {
+  code: number;
+  message: string;
+  data: DirTreeNode;
+}
+
+/**
+ * 루트 디렉토리 전체 트리 전채 조회
+ * @param projectId 프로젝트 ID
+ */
+export const getProjectDirTree = async (projectId: string): Promise<GetDirTreeResponse> => {
+  const response = await axiosInstance.get<GetDirTreeResponse>(
+    `/v1/projects/${projectId}/dirs/tree`,
+  );
   return response.data;
 };

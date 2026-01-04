@@ -6,7 +6,7 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 import { Link, useLocation } from 'react-router-dom';
 
 import { toast } from 'sonner';
-import { createFile } from '@/api/project';
+import { createFile, getProjectDirTree } from '@/api/project';
 
 import BEDeveloperImg from '@/assets/backend.png';
 import DesignerImg from '@/assets/designer.png';
@@ -112,6 +112,60 @@ const CodeEditorPage = () => {
       ],
     },
   ]);
+
+  // 서버에서 받은 디렉토리 트리 노드를 애플리케이션 FileNode 타입으로 변환
+  const convertDirNode = (node: any, rootPath: string): FileNode => {
+    const normalize = (p: string) => p.replace(/\\/g, '/');
+    const rootNorm = normalize(rootPath);
+    const nodePath = normalize(node.path || '');
+    let relative = nodePath.startsWith(rootNorm) ? nodePath.slice(rootNorm.length) : nodePath;
+    if (!relative.startsWith('/')) relative = `/${relative}`;
+
+    const mapped: FileNode = {
+      name: node.name || relative.split('/').pop() || '/',
+      type: node.type === 'DIRECTORY' ? 'folder' : 'file',
+      path: relative === '/' ? '/' : relative,
+      children: [],
+    };
+
+    if (node.children && node.children.length > 0) {
+      mapped.children = node.children.map((ch: any) => convertDirNode(ch, rootPath));
+    }
+
+    return mapped;
+  };
+
+  // 프로젝트 ID가 바뀌면 서버에서 루트 디렉토리 트리 조회
+  useEffect(() => {
+    const segments = path.split('/').filter(Boolean);
+    const projectId = segments[segments.length - 1] ?? '';
+    // const projectId = 5; // 임시 하드코딩
+    if (!projectId) return;
+
+    let mounted = true;
+
+    (async () => {
+      try {
+        const res = await getProjectDirTree(projectId);
+        if (!mounted) return;
+        if (res && res.code === 200 && res.data) {
+          const rootPath = res.data.path || '';
+          const converted = convertDirNode(res.data, rootPath);
+          // 파일 트리는 루트 노드로 설정
+          setFiles([converted]);
+        } else {
+          toast.error('디렉토리 트리 조회에 실패했습니다.');
+        }
+      } catch (error) {
+        console.error('디렉토리 트리 조회 오류', error);
+        toast.error('디렉토리 트리 조회 중 오류가 발생했습니다.');
+      }
+    })();
+
+    return () => {
+      mounted = false;
+    };
+  }, [path]);
   const [editorTabs, setEditorTabs] = useState<Tab[]>([]);
   const [activeTabId, setActiveTabId] = useState<string | undefined>();
   const [fileContents, setFileContents] = useState<Record<string, string>>({});
