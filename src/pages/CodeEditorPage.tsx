@@ -6,8 +6,8 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 import { Link, useLocation } from 'react-router-dom';
 
 import { toast } from 'sonner';
-import { createFile, getProjectDirTree } from '@/api/project';
 
+import { createFile, getProjectDirTree, updateFileContent } from '@/api/project';
 import BEDeveloperImg from '@/assets/backend.png';
 import DesignerImg from '@/assets/designer.png';
 import FEDeveloperImg from '@/assets/frontend.png';
@@ -289,7 +289,12 @@ const CodeEditorPage = () => {
   };
 
   // 파일 생성 핸들러 (API 호출 후 로컬 상태 반영)
-  const handleCreateFile = async (parentPath: string, type: 'file' | 'folder', name: string, content?: string) => {
+  const handleCreateFile = async (
+    parentPath: string,
+    type: 'file' | 'folder',
+    name: string,
+    content?: string,
+  ) => {
     try {
       // 프로젝트 ID 추출 - 추후 API 연동
       const segments = path.split('/').filter(Boolean);
@@ -393,10 +398,19 @@ const CodeEditorPage = () => {
     if (!activeTab) return;
 
     try {
-      // TODO: 실제 API 호출로 대체
-      // await axiosInstance.put(`/v1/files${activeTab.path}`, {
-      //   content: fileContents[activeTab.path],
-      // });
+      // 프로젝트 ID 추출
+      const segments = path.split('/').filter(Boolean);
+      const projectId = segments[segments.length - 1] ?? '';
+      if (!projectId) return;
+
+      // 파일 경로에서 프로젝트 루트를 기준으로 한 상대 경로 추출
+      const filePath = activeTab.path.startsWith('/') ? activeTab.path.slice(1) : activeTab.path;
+
+      // 파일 내용 수정 API 호출
+      await updateFileContent(projectId, {
+        path: filePath,
+        content: fileContents[activeTab.path] || '',
+      });
 
       // 저장 성공
       setEditorTabs((prev) =>
@@ -404,6 +418,8 @@ const CodeEditorPage = () => {
           tab.id === activeTabId ? { ...tab, isModified: false, isSaved: true } : tab,
         ),
       );
+
+      toast.success('파일이 저장되었습니다.');
 
       if (autoSaveTimerRef.current) {
         clearTimeout(autoSaveTimerRef.current);

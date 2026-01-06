@@ -79,7 +79,39 @@ interface GetDirTreeResponse {
  */
 export const getProjectDirTree = async (projectId: string): Promise<GetDirTreeResponse> => {
   const response = await axiosInstance.get<GetDirTreeResponse>(
-    `/v1/projects/${projectId}/dirs/tree`,
+    // `/v1/projects/${projectId}/dirs/tree`,
+    `/v1/projects/5/dirs/tree`, // 임시 하드코딩
+  );
+  return response.data;
+};
+
+// 파일 내용 수정 요청 타입
+interface UpdateFileContentRequest {
+  path: string;
+  content: string;
+}
+
+// 파일 내용 수정 응답 타입
+interface UpdateFileContentResponse {
+  code: number;
+  message: string;
+  data: null;
+}
+
+/**
+ * 프로젝트 내 파일 내용 수정 API
+ * @param projectId 프로젝트 ID
+ * @param fileData 파일 수정 데이터 (path, content)
+ * @returns 파일 수정 응답
+ */
+export const updateFileContent = async (
+  projectId: string,
+  fileData: UpdateFileContentRequest,
+): Promise<UpdateFileContentResponse> => {
+  const response = await axiosInstance.patch<UpdateFileContentResponse>(
+    // `/v1/projects/${projectId}/files`,
+    `/v1/projects/5/files`, // 임시 하드코딩
+    fileData,
   );
   return response.data;
 };
