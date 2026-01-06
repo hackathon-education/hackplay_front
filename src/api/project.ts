@@ -115,3 +115,41 @@ export const updateFileContent = async (
   );
   return response.data;
 };
+
+// 파일 조회 요청 타입
+interface GetFileRequest {
+  path: string;
+}
+
+// 파일 조회 응답 타입
+interface GetFileResponse {
+  code: number;
+  message: string;
+  data: {
+    name: string;
+    path: string;
+    size: number;
+    content: string;
+  };
+}
+
+/**
+ * 파일 조회 API
+ * @param projectId 프로젝트 ID
+ * @param filePath 파일 경로
+ * @returns 파일 조회 응답
+ */
+export const getFile = async (
+  projectId: string,
+  filePath: string,
+): Promise<GetFileResponse> => {
+  const response = await axiosInstance.get<GetFileResponse>(
+    // `/v1/projects/${projectId}/files`,
+    `/v1/projects/5/files`, // 임시 하드코딩
+    {
+      // params: { path: filePath },
+      params: { path: 'src/index.html' }, // 임시 하드코딩
+    },
+  );
+  return response.data;
+}

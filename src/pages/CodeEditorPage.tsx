@@ -7,7 +7,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { toast } from 'sonner';
 
-import { createFile, getProjectDirTree, updateFileContent } from '@/api/project';
+import { createFile, getFile, getProjectDirTree, updateFileContent } from '@/api/project';
 import BEDeveloperImg from '@/assets/backend.png';
 import DesignerImg from '@/assets/designer.png';
 import FEDeveloperImg from '@/assets/frontend.png';
@@ -265,13 +265,33 @@ const CodeEditorPage = () => {
       isSaved: true,
     };
 
-    // 파일 내용 로드 (없으면 빈 문자열)
-    if (!fileContents[filePath]) {
-      setFileContents((prev) => ({ ...prev, [filePath]: '' }));
-    }
+    // 파일 내용 로드
+    const loadFileContent = async () => {
+      try {
+        const segments = path.split('/').filter(Boolean);
+        const projectId = segments[segments.length - 1] ?? '';
+        if (!projectId) return;
 
+        const res = await getFile(projectId, filePath);
+        if (res && res.code === 200 && res.data) {
+          setFileContents((prev) => ({ ...prev, [filePath]: res.data.content }));
+        } else {
+          toast.error('파일 조회에 실패했습니다.');
+          setFileContents((prev) => ({ ...prev, [filePath]: '' }));
+        }
+      } catch (error) {
+        console.error('파일 조회 오류:', error);
+        toast.error('파일 조회 중 오류가 발생했습니다.');
+        setFileContents((prev) => ({ ...prev, [filePath]: '' }));
+      }
+    };
+
+    setFileContents((prev) => ({ ...prev, [filePath]: '' }));
     setEditorTabs((prev) => [...prev, newTab]);
     setActiveTabId(newTab.id);
+
+    // 파일 내용 비동기 로드
+    loadFileContent();
   };
 
   // 파일 삭제
