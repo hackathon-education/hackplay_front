@@ -11,6 +11,7 @@ interface UserInfo {
 
 interface AuthState {
   isLoggedIn: boolean;
+  isLoading: boolean;
   user: UserInfo | null;
   login: (data: { accessToken: string } & UserInfo) => void;
   logout: () => void;
@@ -47,6 +48,7 @@ const getStoredAuth = (): { isLoggedIn: boolean; user: UserInfo | null } => {
 
 export const useAuthStore = create<AuthState>((set) => ({
   isLoggedIn: false,
+  isLoading: true,
   user: null,
   login: ({ accessToken, nickname, email, profileImageUrl, role }) => {
     if (!hasWindow) return;
@@ -59,6 +61,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     set({
       isLoggedIn: true,
+      isLoading: false,
       user: { nickname, email, profileImageUrl, role },
     });
   },
@@ -71,10 +74,15 @@ export const useAuthStore = create<AuthState>((set) => ({
       localStorage.removeItem(STORAGE_KEYS.role);
     }
 
-    set({ isLoggedIn: false, user: null });
+    set({ isLoggedIn: false, isLoading: false, user: null });
   },
   hydrate: () => {
-    const stored = getStoredAuth();
-    set(stored);
+    try {
+      const stored = getStoredAuth();
+      set({ ...stored, isLoading: false });
+    } catch (error) {
+      console.error('Hydration error:', error);
+      set({ isLoggedIn: false, isLoading: false, user: null });
+    }
   },
 }));
