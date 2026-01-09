@@ -125,7 +125,7 @@ const FileTree = ({ files, selectedPath, onFileSelect, onDelete, onCreate }: Fil
             className="flex items-center"
             style={{ paddingLeft: `${(level + 1) * 1 + 0.813}rem` }}
           >
-            <div className='w-7.5 shrink-0'></div>
+            <div className="w-7.5 shrink-0"></div>
             <MdInsertDriveFile className="w-5 h-5 shrink-0 text-gray-260" />
             <input
               ref={inputRef}
@@ -149,7 +149,17 @@ const FileTree = ({ files, selectedPath, onFileSelect, onDelete, onCreate }: Fil
           </div>
         )}
         {isFolder && isExpanded && node.children && (
-          <div>{node.children.map((child) => renderNode(child, level + 1))}</div>
+          <div>
+            {node.children
+              .sort((a, b) => {
+                // 폴더 우선 정렬
+                if (a.type === 'folder' && b.type === 'file') return -1;
+                if (a.type === 'file' && b.type === 'folder') return 1;
+                // 같은 타입일 때는 이름 순서대로
+                return a.name.localeCompare(b.name);
+              })
+              .map((child) => renderNode(child, level + 1))}
+          </div>
         )}
       </div>
     );
@@ -194,8 +204,15 @@ const FileTree = ({ files, selectedPath, onFileSelect, onDelete, onCreate }: Fil
       </div>
 
       {/* 파일 트리 */}
-      <div className="flex-1 overflow-y-auto bg-white">{files.map((file) => renderNode(file))}</div>
-
+      <div className="flex-1 overflow-y-auto bg-white">
+        {files
+          .sort((a, b) => {
+            if (a.type === 'folder' && b.type === 'file') return -1;
+            if (a.type === 'file' && b.type === 'folder') return 1;
+            return a.name.localeCompare(b.name);
+          })
+          .map((file) => renderNode(file))}
+      </div>
       {/* 우클릭 메뉴 */}
       {contextMenu && (
         <div
