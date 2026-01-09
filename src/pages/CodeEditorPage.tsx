@@ -150,9 +150,10 @@ const CodeEditorPage = () => {
         if (!mounted) return;
         if (res && res.code === 200 && res.data) {
           const rootPath = res.data.path || '';
-          const converted = convertDirNode(res.data, rootPath);
-          // 파일 트리는 루트 노드로 설정
-          setFiles([converted]);
+          // 최상단 폴더를 제외하고 children만 사용
+          const children = res.data.children || [];
+          const converted = children.map((child: any) => convertDirNode(child, rootPath));
+          setFiles(converted);
         } else {
           toast.error('디렉토리 트리 조회에 실패했습니다.');
         }
