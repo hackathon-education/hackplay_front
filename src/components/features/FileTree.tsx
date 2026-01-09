@@ -109,7 +109,7 @@ const FileTree = ({ files, selectedPath, onFileSelect, onDelete, onCreate }: Fil
             </>
           ) : (
             <>
-              <div className="w-7.5" /> {/* spacing */}
+              <div className="w-3.5 mr-2.5" /> {/* spacing */}
               <MdInsertDriveFile className="w-5 h-5" />
             </>
           )}
@@ -125,7 +125,7 @@ const FileTree = ({ files, selectedPath, onFileSelect, onDelete, onCreate }: Fil
             className="flex items-center"
             style={{ paddingLeft: `${(level + 1) * 1 + 0.813}rem` }}
           >
-            <div className="w-7.5 shrink-0"></div>
+            <div className="w-3.5 mr-2.5 shrink-0"></div>
             <MdInsertDriveFile className="w-5 h-5 shrink-0 text-gray-260" />
             <input
               ref={inputRef}
