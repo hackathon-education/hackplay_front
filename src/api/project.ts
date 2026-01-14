@@ -139,17 +139,13 @@ interface GetFileResponse {
  * @param filePath 파일 경로
  * @returns 파일 조회 응답
  */
-export const getFile = async (
-  projectId: string,
-  filePath: string,
-): Promise<GetFileResponse> => {
+export const getFile = async (projectId: string, filePath: string): Promise<GetFileResponse> => {
   const response = await axiosInstance.get<GetFileResponse>(
     // `/v1/projects/${projectId}/files`,
     `/v1/projects/5/files`, // 임시 하드코딩
     {
-      // params: { path: filePath },
-      params: { path: 'src/index.html' }, // 임시 하드코딩
+      params: { path: filePath.startsWith('/') ? filePath.slice(1) : filePath },
     },
   );
   return response.data;
-}
+};
