@@ -179,3 +179,33 @@ export const renameFile = async (
   );
   return response.data;
 };
+
+// 파일 이동 요청 타입
+interface MoveFileRequest {
+  currentPath: string;
+  newParentDir: string;
+}
+
+// 파일 이동 응답 타입
+interface MoveFileResponse {
+  code: number;
+  message: string;
+  data: null;
+}
+
+/**
+ * 파일 이동 API
+ * @param projectId 프로젝트 ID
+ * @param fileData 파일 이동 데이터 (currentPath, newParentDir)
+ * @returns 파일 이동 응답
+ */
+export const moveFile = async (
+  projectId: string,
+  fileData: MoveFileRequest,
+): Promise<MoveFileResponse> => {
+  const response = await axiosInstance.patch<MoveFileResponse>(
+    `/v1/projects/${projectId}/files/move`,
+    fileData,
+  );
+  return response.data;
+};
