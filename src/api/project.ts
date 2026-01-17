@@ -149,3 +149,33 @@ export const getFile = async (projectId: string, filePath: string): Promise<GetF
   );
   return response.data;
 };
+
+// 파일명 변경 요청 타입
+interface RenameFileRequest {
+  currentPath: string;
+  newName: string;
+}
+
+// 파일명 변경 응답 타입
+interface RenameFileResponse {
+  code: number;
+  message: string;
+  data: null;
+}
+
+/**
+ * 파일명 변경 API
+ * @param projectId 프로젝트 ID
+ * @param fileData 파일 이름 변경 데이터 (currentPath, newName)
+ * @returns 파일 이름 변경 응답
+ */
+export const renameFile = async (
+  projectId: string,
+  fileData: RenameFileRequest,
+): Promise<RenameFileResponse> => {
+  const response = await axiosInstance.patch<RenameFileResponse>(
+    `/v1/projects/${projectId}/files/rename`,
+    fileData,
+  );
+  return response.data;
+};

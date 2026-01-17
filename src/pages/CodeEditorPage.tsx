@@ -7,7 +7,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { toast } from 'sonner';
 
-import { createFile, getFile, getProjectDirTree, updateFileContent } from '@/api/project';
+import { createFile, getFile, getProjectDirTree, updateFileContent, renameFile } from '@/api/project';
 import BEDeveloperImg from '@/assets/backend.png';
 import DesignerImg from '@/assets/designer.png';
 import FEDeveloperImg from '@/assets/frontend.png';
@@ -351,6 +351,67 @@ const CodeEditorPage = () => {
     } catch (error) {
       console.error('파일 생성 실패', error);
       toast.error('파일 생성에 실패했습니다.');
+    }
+  };
+
+  // 파일 이름 변경 핸들러
+  const handleRenameFile = async (currentPath: string, newName: string) => {
+    try {
+      const segments = path.split('/').filter(Boolean);
+      const projectId = segments[segments.length - 1] ?? '';
+
+      const body = {
+        currentPath,
+        newName,
+      };
+
+      // 서버에 파일 이름 변경 요청
+      await renameFile(projectId, body);
+
+      // 로컬 파일 트리 업데이트
+      const parentPath = currentPath.substring(0, currentPath.lastIndexOf('/'));
+      const newPath = `${parentPath}/${newName}`;
+
+      const updateNode = (nodes: FileNode[]): FileNode[] =>
+        nodes.map((node) => {
+          if (node.path === currentPath) {
+            return { ...node, path: newPath, name: newName };
+          }
+          if (node.children) {
+            return { ...node, children: updateNode(node.children) };
+          }
+          return node;
+        });
+
+      setFiles((prev) => updateNode(prev));
+
+      // 열려있는 탭의 path도 업데이트
+      const tabToUpdate = editorTabs.find((t) => t.path === currentPath);
+      if (tabToUpdate) {
+        setEditorTabs((prev) =>
+          prev.map((tab) =>
+            tab.path === currentPath
+              ? { ...tab, path: newPath, name: newName }
+              : tab,
+          ),
+        );
+
+        // 파일 내용도 옮기기
+        setFileContents((prev) => {
+          const content = prev[currentPath];
+          const newContents = { ...prev };
+          delete newContents[currentPath];
+          if (content) {
+            newContents[newPath] = content;
+          }
+          return newContents;
+        });
+      }
+
+      toast.success('파일 이름을 변경했습니다.');
+    } catch (error) {
+      console.error('파일 이름 변경 실패', error);
+      toast.error('파일 이름 변경에 실패했습니다.');
     }
   };
 
@@ -712,6 +773,7 @@ const CodeEditorPage = () => {
                   onFileSelect={handleFileSelect}
                   onDelete={handleDeleteFile}
                   onCreate={handleCreateFile}
+                  onRename={handleRenameFile}
                 />
               </div>
             )}
