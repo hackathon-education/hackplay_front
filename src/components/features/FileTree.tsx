@@ -18,6 +18,7 @@ interface FileTreeProps {
   onDelete: (path: string) => void; // 삭제 핸들러
   onCreate?: (parentPath: string, type: 'file' | 'folder', name: string, content?: string) => void;
   onRename?: (currentPath: string, newName: string) => void; // 이름 변경 핸들러
+  onMove?: (currentPath: string, newParentDir: string) => void; // 파일 이동 핸들러
 }
 
 const FileTree = ({
@@ -27,6 +28,7 @@ const FileTree = ({
   onDelete,
   onCreate,
   onRename,
+  onMove,
 }: FileTreeProps) => {
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
   const [contextMenu, setContextMenu] = useState<null | {
@@ -39,6 +41,8 @@ const FileTree = ({
   const [newFileName, setNewFileName] = useState('');
   const [renamingPath, setRenamingPath] = useState<string | null>(null);
   const [renameNewName, setRenameNewName] = useState('');
+  const [draggedPath, setDraggedPath] = useState<string | null>(null);
+  const [dropTargetPath, setDropTargetPath] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const renameInputRef = useRef<HTMLInputElement>(null);
 
@@ -90,19 +94,62 @@ const FileTree = ({
     const isSelected = selectedPath === node.path;
     const isFolder = node.type === 'folder';
     const isRenaming = renamingPath === node.path;
+    const isDragged = draggedPath === node.path;
+    const isDropTarget = dropTargetPath === node.path && isFolder;
 
     const handleRightClick = (e: MouseEvent) => {
       e.preventDefault(); // 기본 우클릭 메뉴를 막음
       setContextMenu({ x: e.clientX, y: e.clientY, filePath: node.path, isFolder });
     };
 
+    const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+      setDraggedPath(node.path);
+      e.dataTransfer.effectAllowed = 'move';
+    };
+
+    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+      if (!isFolder || isDragged) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      setDropTargetPath(node.path);
+    };
+
+    const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+      if (e.currentTarget === (e.target as HTMLElement)) {
+        setDropTargetPath(null);
+      }
+    };
+
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      if (!draggedPath || !isFolder || draggedPath === node.path) {
+        setDropTargetPath(null);
+        return;
+      }
+
+      if (onMove) {
+        onMove(draggedPath, node.path);
+      }
+
+      setDraggedPath(null);
+      setDropTargetPath(null);
+      // 드롭한 폴더 자동 확장
+      if (!isExpanded) {
+        toggleFolder(node.path);
+      }
+    };
+
     return (
       <div key={node.path}>
         <div
-          className={`flex items-center cursor-pointer ${
+          className={`flex items-center cursor-pointer transition-colors ${
             isSelected
               ? 'bg-blue-50 text-blue-600'
-              : 'text-gray-260 hover:bg-gray-120 hover:text-gray-620'
+              : isDropTarget
+                ? 'bg-blue-100 text-blue-600'
+                : isDragged
+                  ? 'opacity-50 bg-gray-100'
+                  : 'text-gray-260 hover:bg-gray-120 hover:text-gray-620'
           } ${isFolder ? 'py-2' : 'py-1'}`}
           style={{ paddingLeft: `${level * 1 + 0.813}rem` }}
           onClick={() => {
@@ -112,7 +159,12 @@ const FileTree = ({
               onFileSelect(node.path);
             }
           }}
-          onContextMenu={handleRightClick} // 우클릭 처리
+          onContextMenu={handleRightClick}
+          draggable={!isRenaming}
+          onDragStart={handleDragStart}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
         >
           {isFolder ? (
             <>

@@ -7,7 +7,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { toast } from 'sonner';
 
-import { createFile, getFile, getProjectDirTree, updateFileContent, renameFile } from '@/api/project';
+import { createFile, getFile, getProjectDirTree, updateFileContent, renameFile, moveFile } from '@/api/project';
 import BEDeveloperImg from '@/assets/backend.png';
 import DesignerImg from '@/assets/designer.png';
 import FEDeveloperImg from '@/assets/frontend.png';
@@ -415,6 +415,90 @@ const CodeEditorPage = () => {
     }
   };
 
+  // 파일 이동 핸들러
+  const handleMoveFile = async (currentPath: string, newParentDir: string) => {
+    try {
+      const segments = path.split('/').filter(Boolean);
+      const projectId = segments[segments.length - 1] ?? '';
+
+      const body = {
+        currentPath,
+        newParentDir,
+      };
+
+      // 서버에 파일 이동 요청
+      await moveFile(projectId, body);
+
+      // 새로운 경로 계산
+      const fileName = currentPath.split('/').pop() || '';
+      const newPath = `${newParentDir}/${fileName}`;
+
+      // 로컬 파일 트리 업데이트 - 기존 위치에서 제거 후 새 위치에 추가
+      let nodeToMove: FileNode | null = null;
+
+      const removeNode = (nodes: FileNode[]): FileNode[] => {
+        return nodes.filter((node) => {
+          if (node.path === currentPath) {
+            nodeToMove = node;
+            return false;
+          }
+          if (node.children) {
+            node.children = removeNode(node.children);
+          }
+          return true;
+        });
+      };
+
+      const addNode = (nodes: FileNode[]): FileNode[] => {
+        return nodes.map((node) => {
+          if (node.path === newParentDir && node.type === 'folder' && nodeToMove) {
+            const movedNode = { ...nodeToMove, path: newPath };
+            const children = node.children ? [...node.children, movedNode] : [movedNode];
+            return { ...node, children };
+          }
+          if (node.children) {
+            return { ...node, children: addNode(node.children) };
+          }
+          return node;
+        });
+      };
+
+      setFiles((prev) => {
+        let result = removeNode([...prev]);
+        result = addNode(result);
+        return result;
+      });
+
+      // 열려있는 탭의 path도 업데이트
+      const tabToUpdate = editorTabs.find((t) => t.path === currentPath);
+      if (tabToUpdate) {
+        setEditorTabs((prev) =>
+          prev.map((tab) =>
+            tab.path === currentPath
+              ? { ...tab, path: newPath }
+              : tab,
+          ),
+        );
+
+        // 파일 내용도 옮기기
+        setFileContents((prev) => {
+          const content = prev[currentPath];
+          const newContents = { ...prev };
+          delete newContents[currentPath];
+          if (content) {
+            newContents[newPath] = content;
+          }
+          return newContents;
+        });
+      }
+
+      toast.success('파일을 이동했습니다.');
+    } catch (error) {
+      console.error('파일 이동 실패', error);
+      toast.error('파일 이동에 실패했습니다.');
+    }
+  };
+
   // 탭 클릭 핸들러
   const handleTabClick = (tabId: string) => {
     setActiveTabId(tabId);
@@ -774,6 +858,7 @@ const CodeEditorPage = () => {
                   onDelete={handleDeleteFile}
                   onCreate={handleCreateFile}
                   onRename={handleRenameFile}
+                  onMove={handleMoveFile}
                 />
               </div>
             )}
