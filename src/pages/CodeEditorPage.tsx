@@ -7,7 +7,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { toast } from 'sonner';
 
-import { createFile, getFile, getProjectDirTree, updateFileContent, renameFile, moveFile } from '@/api/project';
+import { createFile, getFile, getProjectDirTree, updateFileContent, renameFile, moveFile, deleteFile } from '@/api/project';
 import BEDeveloperImg from '@/assets/backend.png';
 import DesignerImg from '@/assets/designer.png';
 import FEDeveloperImg from '@/assets/frontend.png';
@@ -296,17 +296,36 @@ const CodeEditorPage = () => {
   };
 
   // 파일 삭제
-  const handleDeleteFile = (filePath: string) => {
-    const removeNode = (nodes: FileNode[]): FileNode[] =>
-      nodes
-        .filter((node) => node.path !== filePath)
-        .map((node) => (node.children ? { ...node, children: removeNode(node.children) } : node));
+  const handleDeleteFile = async (filePath: string) => {
+    try {
+      const segments = path.split('/').filter(Boolean);
+      const projectId = segments[segments.length - 1] ?? '';
+      if (!projectId) return;
 
-    setFiles((prev) => removeNode(prev));
+      const body = {
+        path: filePath.startsWith('/') ? filePath.slice(1) : filePath,
+      };
 
-    // 삭제된 파일이 현재 열린 탭이면 닫기
-    const tabToClose = editorTabs.find((t) => t.path === filePath);
-    if (tabToClose) handleTabClose(tabToClose.id);
+      // 서버에 파일 삭제 요청
+      await deleteFile(projectId, body);
+
+      // 로컬 파일 트리에서 노드 제거
+      const removeNode = (nodes: FileNode[]): FileNode[] =>
+        nodes
+          .filter((node) => node.path !== filePath)
+          .map((node) => (node.children ? { ...node, children: removeNode(node.children) } : node));
+
+      setFiles((prev) => removeNode(prev));
+
+      // 삭제된 파일이 현재 열린 탭이면 닫기
+      const tabToClose = editorTabs.find((t) => t.path === filePath);
+      if (tabToClose) handleTabClose(tabToClose.id);
+
+      toast.success('파일을 삭제했습니다.');
+    } catch (error) {
+      console.error('파일 삭제 실패', error);
+      toast.error('파일 삭제에 실패했습니다.');
+    }
   };
 
   // 파일 생성 핸들러 (API 호출 후 로컬 상태 반영)

@@ -209,3 +209,34 @@ export const moveFile = async (
   );
   return response.data;
 };
+
+// 파일 삭제 요청 타입
+interface DeleteFileRequest {
+  path: string;
+}
+
+// 파일 삭제 응답 타입
+interface DeleteFileResponse {
+  code: number;
+  message: string;
+  data: null;
+}
+
+/**
+ * 파일 삭제 API
+ * @param projectId 프로젝트 ID
+ * @param fileData 파일 삭제 데이터 (path)
+ * @returns 파일 삭제 응답
+ */
+export const deleteFile = async (
+  projectId: string,
+  fileData: DeleteFileRequest,
+): Promise<DeleteFileResponse> => {
+  const response = await axiosInstance.delete<DeleteFileResponse>(
+    `/v1/projects/${projectId}/files`,
+    {
+      data: fileData,
+    },
+  );
+  return response.data;
+};
