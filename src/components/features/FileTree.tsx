@@ -17,9 +17,17 @@ interface FileTreeProps {
   onFileSelect: (path: string) => void;
   onDelete: (path: string) => void; // 삭제 핸들러
   onCreate?: (parentPath: string, type: 'file' | 'folder', name: string, content?: string) => void;
+  onRename?: (currentPath: string, newName: string) => void; // 이름 변경 핸들러
 }
 
-const FileTree = ({ files, selectedPath, onFileSelect, onDelete, onCreate }: FileTreeProps) => {
+const FileTree = ({
+  files,
+  selectedPath,
+  onFileSelect,
+  onDelete,
+  onCreate,
+  onRename,
+}: FileTreeProps) => {
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
   const [contextMenu, setContextMenu] = useState<null | {
     x: number;
@@ -29,7 +37,10 @@ const FileTree = ({ files, selectedPath, onFileSelect, onDelete, onCreate }: Fil
   }>(null);
   const [creatingInFolder, setCreatingInFolder] = useState<string | null>(null);
   const [newFileName, setNewFileName] = useState('');
+  const [renamingPath, setRenamingPath] = useState<string | null>(null);
+  const [renameNewName, setRenameNewName] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
+  const renameInputRef = useRef<HTMLInputElement>(null);
 
   const menuRef = useRef<HTMLDivElement>(null);
   // 외부 클릭 시 메뉴 닫기
@@ -56,6 +67,14 @@ const FileTree = ({ files, selectedPath, onFileSelect, onDelete, onCreate }: Fil
     }
   }, [creatingInFolder]);
 
+  // 이름 변경 입력 필드 자동 포커스
+  useEffect(() => {
+    if (renamingPath && renameInputRef.current) {
+      renameInputRef.current.focus();
+      renameInputRef.current.select();
+    }
+  }, [renamingPath]);
+
   const toggleFolder = (path: string) => {
     const newExpanded = new Set(expandedFolders);
     if (newExpanded.has(path)) {
@@ -70,6 +89,7 @@ const FileTree = ({ files, selectedPath, onFileSelect, onDelete, onCreate }: Fil
     const isExpanded = expandedFolders.has(node.path);
     const isSelected = selectedPath === node.path;
     const isFolder = node.type === 'folder';
+    const isRenaming = renamingPath === node.path;
 
     const handleRightClick = (e: MouseEvent) => {
       e.preventDefault(); // 기본 우클릭 메뉴를 막음
@@ -110,15 +130,41 @@ const FileTree = ({ files, selectedPath, onFileSelect, onDelete, onCreate }: Fil
           ) : (
             <>
               <div className="w-3.5 mr-2.5" /> {/* spacing */}
-              <MdInsertDriveFile className="w-5 h-5" />
+              <MdInsertDriveFile className="w-5 h-5 shrink-0" />
             </>
           )}
-          <span
-            className={`ml-[0.281rem] text-gray-260 self-end ${isFolder ? 'text-[1.005rem] leading-[1.18]' : 'text-[0.939rem] leading-[1.2] font-[410]'} ${isFolder && isExpanded ? 'text-gray-620' : 'text-inherit'}`}
-          >
-            {node.name}
-          </span>
+
+          {/* 이름 변경 중이면 입력 필드, 아니면 파일명 표시 */}
+          {isRenaming ? (
+              <input
+                ref={renameInputRef}
+                type="text"
+                value={renameNewName}
+                onChange={(e) => setRenameNewName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleRenameFile(node.path);
+                  } else if (e.key === 'Escape') {
+                    setRenamingPath(null);
+                    setRenameNewName('');
+                  }
+                }}
+                onBlur={() => {
+                  setRenamingPath(null);
+                  setRenameNewName('');
+                }}
+                className="ml-[0.281rem] flex-1 min-w-0 px-1 border border-blue-400 rounded text-[0.939rem]/[1.2] font-[410]"
+                onClick={(e) => e.stopPropagation()}
+              />
+          ) : (
+            <span
+              className={`ml-[0.281rem] text-gray-260 self-end ${isFolder ? 'text-[1.005rem] leading-[1.18]' : 'text-[0.939rem] leading-[1.2] font-[410]'} ${isFolder && isExpanded ? 'text-gray-620' : 'text-inherit'}`}
+            >
+              {node.name}
+            </span>
+          )}
         </div>
+
         {/* 인라인 파일명 입력 */}
         {isFolder && isExpanded && creatingInFolder === node.path && (
           <div
@@ -148,6 +194,7 @@ const FileTree = ({ files, selectedPath, onFileSelect, onDelete, onCreate }: Fil
             />
           </div>
         )}
+
         {isFolder && isExpanded && node.children && (
           <div>
             {node.children
@@ -196,6 +243,30 @@ const FileTree = ({ files, selectedPath, onFileSelect, onDelete, onCreate }: Fil
     setNewFileName('');
   };
 
+  const handleRenameFile = (currentPath: string) => {
+    // 검증
+    if (!renameNewName.trim()) {
+      alert('파일 이름을 입력해주세요.');
+      return;
+    }
+    if (renameNewName.length > 255) {
+      alert('파일 이름은 최대 255자입니다.');
+      return;
+    }
+    const validName = /^[A-Za-z0-9._-]+$/.test(renameNewName);
+    if (!validName) {
+      alert("파일명은 영문, 숫자, '.', '_', '-'만 허용됩니다.");
+      return;
+    }
+
+    if (onRename) {
+      onRename(currentPath, renameNewName);
+    }
+
+    setRenamingPath(null);
+    setRenameNewName('');
+  };
+
   return (
     <div className="h-full flex flex-col">
       {/* 헤더 */}
@@ -231,6 +302,21 @@ const FileTree = ({ files, selectedPath, onFileSelect, onDelete, onCreate }: Fil
                   }}
                 >
                   새 파일...
+                </button>
+              </li>
+            )}
+            {!contextMenu.isFolder && (
+              <li>
+                <button
+                  className="w-full !justify-start text-base px-3.5 py-1.5 hover:bg-blue-50"
+                  onClick={() => {
+                    const fileName = contextMenu.filePath.split('/').pop() || '';
+                    setRenamingPath(contextMenu.filePath);
+                    setRenameNewName(fileName);
+                    setContextMenu(null);
+                  }}
+                >
+                  이름 바꾸기...
                 </button>
               </li>
             )}
