@@ -1,9 +1,10 @@
 import { AiOutlineCalendar, AiOutlineTeam } from 'react-icons/ai';
 import { RiFlag2Line } from 'react-icons/ri';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Progress } from 'antd';
 
+import { createProject } from '@/api/project';
 import { ROUTES } from '@/constants/routes';
 
 // 프로젝트 정보 아이템 타입
@@ -19,10 +20,22 @@ interface StatusBadgeProps {
   label: string;
 }
 
+// 프로젝트 진행 상태 타입
+type ProjectStatus = 'COMPLETED' | 'IN_PROGRESS' | 'NOT_STARTED';
+
 // 유닛 아이템 타입
 interface UnitItemProps {
   path: string;
+  status: ProjectStatus;
 }
+
+// 유닛 아이템 더미 데이터 (추후 API 연동으로 대체 예정)
+const unitItemsData: UnitItemProps[] = [
+  { path: 'team-project-1', status: 'COMPLETED' },
+  { path: 'team-project-2', status: 'NOT_STARTED' },
+  { path: 'team-project-3', status: 'NOT_STARTED' },
+  { path: 'team-project-4', status: 'NOT_STARTED' },
+];
 
 // 프로젝트 정보 아이템 컴포넌트
 const ProjectInfoItem = ({ icon, label, content }: ProjectInfoItemProps) => {
@@ -48,12 +61,31 @@ const StatusBadge = ({ color, label }: StatusBadgeProps) => {
 };
 
 // 유닛 아이템 컴포넌트
-const UnitItem = ({ path }: UnitItemProps) => {
+const UnitItem = ({ path, status }: UnitItemProps) => {
+  const navigate = useNavigate();
+
+  const handleClick = async () => {
+    try {
+      if (status === 'NOT_STARTED') {
+        await createProject({
+          name: 'My First React Project',
+          templateType: 'react-vite',
+          isPublic: true,
+          lecture: 'PROJECT',
+        });
+      }
+
+      navigate(ROUTES.WORKSPACE(path));
+    } catch (error) {
+      console.error('프로젝트 생성 실패', error);
+    }
+  };
+
   return (
     <li className="flex gap-[2.063rem]">
-      <div className="w-[4.063rem] h-[4.063rem] rounded-full bg-gray-200"></div>
+      <div className="w-[4.063rem] h-[4.063rem] rounded-full bg-gray-200" />
       <div className="w-full max-w-[81rem] h-[24.5rem] rounded-2.5xl bg-gray-250">
-        <Link to={ROUTES.WORKSPACE(path)}>학습하기</Link>
+        <button onClick={handleClick}>{status === 'COMPLETED' ? '완료' : '학습하기'}</button>
       </div>
     </li>
   );
@@ -85,14 +117,6 @@ const TeamProjectPage = () => {
     { color: 'bg-green', label: '진행 완료' },
     { color: 'bg-blue-330', label: '진행중' },
     { color: 'bg-yellow', label: '시작 전' },
-  ];
-
-  // 유닛 아이템 데이터
-  const unitItems = [
-    { path: 'team-project-1' },
-    { path: 'team-project-2' },
-    { path: 'team-project-3' },
-    { path: 'team-project-4' },
   ];
 
   return (
@@ -177,8 +201,8 @@ const TeamProjectPage = () => {
             </div>
             {/* 유닛 목록 */}
             <ol className="mt-5 flex flex-col gap-[4.688rem]">
-              {unitItems.map((item, idx) => (
-                <UnitItem key={idx} path={item.path} />
+              {unitItemsData.map((item, idx) => (
+                <UnitItem key={idx} path={item.path} status={item.status} />
               ))}
             </ol>
           </div>

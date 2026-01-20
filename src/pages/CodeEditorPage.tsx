@@ -7,6 +7,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { toast } from 'sonner';
 
+import { createFile, getFile, getProjectDirTree, updateFileContent, renameFile, moveFile, deleteFile } from '@/api/project';
 import BEDeveloperImg from '@/assets/backend.png';
 import DesignerImg from '@/assets/designer.png';
 import FEDeveloperImg from '@/assets/frontend.png';
@@ -111,6 +112,61 @@ const CodeEditorPage = () => {
       ],
     },
   ]);
+
+  // 서버에서 받은 디렉토리 트리 노드를 애플리케이션 FileNode 타입으로 변환
+  const convertDirNode = (node: any, rootPath: string): FileNode => {
+    const normalize = (p: string) => p.replace(/\\/g, '/');
+    const rootNorm = normalize(rootPath);
+    const nodePath = normalize(node.path || '');
+    let relative = nodePath.startsWith(rootNorm) ? nodePath.slice(rootNorm.length) : nodePath;
+    if (!relative.startsWith('/')) relative = `/${relative}`;
+
+    const mapped: FileNode = {
+      name: node.name || relative.split('/').pop() || '/',
+      type: node.type === 'DIRECTORY' ? 'folder' : 'file',
+      path: relative === '/' ? '/' : relative,
+      children: [],
+    };
+
+    if (node.children && node.children.length > 0) {
+      mapped.children = node.children.map((ch: any) => convertDirNode(ch, rootPath));
+    }
+
+    return mapped;
+  };
+
+  // 프로젝트 ID가 바뀌면 서버에서 루트 디렉토리 트리 조회
+  useEffect(() => {
+    const segments = path.split('/').filter(Boolean);
+    const projectId = segments[segments.length - 1] ?? '';
+    // const projectId = 5; // 임시 하드코딩
+    if (!projectId) return;
+
+    let mounted = true;
+
+    (async () => {
+      try {
+        const res = await getProjectDirTree(projectId);
+        if (!mounted) return;
+        if (res && res.code === 200 && res.data) {
+          const rootPath = res.data.path || '';
+          // 최상단 폴더를 제외하고 children만 사용
+          const children = res.data.children || [];
+          const converted = children.map((child: any) => convertDirNode(child, rootPath));
+          setFiles(converted);
+        } else {
+          toast.error('디렉토리 트리 조회에 실패했습니다.');
+        }
+      } catch (error) {
+        console.error('디렉토리 트리 조회 오류', error);
+        toast.error('디렉토리 트리 조회 중 오류가 발생했습니다.');
+      }
+    })();
+
+    return () => {
+      mounted = false;
+    };
+  }, [path]);
   const [editorTabs, setEditorTabs] = useState<Tab[]>([]);
   const [activeTabId, setActiveTabId] = useState<string | undefined>();
   const [fileContents, setFileContents] = useState<Record<string, string>>({});
@@ -210,27 +266,256 @@ const CodeEditorPage = () => {
       isSaved: true,
     };
 
-    // 파일 내용 로드 (없으면 빈 문자열)
-    if (!fileContents[filePath]) {
-      setFileContents((prev) => ({ ...prev, [filePath]: '' }));
-    }
+    // 파일 내용 로드
+    const loadFileContent = async () => {
+      try {
+        const segments = path.split('/').filter(Boolean);
+        const projectId = segments[segments.length - 1] ?? '';
+        if (!projectId) return;
 
+        const res = await getFile(projectId, filePath);
+        if (res && res.code === 200 && res.data) {
+          setFileContents((prev) => ({ ...prev, [filePath]: res.data.content }));
+        } else {
+          toast.error('파일 조회에 실패했습니다.');
+          setFileContents((prev) => ({ ...prev, [filePath]: '' }));
+        }
+      } catch (error) {
+        console.error('파일 조회 오류:', error);
+        toast.error('파일 조회 중 오류가 발생했습니다.');
+        setFileContents((prev) => ({ ...prev, [filePath]: '' }));
+      }
+    };
+
+    setFileContents((prev) => ({ ...prev, [filePath]: '' }));
     setEditorTabs((prev) => [...prev, newTab]);
     setActiveTabId(newTab.id);
+
+    // 파일 내용 비동기 로드
+    loadFileContent();
   };
 
   // 파일 삭제
-  const handleDeleteFile = (filePath: string) => {
-    const removeNode = (nodes: FileNode[]): FileNode[] =>
-      nodes
-        .filter((node) => node.path !== filePath)
-        .map((node) => (node.children ? { ...node, children: removeNode(node.children) } : node));
+  const handleDeleteFile = async (filePath: string) => {
+    try {
+      const segments = path.split('/').filter(Boolean);
+      const projectId = segments[segments.length - 1] ?? '';
+      if (!projectId) return;
 
-    setFiles((prev) => removeNode(prev));
+      const body = {
+        path: filePath.startsWith('/') ? filePath.slice(1) : filePath,
+      };
 
-    // 삭제된 파일이 현재 열린 탭이면 닫기
-    const tabToClose = editorTabs.find((t) => t.path === filePath);
-    if (tabToClose) handleTabClose(tabToClose.id);
+      // 서버에 파일 삭제 요청
+      await deleteFile(projectId, body);
+
+      // 로컬 파일 트리에서 노드 제거
+      const removeNode = (nodes: FileNode[]): FileNode[] =>
+        nodes
+          .filter((node) => node.path !== filePath)
+          .map((node) => (node.children ? { ...node, children: removeNode(node.children) } : node));
+
+      setFiles((prev) => removeNode(prev));
+
+      // 삭제된 파일이 현재 열린 탭이면 닫기
+      const tabToClose = editorTabs.find((t) => t.path === filePath);
+      if (tabToClose) handleTabClose(tabToClose.id);
+
+      toast.success('파일을 삭제했습니다.');
+    } catch (error) {
+      console.error('파일 삭제 실패', error);
+      toast.error('파일 삭제에 실패했습니다.');
+    }
+  };
+
+  // 파일 생성 핸들러 (API 호출 후 로컬 상태 반영)
+  const handleCreateFile = async (
+    parentPath: string,
+    type: 'file' | 'folder',
+    name: string,
+    content?: string,
+  ) => {
+    try {
+      // 프로젝트 ID 추출 - 추후 API 연동
+      const segments = path.split('/').filter(Boolean);
+      const projectId = segments[segments.length - 1] ?? '';
+
+      const body = {
+        name,
+        content: content ?? '',
+        parentPath: parentPath.replace(/^\//, ''),
+      };
+
+      // 서버에 파일 생성 요청
+      await createFile(projectId, body);
+
+      // 로컬 파일 트리에 새 노드 추가
+      const normalizedParent = parentPath.startsWith('/') ? parentPath : `/${parentPath}`;
+      const newNode: FileNode = { name, type: 'file', path: `${normalizedParent}/${name}` };
+
+      const addNode = (nodes: FileNode[]): FileNode[] =>
+        nodes.map((node) => {
+          if (node.path === normalizedParent && node.type === 'folder') {
+            const children = node.children ? [...node.children, newNode] : [newNode];
+            return { ...node, children };
+          }
+          if (node.children) {
+            return { ...node, children: addNode(node.children) };
+          }
+          return node;
+        });
+
+      setFiles((prev) => addNode(prev));
+      toast.success('파일을 생성했습니다.');
+    } catch (error) {
+      console.error('파일 생성 실패', error);
+      toast.error('파일 생성에 실패했습니다.');
+    }
+  };
+
+  // 파일 이름 변경 핸들러
+  const handleRenameFile = async (currentPath: string, newName: string) => {
+    try {
+      const segments = path.split('/').filter(Boolean);
+      const projectId = segments[segments.length - 1] ?? '';
+
+      const body = {
+        currentPath,
+        newName,
+      };
+
+      // 서버에 파일 이름 변경 요청
+      await renameFile(projectId, body);
+
+      // 로컬 파일 트리 업데이트
+      const parentPath = currentPath.substring(0, currentPath.lastIndexOf('/'));
+      const newPath = `${parentPath}/${newName}`;
+
+      const updateNode = (nodes: FileNode[]): FileNode[] =>
+        nodes.map((node) => {
+          if (node.path === currentPath) {
+            return { ...node, path: newPath, name: newName };
+          }
+          if (node.children) {
+            return { ...node, children: updateNode(node.children) };
+          }
+          return node;
+        });
+
+      setFiles((prev) => updateNode(prev));
+
+      // 열려있는 탭의 path도 업데이트
+      const tabToUpdate = editorTabs.find((t) => t.path === currentPath);
+      if (tabToUpdate) {
+        setEditorTabs((prev) =>
+          prev.map((tab) =>
+            tab.path === currentPath
+              ? { ...tab, path: newPath, name: newName }
+              : tab,
+          ),
+        );
+
+        // 파일 내용도 옮기기
+        setFileContents((prev) => {
+          const content = prev[currentPath];
+          const newContents = { ...prev };
+          delete newContents[currentPath];
+          if (content) {
+            newContents[newPath] = content;
+          }
+          return newContents;
+        });
+      }
+
+      toast.success('파일 이름을 변경했습니다.');
+    } catch (error) {
+      console.error('파일 이름 변경 실패', error);
+      toast.error('파일 이름 변경에 실패했습니다.');
+    }
+  };
+
+  // 파일 이동 핸들러
+  const handleMoveFile = async (currentPath: string, newParentDir: string) => {
+    try {
+      const segments = path.split('/').filter(Boolean);
+      const projectId = segments[segments.length - 1] ?? '';
+
+      const body = {
+        currentPath,
+        newParentDir,
+      };
+
+      // 서버에 파일 이동 요청
+      await moveFile(projectId, body);
+
+      // 새로운 경로 계산
+      const fileName = currentPath.split('/').pop() || '';
+      const newPath = `${newParentDir}/${fileName}`;
+
+      // 로컬 파일 트리 업데이트 - 기존 위치에서 제거 후 새 위치에 추가
+      let nodeToMove: FileNode | null = null;
+
+      const removeNode = (nodes: FileNode[]): FileNode[] => {
+        return nodes.filter((node) => {
+          if (node.path === currentPath) {
+            nodeToMove = node;
+            return false;
+          }
+          if (node.children) {
+            node.children = removeNode(node.children);
+          }
+          return true;
+        });
+      };
+
+      const addNode = (nodes: FileNode[]): FileNode[] => {
+        return nodes.map((node) => {
+          if (node.path === newParentDir && node.type === 'folder' && nodeToMove) {
+            const movedNode = { ...nodeToMove, path: newPath };
+            const children = node.children ? [...node.children, movedNode] : [movedNode];
+            return { ...node, children };
+          }
+          if (node.children) {
+            return { ...node, children: addNode(node.children) };
+          }
+          return node;
+        });
+      };
+
+      setFiles((prev) => {
+        let result = removeNode([...prev]);
+        result = addNode(result);
+        return result;
+      });
+
+      // 열려있는 탭의 path도 업데이트
+      const tabToUpdate = editorTabs.find((t) => t.path === currentPath);
+      if (tabToUpdate) {
+        setEditorTabs((prev) =>
+          prev.map((tab) =>
+            tab.path === currentPath
+              ? { ...tab, path: newPath }
+              : tab,
+          ),
+        );
+
+        // 파일 내용도 옮기기
+        setFileContents((prev) => {
+          const content = prev[currentPath];
+          const newContents = { ...prev };
+          delete newContents[currentPath];
+          if (content) {
+            newContents[newPath] = content;
+          }
+          return newContents;
+        });
+      }
+
+      toast.success('파일을 이동했습니다.');
+    } catch (error) {
+      console.error('파일 이동 실패', error);
+      toast.error('파일 이동에 실패했습니다.');
+    }
   };
 
   // 탭 클릭 핸들러
@@ -298,10 +583,19 @@ const CodeEditorPage = () => {
     if (!activeTab) return;
 
     try {
-      // TODO: 실제 API 호출로 대체
-      // await axiosInstance.put(`/v1/files${activeTab.path}`, {
-      //   content: fileContents[activeTab.path],
-      // });
+      // 프로젝트 ID 추출
+      const segments = path.split('/').filter(Boolean);
+      const projectId = segments[segments.length - 1] ?? '';
+      if (!projectId) return;
+
+      // 파일 경로에서 프로젝트 루트를 기준으로 한 상대 경로 추출
+      const filePath = activeTab.path.startsWith('/') ? activeTab.path.slice(1) : activeTab.path;
+
+      // 파일 내용 수정 API 호출
+      await updateFileContent(projectId, {
+        path: filePath,
+        content: fileContents[activeTab.path] || '',
+      });
 
       // 저장 성공
       setEditorTabs((prev) =>
@@ -309,6 +603,8 @@ const CodeEditorPage = () => {
           tab.id === activeTabId ? { ...tab, isModified: false, isSaved: true } : tab,
         ),
       );
+
+      toast.success('파일이 저장되었습니다.');
 
       if (autoSaveTimerRef.current) {
         clearTimeout(autoSaveTimerRef.current);
@@ -579,6 +875,9 @@ const CodeEditorPage = () => {
                   selectedPath={editorTabs.find((t) => t.id === activeTabId)?.path}
                   onFileSelect={handleFileSelect}
                   onDelete={handleDeleteFile}
+                  onCreate={handleCreateFile}
+                  onRename={handleRenameFile}
+                  onMove={handleMoveFile}
                 />
               </div>
             )}
