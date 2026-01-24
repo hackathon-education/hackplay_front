@@ -1,0 +1,19 @@
+:root {
+  /* Blue - Light */
+  --blue-050: #e6f2fe;
+  --blue-100: #d9ecfd;
+  --blue-200: #b0d7fb;
+
+  /* Blue - Normal */
+  --blue-500: #007df1;
+  --blue-600: #0071d9;
+  --blue-700: #0064c1;
+
+  /* Blue - Dark */
+  --blue-800: #005eb5;
+  --blue-850: #004b91;
+  --blue-900: #00386c;
+
+  /* Blue - Darker */
+  --blue-950: #002c54;
+}
