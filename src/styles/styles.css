@@ -1,5 +1,6 @@
 @import './global.css';
 @import './colors.css';
+@import './fonts.css';
 @import 'tailwindcss';
 
 @theme {
@@ -25,6 +26,9 @@
   /* Error */
   --color-error: var(--error-600);
 
+  /* Font */
+  --font-base: var(--base-font-family);
+
   /* Input */
   --color-input-default-border: var(--neutral-150);
   --color-input-default-bg: transparent;
@@ -39,9 +43,6 @@
   /* Text */
   --color-text-base: var(--neutral-700);
   --color-text-title: var(--neutral-800);
-
-  /** Font **/
-  --font-freesentation: 'FreesentationVF', sans-serif;
 
   /** Font Weight **/
   --font-weight-590: 590;

@@ -9,3 +9,7 @@
   font-display: swap;
   src: url('/fonts/PretendardVariable.woff2') format('woff2-variations');
 }
+
+:root {
+  --base-font-family: 'Pretendard Variable', sans-serif;
+}
