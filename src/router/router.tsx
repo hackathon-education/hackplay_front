@@ -1,7 +1,8 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 
 import ProtectedRoute from '@/components/ProtectedRoute';
 import PublicRoute from '@/components/PublicRoute';
+import ScrollToTop from '@/components/ScrollToTop';
 import Layout from '@/components/Layout';
 import { ROUTES } from '@/constants/routes';
 import BasicLearningPage from '@/pages/BasicLearningPage';
@@ -16,8 +17,16 @@ import MainPage from '@/pages/MainPage';
 import ProjectsPage from '@/pages/ProjectsPage';
 import SignupPage from '@/pages/SignupPage';
 
+const RootLayout = () => (
+  <>
+    <ScrollToTop />
+    <Outlet />
+  </>
+);
+
 const router = createBrowserRouter([
   {
+    element: <RootLayout />,
     children: [
       {
         element: <Layout />,
