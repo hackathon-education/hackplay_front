@@ -2,14 +2,6 @@
 @import './colors.css';
 @import 'tailwindcss';
 
-@font-face {
-  font-family: 'FreesentationVF';
-  src: url('/fonts/FreesentationVF.woff2') format('woff2');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
 @theme {
   /* Brand */
   --color-primary-500: var(--primary-500);
