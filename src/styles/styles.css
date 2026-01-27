@@ -24,7 +24,7 @@
   --color-chip-active-text: var(--primary-500);
 
   /* Error */
-  --color-error: var(--error-600);
+  --color-error-600: var(--error-600);
 
   /* Font */
   --font-base: var(--base-font-family);
