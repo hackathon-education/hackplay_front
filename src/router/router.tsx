@@ -1,7 +1,8 @@
-import { Route, Routes } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 
 import ProtectedRoute from '@/components/ProtectedRoute';
 import PublicRoute from '@/components/PublicRoute';
+import ScrollToTop from '@/components/ScrollToTop';
 import Layout from '@/components/Layout';
 import { ROUTES } from '@/constants/routes';
 import BasicLearningPage from '@/pages/BasicLearningPage';
@@ -16,51 +17,86 @@ import MainPage from '@/pages/MainPage';
 import ProjectsPage from '@/pages/ProjectsPage';
 import SignupPage from '@/pages/SignupPage';
 
+const RootLayout = () => (
+  <>
+    <ScrollToTop />
+    <Outlet />
+  </>
+);
+
+const router = createBrowserRouter([
+  {
+    element: <RootLayout />,
+    children: [
+      {
+        element: <Layout />,
+    children: [
+      {
+        path: ROUTES.MAIN,
+        element: <MainPage />,
+      },
+      {
+        element: <PublicRoute />,
+        children: [
+          {
+            path: ROUTES.SIGNUP,
+            element: <SignupPage />,
+          },
+          {
+            path: ROUTES.SIGNIN,
+            element: <LoginPage />,
+          },
+        ],
+      },
+      {
+        path: ROUTES.COURSES.ROOT,
+        element: <CoursesPage />,
+      },
+      {
+        path: ROUTES.COURSES.LECTURE_LIST(':job', ':level'),
+        element: <LectureListPage />,
+      },
+      {
+        path: ROUTES.COURSES.LECTURE_MAIN(':job', ':level', ':lectureId'),
+        element: <LectureMainPage />,
+      },
+      {
+        path: ROUTES.COURSES.LECTURE_DETAIL(':job', ':level', ':lectureId'),
+        element: <LectureDetailPage />,
+      },
+      {
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: ROUTES.WORKSPACE(':lectureId'),
+            element: <CodeEditorPage />,
+          },
+        ],
+      },
+      {
+        path: ROUTES.BASIC_LEARNING.ROOT,
+        element: <BasicLearningPage />,
+      },
+      {
+        path: ROUTES.BASIC_LEARNING.LECTURE_DETAIL(':lectureId'),
+        element: <LectureDetailPage />,
+      },
+      {
+        path: ROUTES.PROJECTS,
+        element: <ProjectsPage />,
+      },
+        ],
+      },
+      {
+        path: '*',
+        element: <ErrorPage />,
+      },
+    ],
+  },
+]);
+
 const Router = () => {
-  return (
-    <Routes>
-      {/* 헤더/푸터가 있는 페이지들 */}
-      <Route element={<Layout />}>
-        <Route path={ROUTES.MAIN} element={<MainPage />} />
-
-        {/* Auth */}
-        <Route element={<PublicRoute />}>
-          <Route path={ROUTES.SIGNUP} element={<SignupPage />} />
-          <Route path={ROUTES.SIGNIN} element={<LoginPage />} />
-        </Route>
-
-        {/* 단계별 학습 */}
-        <Route path={ROUTES.COURSES.ROOT} element={<CoursesPage />} />
-        <Route path={ROUTES.COURSES.LECTURE_LIST(':job', ':level')} element={<LectureListPage />} />
-        <Route
-          path={ROUTES.COURSES.LECTURE_MAIN(':job', ':level', ':lectureId')}
-          element={<LectureMainPage />}
-        />
-        <Route
-          path={ROUTES.COURSES.LECTURE_DETAIL(':job', ':level', ':lectureId')}
-          element={<LectureDetailPage />}
-        />
-
-        {/* 코드 에디터 */}
-        <Route element={<ProtectedRoute />}>
-          <Route path={ROUTES.WORKSPACE(':lectureId')} element={<CodeEditorPage />} />
-        </Route>
-
-        {/* 기초 학습 */}
-        <Route path={ROUTES.BASIC_LEARNING.ROOT} element={<BasicLearningPage />} />
-        <Route
-          path={ROUTES.BASIC_LEARNING.LECTURE_DETAIL(':lectureId')}
-          element={<LectureDetailPage />}
-        />
-
-        {/* 팀 프로젝트 */}
-        <Route path={ROUTES.PROJECTS} element={<ProjectsPage />} />
-      </Route>
-
-      {/* 헤더/푸터가 없는 에러 페이지 */}
-      <Route path="*" element={<ErrorPage />} />
-    </Routes>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default Router;
