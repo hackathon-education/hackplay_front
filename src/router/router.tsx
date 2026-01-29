@@ -29,7 +29,7 @@ const router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       {
-        element: <Layout />,
+        element: <MainLayout />,
         children: [
           {
             path: ROUTES.MAIN,
