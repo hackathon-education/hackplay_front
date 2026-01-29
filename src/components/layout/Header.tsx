@@ -8,7 +8,7 @@ const Header = () => {
     <header>
       <LogoPrimary />
       <FilePen strokeWidth={1.5} size={19} absoluteStrokeWidth={true} />
-      <img src={ProfileDefaultImg} alt="HACKPLAY" />
+      <img src={ProfileDefaultImg} alt="HACKPLAY" className="w-14" /> {/* TODO: API 연동 */}
     </header>
   );
 };
