@@ -7,9 +7,12 @@
   /* Brand */
   --color-primary-500: var(--primary-500);
 
+  /* Border Radius */
+  --radius-20: 1.25rem; /* 20px */
+
   /* Button */
   --color-btn-disabled-bg: var(--neutral-150);
-  --color-btn-disabled-text: var(--neutral-600-rgb, 0.8);
+  --color-btn-disabled-text: rgba(var(--neutral-600-rgb), 0.8);
 
   --color-btn-default-bg: var(--primary-500);
   --color-btn-default-bg-hover: var(--primary-600);
@@ -20,8 +23,11 @@
   --color-chip-default-bg: transparent;
   --color-chip-default-text: var(--neutral-600);
 
-  --color-chip-active-bg: var(--primary-500-rgb, 0.1);
+  --color-chip-active-bg: rgba(var(--primary-500-rgb), 0.1);
   --color-chip-active-text: var(--primary-500);
+
+  /* Divider */
+  --color-divider: var(--neutral-150);
 
   /* Error */
   --color-error-600: var(--error-600);
@@ -37,8 +43,16 @@
   --color-input-default-text: var(--neutral-950);
 
   --color-input-disabled-border: var(--primary-500);
-  --color-input-disabled-bg: var(--primary-500-rgb, 0.1);
-  --color-input-disabled-text: var(--neutral-950-rgb, 0.5);
+  --color-input-disabled-bg: rgba(var(--primary-500-rgb), 0.1);
+  --color-input-disabled-text: rgba(var(--neutral-950-rgb), 0.5);
+
+  /* Navigation */
+  --color-nav-border: var(--neutral-150);
+  --color-nav-bg: var(--neutral-000);
+  --color-nav-text-default: var(--neutral-700);
+  --color-nav-text-hover: var(--primary-500);
+  --color-nav-text-active: var(--primary-500);
+  --shadow-nav: 1px 1px 12px 0 rgba(var(--primary-300-rgb), 0.1);
 
   /* Text */
   --color-text-base: var(--neutral-700);
