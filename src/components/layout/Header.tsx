@@ -4,13 +4,20 @@ import { Link, NavLink } from 'react-router-dom';
 
 import ProfileDefaultImg from '@/assets/user/profile-default.webp';
 import { ROUTES } from '@/constants/routes';
+import { useAuthStore } from '@/store/authStore';
 
 import HeaderTabs from './HeaderTabs';
 
 const Header = () => {
+  const { isLoggedIn } = useAuthStore();
+
   const headerClass = 'flex fixed w-full h-24 items-center justify-between px-5';
   const authClass =
     'flex w-20 h-9.5 items-center justify-center rounded-lg border shadow-1 text-sm font-medium';
+  const resumeClass =
+    'flex px-5.5 h-14 items-center justify-center rounded-50 bg-btn-default-bg shadow-1 gap-2 text-btn-default-text';
+  const profileClass =
+    'flex w-14 h-14 items-center justify-center rounded-full border border-profile-img-border bg-profile-img-bg shadow-1 overflow-hidden';
 
   return (
     <header className={headerClass}>
@@ -27,21 +34,35 @@ const Header = () => {
       </div>
       {/* <HeaderTabs variant="mobile" /> - TODO: 모바일 메뉴 버튼 구현 */}
       <div className="flex-1 flex justify-end gap-2.5">
-        <Link
-          to={ROUTES.SIGNIN}
-          className={`${authClass} border-link-btn-default-border bg-link-btn-default-bg text-link-btn-default-text`}
-        >
-          로그인
-        </Link>
-        <Link
-          to={ROUTES.SIGNUP}
-          className={`${authClass} border-link-btn-accent-border bg-link-btn-accent-bg text-link-btn-accent-text`}
-        >
-          회원가입
-        </Link>
+        {isLoggedIn ? (
+          <>
+            <Link className={resumeClass}>
+              {/* TODO: to 속성 API 연동 */}
+              <FilePen strokeWidth={1.5} size={19} absoluteStrokeWidth={true} />
+              <span className="font-semibold">학습 이어하기</span>
+            </Link>
+            <button className={profileClass}>
+              <img src={ProfileDefaultImg} alt="HACKPLAY" className="w-14" />{' '}
+              {/* TODO: 드롭다운, 프로필 사진 API 연동 */}
+            </button>
+          </>
+        ) : (
+          <>
+            <Link
+              to={ROUTES.SIGNIN}
+              className={`${authClass} border-link-btn-default-border bg-link-btn-default-bg text-link-btn-default-text`}
+            >
+              로그인
+            </Link>
+            <Link
+              to={ROUTES.SIGNUP}
+              className={`${authClass} border-link-btn-accent-border bg-link-btn-accent-bg text-link-btn-accent-text`}
+            >
+              회원가입
+            </Link>
+          </>
+        )}
       </div>
-      {/* <FilePen strokeWidth={1.5} size={19} absoluteStrokeWidth={true} /> - TODO: 로그인 상태 분기 */}
-      {/* <img src={ProfileDefaultImg} alt="HACKPLAY" className="w-14" /> - TODO: 로그인 상태 분기, API 연동 */}
     </header>
   );
 };

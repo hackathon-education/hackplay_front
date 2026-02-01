@@ -9,6 +9,7 @@
 
   /* Border Radius */
   --radius-20: 1.25rem; /* 20px */
+  --radius-50: 3.125rem; /* 50px */
 
   /* Button */
   --color-btn-disabled-bg: var(--neutral-150);
@@ -66,6 +67,10 @@
   --color-nav-text-hover: var(--primary-500);
   --color-nav-text-active: var(--primary-500);
   --shadow-nav: 1px 1px 12px 0 rgba(var(--primary-300-rgb), 0.1);
+
+  /* Profile */
+  --color-profile-img-border: var(--neutral-150);
+  --color-profile-img-bg: var(--neutral-000);
 
   /* Shadow */
   --shadow-1: 1px 1px 12px 0 rgba(var(--primary-300-rgb), 0.1);
