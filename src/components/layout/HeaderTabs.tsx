@@ -11,7 +11,7 @@ interface HeaderTabsProps {
 const HeaderTabs = ({ variant, onItemClick, isScrolled = false }: HeaderTabsProps) => {
   const listClass =
     variant === 'desktop'
-      ? 'hidden lg:flex w-[500px] h-14 items-center justify-center gap-10 rounded-20 border border-nav-border bg-nav-bg shadow-nav'
+      ? 'hidden lg:flex w-[500px] h-14 items-center justify-center gap-10 rounded-20 border border-nav-border bg-nav-bg shadow-1'
       : 'space-y-6 flex-1';
 
   const dividerClass =

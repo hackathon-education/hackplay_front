@@ -46,6 +46,10 @@
   --color-input-disabled-bg: rgba(var(--primary-500-rgb), 0.1);
   --color-input-disabled-text: rgba(var(--neutral-950-rgb), 0.5);
 
+  /* Logo */
+  --color-logo-bg: var(--neutral-000);
+  --color-logo-border: var(--neutral-150);
+
   /* Navigation */
   --color-nav-border: var(--neutral-150);
   --color-nav-bg: var(--neutral-000);
@@ -53,6 +57,9 @@
   --color-nav-text-hover: var(--primary-500);
   --color-nav-text-active: var(--primary-500);
   --shadow-nav: 1px 1px 12px 0 rgba(var(--primary-300-rgb), 0.1);
+
+  /* Shadow */
+  --shadow-1: 1px 1px 12px 0 rgba(var(--primary-300-rgb), 0.1);
 
   /* Text */
   --color-text-base: var(--neutral-700);
@@ -114,7 +121,6 @@
   --color-yellow: #ffd23d;
 
   /** Shadow **/
-  --shadow-1: 1px 1px 1px 0px rgba(0, 0, 0, 0.1);
   --shadow-2: 1px 1px 39.4px -9px rgba(0, 0, 0, 0.41);
   --shadow-3: 1px 1px 39.4px -9px rgba(0, 113, 188, 0.76);
   --shadow-4: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
