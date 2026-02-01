@@ -5,6 +5,8 @@
   --primary-200: #b0d7fb;
   --primary-300: #8cc2d7;
   --primary-300-rgb: 140, 194, 215;
+  --primary-400: #0091F2;
+  --primary-400-rgb: 0, 145, 242;
 
   /* Blue - Normal */
   --primary-500: #007df1;
@@ -22,6 +24,7 @@
 
   /* Neutral */
   --neutral-000: #ffffff;
+  --neutral-100: #f9fafb;
   --neutral-150: #f0f0f0;
   --neutral-300: #cdcdcd;
   --neutral-600: #767676;
