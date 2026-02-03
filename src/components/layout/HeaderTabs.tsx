@@ -1,6 +1,9 @@
 import { NavLink } from 'react-router-dom';
 
 import { NAV_ITEMS } from '@/constants/menuData';
+import { useLockModal } from '@/hooks/useLockModal';
+
+import LockModal from '../LockModal';
 
 interface HeaderTabsProps {
   variant: 'desktop' | 'mobile';
@@ -9,6 +12,8 @@ interface HeaderTabsProps {
 }
 
 const HeaderTabs = ({ variant, onItemClick, isScrolled = false }: HeaderTabsProps) => {
+  const { isLockModalOpen, closeLockModal, handleLockedItemClick } = useLockModal();
+
   const listClass =
     variant === 'desktop'
       ? 'hidden lg:flex w-[500px] h-14 items-center justify-center gap-10 rounded-20 border border-nav-border bg-nav-bg shadow-1'
@@ -27,7 +32,7 @@ const HeaderTabs = ({ variant, onItemClick, isScrolled = false }: HeaderTabsProp
       {NAV_ITEMS.map((item) => (
         <li key={item.label} className={`${itemClass} list-none`}>
           {item.locked ? (
-            <button>{item.label}</button> // TODO: onClick로 잠금 모달
+            <button onClick={handleLockedItemClick}>{item.label}</button> // TODO: onClick로 잠금 모달
           ) : (
             <NavLink
               to={item.path ?? '#'}
@@ -39,6 +44,8 @@ const HeaderTabs = ({ variant, onItemClick, isScrolled = false }: HeaderTabsProp
           )}
         </li>
       ))}
+
+      <LockModal isOpen={isLockModalOpen} onClose={closeLockModal} />
     </nav>
   );
 };
