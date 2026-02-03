@@ -32,7 +32,7 @@ const HeaderTabs = ({ variant, onItemClick, isScrolled = false }: HeaderTabsProp
       {NAV_ITEMS.map((item) => (
         <li key={item.label} className={`${itemClass} list-none`}>
           {item.locked ? (
-            <button onClick={handleLockedItemClick}>{item.label}</button> // TODO: onClick로 잠금 모달
+            <button onClick={handleLockedItemClick}>{item.label}</button>
           ) : (
             <NavLink
               to={item.path ?? '#'}
