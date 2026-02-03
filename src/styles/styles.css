@@ -20,6 +20,11 @@
   --color-btn-default-bg-active: var(--primary-700);
   --color-btn-default-text: var(--neutral-000);
 
+  --color-btn-secondary-bg: var(--neutral-800);
+  --color-btn-secondary-bg-hover: var(--neutral-750);
+  --color-btn-secondary-bg-active: var(--neutral-850);
+  --color-btn-secondary-text: var(--neutral-000);
+
   /* Chip */
   --color-chip-default-bg: transparent;
   --color-chip-default-text: var(--neutral-600);
@@ -51,14 +56,17 @@
   --color-link-btn-default-border: var(--neutral-150);
   --color-link-btn-default-bg: var(--neutral-100);
   --color-link-btn-default-text: var(--neutral-800);
-  
+
   --color-link-btn-accent-border: var(--primary-500);
-  --color-link-btn-accent-bg: rgba(var(--primary-400-rgb), 0.1); /* TODO: 배경색 변경 */
-  --color-link-btn-accent-text: var(--primary-500);
+  --color-link-btn-accent-bg: var(--primary-500);
+  --color-link-btn-accent-text: var(--neutral-000);
 
   /* Logo */
   --color-logo-bg: var(--neutral-000);
   --color-logo-border: var(--neutral-150);
+
+  /* Modal */
+  --color-modal-bg: var(--neutral-100);
 
   /* Navigation */
   --color-nav-border: var(--neutral-150);
@@ -74,10 +82,12 @@
 
   /* Shadow */
   --shadow-1: 1px 1px 12px 0 rgba(var(--primary-300-rgb), 0.1);
+  --shadow-2: 0 4px 4px 0 rgba(var(--neutral-1000-rgb), 0.25);
 
   /* Text */
   --color-text-base: var(--neutral-700);
   --color-text-title: var(--neutral-800);
+  --color-text-accent: var(--primary-500);
 
   /** Font Weight **/
   --font-weight-590: 590;
@@ -135,7 +145,6 @@
   --color-yellow: #ffd23d;
 
   /** Shadow **/
-  --shadow-2: 1px 1px 39.4px -9px rgba(0, 0, 0, 0.41);
   --shadow-3: 1px 1px 39.4px -9px rgba(0, 113, 188, 0.76);
   --shadow-4: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
   --shadow-5: 0px 10px 19.9px 0px rgba(0, 0, 0, 0.28);

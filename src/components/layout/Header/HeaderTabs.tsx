@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { NAV_ITEMS } from '@/constants/menuData';
 import { useLockModal } from '@/hooks/useLockModal';
 
-import LockModal from '../LockModal';
+import LockModal from '../../LockModal';
 
 interface HeaderTabsProps {
   variant: 'desktop' | 'mobile';
