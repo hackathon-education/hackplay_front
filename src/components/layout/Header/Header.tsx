@@ -2,22 +2,20 @@ import LogoPrimary from '@/assets/logo/logo-primary.svg?react';
 import { FilePen } from 'lucide-react';
 import { Link, NavLink } from 'react-router-dom';
 
-import ProfileDefaultImg from '@/assets/user/profile-default.webp';
 import { ROUTES } from '@/constants/routes';
 import { useAuthStore } from '@/store/authStore';
 
 import HeaderTabs from './HeaderTabs';
+import UserDropdown from './UserDropdown';
 
 const Header = () => {
   const { isLoggedIn } = useAuthStore();
 
-  const headerClass = 'flex fixed w-full h-24 items-center justify-between px-5';
+  const headerClass = 'flex fixed w-full h-24 items-center justify-between px-5 z-index-nav';
   const authClass =
     'flex w-20 h-9.5 items-center justify-center rounded-lg border shadow-1 text-sm font-medium';
   const resumeClass =
     'flex px-5.5 h-14 items-center justify-center rounded-50 bg-btn-default-bg shadow-1 gap-2 text-btn-default-text';
-  const profileClass =
-    'flex w-14 h-14 items-center justify-center rounded-full border border-profile-img-border bg-profile-img-bg shadow-1 overflow-hidden';
 
   return (
     <header className={headerClass}>
@@ -29,11 +27,13 @@ const Header = () => {
           <LogoPrimary />
         </NavLink>
       </div>
+
       <div className="flex-1 flex justify-center">
         <HeaderTabs variant="desktop" />
       </div>
       {/* <HeaderTabs variant="mobile" /> - TODO: 모바일 메뉴 버튼 구현 */}
-      <div className="flex-1 flex justify-end gap-2.5">
+
+      <div className="flex-1 flex justify-end gap-2.5 items-center">
         {isLoggedIn ? (
           <>
             <Link className={resumeClass}>
@@ -41,10 +41,7 @@ const Header = () => {
               <FilePen strokeWidth={1.5} size={19} absoluteStrokeWidth={true} />
               <span className="font-semibold">학습 이어하기</span>
             </Link>
-            <button className={profileClass}>
-              <img src={ProfileDefaultImg} alt="HACKPLAY" className="w-14" />{' '}
-              {/* TODO: 드롭다운, 프로필 사진 API 연동 */}
-            </button>
+            <UserDropdown />
           </>
         ) : (
           <>

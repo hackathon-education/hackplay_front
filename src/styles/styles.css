@@ -8,6 +8,7 @@
   --color-primary-500: var(--primary-500);
 
   /* Border Radius */
+  --radius-14: 0.875rem; /* 14px */
   --radius-20: 1.25rem; /* 20px */
   --radius-50: 3.125rem; /* 50px */
 
@@ -34,6 +35,14 @@
 
   /* Divider */
   --color-divider: var(--neutral-150);
+
+  /* Dropdown */
+  --color-dropdown-border: var(--neutral-150);
+  --color-dropdown-default-bg: var(--neutral-000);
+  --color-dropdown-default-text: var(--neutral-700);
+
+  --color-dropdown-hover-bg: var(--neutral-100);
+  --color-dropdown-hover-text: var(--primary-500);
 
   /* Error */
   --color-error-600: var(--error-600);
