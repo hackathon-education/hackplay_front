@@ -13,7 +13,7 @@ const Header = () => {
 
   const headerClass = 'flex fixed w-full h-24 items-center justify-between px-5 z-index-nav';
   const authClass =
-    'flex w-20 h-9.5 items-center justify-center rounded-lg border shadow-1 text-sm font-medium';
+    'flex w-20 h-9.5 items-center justify-center rounded-lg shadow-1 text-sm font-medium';
   const resumeClass =
     'flex px-5.5 h-14 items-center justify-center rounded-50 bg-btn-default-bg shadow-1 gap-2 text-btn-default-text';
 
@@ -47,13 +47,13 @@ const Header = () => {
           <>
             <Link
               to={ROUTES.SIGNIN}
-              className={`${authClass} border-link-btn-default-border bg-link-btn-default-bg text-link-btn-default-text`}
+              className={`${authClass} bg-link-btn-default-bg text-link-btn-default-text`}
             >
               로그인
             </Link>
             <Link
               to={ROUTES.SIGNUP}
-              className={`${authClass} border-link-btn-accent-border bg-link-btn-accent-bg text-link-btn-accent-text`}
+              className={`${authClass} bg-link-btn-accent-bg text-link-btn-accent-text`}
             >
               회원가입
             </Link>
