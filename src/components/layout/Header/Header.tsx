@@ -1,6 +1,9 @@
 import LogoPrimary from '@/assets/logo/logo-primary.svg?react';
 import { FilePen } from 'lucide-react';
+import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+
+import { useMotionValueEvent, useScroll } from 'framer-motion';
 
 import { ROUTES } from '@/constants/routes';
 import { useAuthStore } from '@/store/authStore';
@@ -11,7 +14,14 @@ import UserDropdown from './UserDropdown';
 const Header = () => {
   const { isLoggedIn } = useAuthStore();
 
-  const headerClass = 'flex fixed w-full h-24 items-center justify-between px-5 z-index-nav';
+  const [isScrolled, setIsScrolled] = useState(false);
+  const { scrollY } = useScroll();
+
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    setIsScrolled(latest > 0);
+  });
+
+  const headerClass = `flex fixed w-full h-24 items-center justify-between px-5 z-index-nav transition ${isScrolled ? 'backdrop-blur-[20px]' : ''}`;
   const authClass =
     'flex w-20 h-9.5 items-center justify-center rounded-lg shadow-1 text-sm font-medium';
   const resumeClass =
