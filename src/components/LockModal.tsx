@@ -61,7 +61,15 @@ const LockModal = ({ isOpen, onClose, message }: LockModalProps) => {
               확인했습니다.
             </button>
             <p className="text-text-base font-medium text-sm">
-              원하는 기능이 있으신가요? <Link className="text-text-accent">의견 보내기</Link> {/* TODO: 구글폼 or 문의하기 페이지 연결 */}
+              원하는 기능이 있으신가요?{' '}
+              <Link
+                to="https://docs.google.com/forms/d/e/1FAIpQLScYFGXxA0_GkEXsiwA28O3PbFEC_PCKcqqjJdNu_24ExuCJ8A/viewform?usp=dialog"
+                target="_blank"
+                className="text-text-accent"
+              >
+                의견 보내기
+              </Link>{' '}
+              {/* TODO: 문의하기 페이지 연결 */}
             </p>
           </motion.div>
         </motion.div>

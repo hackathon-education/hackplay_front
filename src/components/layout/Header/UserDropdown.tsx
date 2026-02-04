@@ -11,7 +11,7 @@ import { useAuthStore } from '@/store/authStore';
 import LogoutModal from './LogoutModal';
 
 const UserDropdown = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const { logout } = useAuthStore();
