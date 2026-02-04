@@ -62,6 +62,7 @@
   --color-input-disabled-text: rgba(var(--neutral-950-rgb), 0.5);
 
   /* Link */
+  --color-link-btn-default-border: var(--neutral-150);
   --color-link-btn-default-bg: var(--neutral-100);
   --color-link-btn-default-text: var(--neutral-800);
 

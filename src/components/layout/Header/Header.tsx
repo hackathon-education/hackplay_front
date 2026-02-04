@@ -57,7 +57,7 @@ const Header = () => {
           <>
             <Link
               to={ROUTES.SIGNIN}
-              className={`${authClass} bg-link-btn-default-bg text-link-btn-default-text`}
+              className={`${authClass} border border-link-btn-default-border bg-link-btn-default-bg text-link-btn-default-text`}
             >
               로그인
             </Link>
