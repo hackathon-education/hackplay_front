@@ -21,7 +21,7 @@ const Header = () => {
     setIsScrolled(latest > 0);
   });
 
-  const headerClass = `flex fixed w-full h-24 items-center justify-between px-5 z-index-nav transition ${isScrolled ? 'backdrop-blur-[20px]' : ''}`;
+  const headerClass = `flex fixed w-full h-24 items-center justify-between px-5 z-index-nav transition ${isScrolled ? 'backdrop-blur-[20px]' : ''}`; // TODO: 스크롤 시 헤더 스타일 개선
   const authClass =
     'flex w-20 h-9.5 items-center justify-center rounded-lg shadow-1 text-sm font-medium';
   const resumeClass =
