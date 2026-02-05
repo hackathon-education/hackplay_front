@@ -8,11 +8,8 @@ import ProfileDefaultImg from '@/assets/user/profile-default.webp';
 import { ROUTES } from '@/constants/routes';
 import { useAuthStore } from '@/store/authStore';
 
-import LogoutModal from './LogoutModal';
-
 const UserDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const { logout } = useAuthStore();
   const navigate = useNavigate();
@@ -45,7 +42,6 @@ const UserDropdown = () => {
       console.error('로그아웃 실패:', error);
     } finally {
       logout();
-      setIsLogoutModalOpen(false);
       navigate(ROUTES.MAIN);
     }
   };
@@ -56,10 +52,7 @@ const UserDropdown = () => {
     { label: '마이페이지', onClick: () => console.log('마이페이지') }, // TODO: 마이페이지 라우트 연결
     {
       label: '로그아웃',
-      onClick: () => {
-        setIsLogoutModalOpen(true);
-        setIsOpen(false);
-      },
+      onClick: handleLogout,
     },
   ];
 
@@ -100,12 +93,6 @@ const UserDropdown = () => {
           </motion.div>
         )}
       </AnimatePresence>
-
-      <LogoutModal
-        isOpen={isLogoutModalOpen}
-        onConfirm={handleLogout}
-        onCancel={() => setIsLogoutModalOpen(false)}
-      />
     </div>
   );
 };
