@@ -26,7 +26,7 @@ const Header = () => {
   const authClass =
     'flex w-20 h-9.5 items-center justify-center rounded-lg shadow-1 text-sm font-medium';
   const resumeClass =
-    'flex px-5.5 h-14 items-center justify-center rounded-50 bg-btn-default-bg shadow-1 gap-2 text-btn-default-text';
+    'flex w-10 h-10 mr-2 lg:mr-0 lg:px-5.5 lg:w-auto lg:h-14 items-center justify-center rounded-50 bg-btn-default-bg shadow-1 gap-2 text-btn-default-text';
 
   return (
     <header className={headerClass}>
@@ -50,7 +50,7 @@ const Header = () => {
             <Link className={resumeClass}>
               {/* TODO: to 속성 API 연동 */}
               <FilePen strokeWidth={1.5} size={19} absoluteStrokeWidth={true} />
-              <span className="font-semibold">학습 이어하기</span>
+              <span className="hidden lg:block font-semibold">학습 이어하기</span>
             </Link>
             <UserDropdown />
           </>
@@ -70,11 +70,11 @@ const Header = () => {
                 회원가입
               </Link>
             </div>
-            <button className="flex lg:hidden w-10 h-10 items-center justify-center">
-              <MenuIcon />
-            </button>
           </>
         )}
+        <button className="flex lg:hidden w-10 h-10 items-center justify-center">
+          <MenuIcon />
+        </button>
       </div>
     </header>
   );

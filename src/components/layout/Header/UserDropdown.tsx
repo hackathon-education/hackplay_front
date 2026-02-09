@@ -65,7 +65,7 @@ const UserDropdown = () => {
     >
       <button
         onClick={toggleMenu}
-        className="flex w-14 h-14 items-center justify-center rounded-full border border-profile-img-border bg-profile-img-bg shadow-1 overflow-hidden"
+        className="flex w-10 h-10 lg:w-14 lg:h-14 items-center justify-center rounded-full border border-profile-img-border bg-profile-img-bg shadow-1 overflow-hidden"
       >
         <img src={ProfileDefaultImg} alt="프로필" className="w-full h-full object-cover" />
         {/* TODO: 프로필 사진 API 연동 */}
