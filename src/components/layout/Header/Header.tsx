@@ -1,4 +1,5 @@
 import LogoPrimary from '@/assets/logo/logo-primary.svg?react';
+import MenuIcon from '@/assets/navigation/menu-icon.svg?react';
 import { FilePen } from 'lucide-react';
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
@@ -21,7 +22,7 @@ const Header = () => {
     setIsScrolled(latest > 0);
   });
 
-  const headerClass = `flex fixed w-full h-24 items-center justify-between px-5 z-index-nav transition ${isScrolled ? 'backdrop-blur-[20px]' : ''}`; // TODO: 스크롤 시 헤더 스타일 개선
+  const headerClass = `flex fixed w-full h-16.5 items-center justify-between pl-4.5 pr-[15px] z-index-nav transition ${isScrolled ? 'backdrop-blur-[20px]' : ''} lg:h-24 lg:px-5`; // TODO: 스크롤 시 헤더 스타일 개선
   const authClass =
     'flex w-20 h-9.5 items-center justify-center rounded-lg shadow-1 text-sm font-medium';
   const resumeClass =
@@ -43,7 +44,7 @@ const Header = () => {
       </div>
       {/* <HeaderTabs variant="mobile" /> - TODO: 모바일 메뉴 버튼 구현 */}
 
-      <div className="flex-1 flex justify-end gap-2.5 items-center">
+      <div className="flex-1 flex justify-end gap-0 items-center lg:gap-2.5">
         {isLoggedIn ? (
           <>
             <Link className={resumeClass}>
@@ -55,18 +56,23 @@ const Header = () => {
           </>
         ) : (
           <>
-            <Link
-              to={ROUTES.SIGNIN}
-              className={`${authClass} border border-link-btn-default-border bg-link-btn-default-bg text-link-btn-default-text`}
-            >
-              로그인
-            </Link>
-            <Link
-              to={ROUTES.SIGNUP}
-              className={`${authClass} bg-link-btn-accent-bg text-link-btn-accent-text`}
-            >
-              회원가입
-            </Link>
+            <div className="hidden lg:flex gap-2.5">
+              <Link
+                to={ROUTES.SIGNIN}
+                className={`${authClass} border border-link-btn-default-border bg-link-btn-default-bg text-link-btn-default-text`}
+              >
+                로그인
+              </Link>
+              <Link
+                to={ROUTES.SIGNUP}
+                className={`${authClass} bg-link-btn-accent-bg text-link-btn-accent-text`}
+              >
+                회원가입
+              </Link>
+            </div>
+            <button className="flex lg:hidden w-10 h-10 items-center justify-center">
+              <MenuIcon />
+            </button>
           </>
         )}
       </div>
