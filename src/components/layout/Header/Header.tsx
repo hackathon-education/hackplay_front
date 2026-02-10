@@ -33,7 +33,7 @@ const Header = () => {
       <div className="flex-1 flex justify-start">
         <NavLink
           to={ROUTES.MAIN}
-          className="flex w-[181px] h-14 items-center justify-center bg-logo-bg border border-logo-border rounded-20 shadow-1"
+          className="flex lg:w-[181px] h-14 items-center justify-center bg-transparent lg:bg-logo-bg border-none lg:border border-logo-border rounded-20 shadow-none lg:shadow-1"
         >
           <LogoPrimary />
         </NavLink>
