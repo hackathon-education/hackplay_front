@@ -1,19 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { AnimatePresence, motion } from 'framer-motion';
 
-import { axiosInstance } from '@/api/axios';
 import ProfileDefaultImg from '@/assets/user/profile-default.webp';
 import { USER_MENU_ITEMS } from '@/constants/menuData';
-import { ROUTES } from '@/constants/routes';
-import { useAuthStore } from '@/store/authStore';
+import { useUserMenu } from '@/hooks/useUserMenu';
 
 const UserDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
-  const { logout } = useAuthStore();
-  const navigate = useNavigate();
+
+  const { handleMenuItemClick } = useUserMenu(() => setIsOpen(false));
 
   const toggleMenu = () => setIsOpen((prev) => !prev);
 
@@ -26,40 +23,6 @@ const UserDropdown = () => {
     if (isOpen) document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
-
-  const handleLogout = async () => {
-    try {
-      const token = sessionStorage.getItem('accessToken'); // TODO: 토큰 쿠키로 변경
-      if (token) {
-        await axiosInstance.post(
-          '/v1/auth/signout',
-          {},
-          {
-            headers: { Authorization: `Bearer ${token}` }, // TODO: 토큰 쿠키로 변경 시 헤더 불필요
-          },
-        );
-      }
-    } catch (error) {
-      console.error('로그아웃 실패:', error);
-    } finally {
-      logout();
-      navigate(ROUTES.MAIN);
-    }
-  };
-
-  const handleMenuItemClick = (item: (typeof USER_MENU_ITEMS)[number]) => {
-    if (item.label === '로그아웃') {
-      handleLogout();
-      return;
-    }
-
-    if (item.path && item.path !== "#") {
-      navigate(item.path);
-    } else {
-      console.log(`${item.label} 클릭`); // TODO: 기능 구현 완료 시 제거
-    }
-    setIsOpen(false);
-  };
 
   return (
     <div
