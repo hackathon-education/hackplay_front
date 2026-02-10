@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 import { axiosInstance } from '@/api/axios';
 import ProfileDefaultImg from '@/assets/user/profile-default.webp';
+import { USER_MENU_ITEMS } from '@/constants/menuData';
 import { ROUTES } from '@/constants/routes';
 import { useAuthStore } from '@/store/authStore';
 
@@ -46,15 +47,19 @@ const UserDropdown = () => {
     }
   };
 
-  const menuItems = [
-    { label: '계정설정', onClick: () => console.log('계정설정') }, // TODO: 계정설정 기능 구현
-    // { label: '문의하기', onClick: () => console.log('문의하기') }, // TODO: 문의하기 기능 구현
-    { label: '마이페이지', onClick: () => console.log('마이페이지') }, // TODO: 마이페이지 라우트 연결
-    {
-      label: '로그아웃',
-      onClick: handleLogout,
-    },
-  ];
+  const handleMenuItemClick = (item: (typeof USER_MENU_ITEMS)[number]) => {
+    if (item.label === '로그아웃') {
+      handleLogout();
+      return;
+    }
+
+    if (item.path && item.path !== "#") {
+      navigate(item.path);
+    } else {
+      console.log(`${item.label} 클릭`); // TODO: 기능 구현 완료 시 제거
+    }
+    setIsOpen(false);
+  };
 
   return (
     <div
@@ -80,11 +85,11 @@ const UserDropdown = () => {
             className="absolute w-40 right-0 z-dropdown -translate-y-2.5"
           >
             <ul className="flex flex-col rounded-14 border border-dropdown-border bg-dropdown-default-bg shadow-1 right-0 mt-5 z-dropdown divide-y divide-divider overflow-hidden">
-              {menuItems.map((item, idx) => (
+              {USER_MENU_ITEMS.map((item, idx) => (
                 <button
                   key={idx}
                   className="flex h-12.5 items-center justify-center text-dropdown-default-text text-sm hover:bg-dropdown-hover-bg hover:text-dropdown-hover-text hover:font-medium transition-colors"
-                  onClick={item.onClick}
+                  onClick={() => handleMenuItemClick(item)}
                 >
                   {item.label}
                 </button>
