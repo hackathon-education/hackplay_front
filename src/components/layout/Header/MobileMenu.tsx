@@ -59,22 +59,34 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
             </div>
 
             {/* snb-bottom */}
-            {isLoggedIn && (
-              <div className="border-t border-divider-secondary bg-drawer-bg">
-                <ul className="flex divide-x divide-divider-secondary">
-                  {USER_MENU_ITEMS.map((item, idx) => (
-                    <li key={idx} className="flex-1">
-                      <button
-                        onClick={() => handleMenuItemClick(item)}
-                        className="h-11 w-full text-sm text-drawer-text-secondary"
-                      >
-                        {item.label}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            <div className="bg-drawer-bg">
+              {isLoggedIn ? (
+                <div className="border-t border-divider-secondary">
+                  <ul className="flex divide-x divide-divider-secondary">
+                    {USER_MENU_ITEMS.map((item, idx) => (
+                      <li key={idx} className="flex-1">
+                        <button
+                          onClick={() => handleMenuItemClick(item)}
+                          className="h-11 w-full text-sm text-drawer-text-secondary font-medium active:bg-white/5 transition-colors"
+                        >
+                          {item.label}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : (
+                <div className="p-4">
+                  <Link
+                    to={ROUTES.SIGNIN}
+                    onClick={onClose}
+                    className="flex h-12 w-full items-center justify-center rounded-xl bg-link-btn-accent-bg text-link-btn-accent-text font-bold text-base active:scale-[0.98] transition-all"
+                  >
+                    로그인
+                  </Link>
+                </div>
+              )}
+            </div>
           </motion.div>
         </>
       )}
