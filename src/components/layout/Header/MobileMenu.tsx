@@ -37,10 +37,10 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="right-0 top-0 bottom-0 flex bg-drawer-bg w-80 fixed flex-col z-modal"
+            className="right-0 top-0 bottom-0 flex bg-drawer-bg w-80 fixed flex-col z-modal bg-drawer-header-bg"
           >
             {/* snb-top */}
-            <div className="bg-drawer-header-bg flex justify-between px-6 h-15 items-center mb-3">
+            <div className="flex justify-between px-6 h-15 items-center mb-3">
               <Link to={ROUTES.MAIN} onClick={onClose}>
                 <LogoWhite title="HACKPLAY" className="h-4.5 w-auto" />
               </Link>
@@ -52,12 +52,12 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
             </div>
 
             {/* snb-navigation */}
-            <div className="flex-1 overflow-auto p-3.5">
+            <div className="flex-1 overflow-auto p-3.5 bg-drawer-bg">
               <HeaderTabs variant="mobile" onItemClick={onClose} />
             </div>
 
             {/* snb-bottom */}
-            <div className="border-t border-divider-secondary">
+            <div className="border-t border-divider-secondary bg-drawer-bg">
               <ul className="flex divide-x divide-divider-secondary">
                 {USER_MENU_ITEMS.map((item, idx) => (
                   <li key={idx} className="flex-1">

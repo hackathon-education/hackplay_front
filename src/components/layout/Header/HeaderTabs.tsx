@@ -33,7 +33,7 @@ const HeaderTabs = ({ variant, onItemClick }: HeaderTabsProps) => {
 
   const snbItemClass =
     variant === 'mobile'
-      ? 'flex items-center py-3.5 px-3 border-b w-full border-divider text-drawer-text-base text-lg font-medium'
+      ? 'flex items-center p-3 border-b w-full border-divider text-drawer-text-base text-lg font-medium'
       : '';
 
   return (
