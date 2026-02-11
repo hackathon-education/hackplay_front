@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { USER_MENU_ITEMS } from '@/constants/menuData';
 import { ROUTES } from '@/constants/routes';
 import { useUserMenu } from '@/hooks/useUserMenu';
+import { useAuthStore } from '@/store/authStore';
 
 import HeaderTabs from './HeaderTabs';
 
@@ -17,6 +18,7 @@ interface MobileMenuProps {
 
 const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
   const { handleMenuItemClick } = useUserMenu(onClose);
+  const { isLoggedIn } = useAuthStore();
 
   return (
     <AnimatePresence>
@@ -57,20 +59,22 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
             </div>
 
             {/* snb-bottom */}
-            <div className="border-t border-divider-secondary bg-drawer-bg">
-              <ul className="flex divide-x divide-divider-secondary">
-                {USER_MENU_ITEMS.map((item, idx) => (
-                  <li key={idx} className="flex-1">
-                    <button
-                      onClick={() => handleMenuItemClick(item)}
-                      className="h-11 w-full text-sm text-drawer-text-secondary"
-                    >
-                      {item.label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {isLoggedIn && (
+              <div className="border-t border-divider-secondary bg-drawer-bg">
+                <ul className="flex divide-x divide-divider-secondary">
+                  {USER_MENU_ITEMS.map((item, idx) => (
+                    <li key={idx} className="flex-1">
+                      <button
+                        onClick={() => handleMenuItemClick(item)}
+                        className="h-11 w-full text-sm text-drawer-text-secondary"
+                      >
+                        {item.label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </motion.div>
         </>
       )}
