@@ -35,6 +35,13 @@
 
   /* Divider */
   --color-divider: var(--neutral-150);
+  --color-divider-secondary: var(--neutral-100);
+
+  /* Drawer */
+  --color-drawer-bg: var(--neutral-000);
+  --color-drawer-header-bg: var(--primary-500);
+  --color-drawer-text-base: var(--neutral-950);
+  --color-drawer-text-secondary: var(--neutral-600);
 
   /* Dropdown */
   --color-dropdown-border: var(--neutral-150);
@@ -83,6 +90,9 @@
   --color-nav-text-hover: var(--primary-500);
   --color-nav-text-active: var(--primary-500);
   --shadow-nav: 1px 1px 12px 0 rgba(var(--primary-300-rgb), 0.1);
+
+  /* Overlay */
+  --color-overlay-bg: rgba(var(--neutral-1000-rgb), 0.6);
 
   /* Profile */
   --color-profile-img-border: var(--neutral-150);
