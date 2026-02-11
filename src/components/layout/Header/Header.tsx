@@ -37,7 +37,9 @@ const Header = () => {
             to={ROUTES.MAIN}
             className="flex lg:w-[181px] h-14 items-center justify-center bg-transparent lg:bg-logo-bg border-none lg:border border-logo-border rounded-20 shadow-none lg:shadow-1"
           >
-            <LogoPrimary />
+            <LogoPrimary
+              className={`transition-colors duration-300 ease-in-out ${isScrolled ? 'text-black' : 'text-white'} lg:text-black`}
+            />
           </NavLink>
         </div>
 
@@ -76,7 +78,9 @@ const Header = () => {
             onClick={() => setIsMobileMenuOpen(true)}
             className="flex lg:hidden w-10 h-10 items-center justify-center"
           >
-            <MenuIcon />
+            <MenuIcon
+              className={`transition-colors duration-300 ease-in-out ${isScrolled ? 'text-btn-secondary-bg' : 'text-white'}`}
+            />
           </button>
         </div>
       </header>
