@@ -45,7 +45,7 @@ const UserDropdown = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
-            className="absolute w-40 right-0 z-dropdown -translate-y-2.5"
+            className="hidden lg:absolute lg:block w-40 right-0 z-dropdown -translate-y-2.5"
           >
             <ul className="flex flex-col rounded-14 border border-dropdown-border bg-dropdown-default-bg shadow-1 right-0 mt-5 z-dropdown divide-y divide-divider overflow-hidden">
               {USER_MENU_ITEMS.map((item, idx) => (
