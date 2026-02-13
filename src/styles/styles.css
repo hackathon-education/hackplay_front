@@ -7,6 +7,9 @@
   /* Brand */
   --color-primary-500: var(--primary-500);
 
+  /* Badge */
+  --color-badge-bg: var(--primary-150);
+
   /* Border Radius */
   --radius-14: 0.875rem; /* 14px */
   --radius-20: 1.25rem; /* 20px */
@@ -106,6 +109,7 @@
   --color-text-base: var(--neutral-700);
   --color-text-title: var(--neutral-800);
   --color-text-accent: var(--primary-500);
+  --color-text-meta: var(--neutral-1000);
 
   /** Font Weight **/
   --font-weight-590: 590;
@@ -192,10 +196,6 @@
 
 .dot {
   @apply w-1 h-1 sm:w-1.5 sm:h-1.5 md:w-2 md:h-2 lg:w-2.5 lg:h-2.5 xl:w-3 xl:h-3 bg-gray-200 rounded-full;
-}
-
-.page-container {
-  @apply max-w-[95rem] mx-auto text-center flex flex-col items-center;
 }
 
 .basic-button {
