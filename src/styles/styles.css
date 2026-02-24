@@ -7,10 +7,17 @@
   /* Brand */
   --color-primary-500: var(--primary-500);
 
+  /* Background */
+  --color-bg: var(--neutral-100);
+
   /* Badge */
   --color-badge-bg: var(--primary-150);
 
+  /* Banner */
+  --color-banner-border: var(--neutral-150);
+
   /* Border Radius */
+  --radius-10: 0.625rem; /* 10px */
   --radius-14: 0.875rem; /* 14px */
   --radius-20: 1.25rem; /* 20px */
   --radius-50: 3.125rem; /* 50px */
@@ -29,6 +36,12 @@
   --color-btn-secondary-bg-active: var(--neutral-850);
   --color-btn-secondary-text: var(--neutral-000);
 
+  /* Card */
+  --color-card-bg: var(--neutral-000);
+  --color-card-hover-bg: var(--neutral-100);
+  --color-card-bg-glass: rgba(var(--neutral-000-rgb), 0.33);
+  --color-card-border: var(--neutral-200);
+
   /* Chip */
   --color-chip-default-bg: transparent;
   --color-chip-default-text: var(--neutral-600);
@@ -39,6 +52,7 @@
   /* Divider */
   --color-divider: var(--neutral-150);
   --color-divider-secondary: var(--neutral-100);
+  --color-divider-strong: var(--neutral-200);
 
   /* Drawer */
   --color-drawer-bg: var(--neutral-000);
@@ -59,6 +73,28 @@
 
   /* Font */
   --font-base: var(--base-font-family);
+
+  /* Gradient */
+  --background-image-gradient-overlay: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.13) 0%,
+    rgba(3, 3, 3, 0.31) 50%,
+    rgba(5, 5, 5, 0.45) 87.5%,
+    rgba(6, 6, 6, 0.5) 100%
+  );
+
+  --background-image-gradient-banner-glass: linear-gradient(
+    95deg,
+    rgba(0, 37, 80, 0.4) 0.11%,
+    rgba(80, 0, 65, 0.24) 99.89%
+  );
+
+  /* Icon */
+  --color-icon: var(--neutral-600);
+  --color-icon-bg: rgba(var(--neutral-250-rgb), 0.2);
+  --color-icon-blue-200: var(--primary-200);
+  --color-icon-yellow-500: var(--yellow-500);
+  --color-icon-neutral-250: var(--neutral-250);
 
   /* Input */
   --color-input-default-border: var(--neutral-150);
@@ -104,12 +140,22 @@
   /* Shadow */
   --shadow-1: 1px 1px 12px 0 rgba(var(--primary-300-rgb), 0.1);
   --shadow-2: 0 4px 4px 0 rgba(var(--neutral-1000-rgb), 0.25);
+  --shadow-3: 0 4px 4px 0 rgba(var(--primary-300-rgb), 0.1);
+  --shadow-4: 0px 6px 6px 0px rgba(var(--neutral-1000-rgb), 0.25);
+
+  /* Tab */
+  --color-tab-border-default: var(--neutral-200);
+  --color-tab-border-active: var(--primary-500);
+  --color-tab-text-default: var(--neutral-700);
+  --color-tab-text-active: var(--primary-500);
 
   /* Text */
   --color-text-base: var(--neutral-700);
   --color-text-title: var(--neutral-800);
   --color-text-accent: var(--primary-500);
   --color-text-meta: var(--neutral-1000);
+  --color-text-white: var(--neutral-000);
+  --color-text-body: var(--neutral-600);
 
   /** Font Weight **/
   --font-weight-590: 590;
@@ -167,8 +213,6 @@
   --color-yellow: #ffd23d;
 
   /** Shadow **/
-  --shadow-3: 1px 1px 39.4px -9px rgba(0, 113, 188, 0.76);
-  --shadow-4: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
   --shadow-5: 0px 10px 19.9px 0px rgba(0, 0, 0, 0.28);
   --shadow-6: 1px 1px 50px 0px rgba(0, 0, 0, 0.4);
   --shadow-7: 1px 1px 20px -9px rgba(0, 0, 0, 0.4);
@@ -196,14 +240,6 @@
 
 .dot {
   @apply w-1 h-1 sm:w-1.5 sm:h-1.5 md:w-2 md:h-2 lg:w-2.5 lg:h-2.5 xl:w-3 xl:h-3 bg-gray-200 rounded-full;
-}
-
-.basic-button {
-  @apply bg-[#0059b3] text-white border-none px-5 py-2.5 mt-5 text-base cursor-pointer rounded-[5px] hover:bg-[#004080];
-}
-
-.card-box {
-  @apply rounded-2xl bg-white shadow-8;
 }
 
 .blue-gradient {

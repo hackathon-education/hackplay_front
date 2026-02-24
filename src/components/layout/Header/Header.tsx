@@ -23,7 +23,7 @@ const Header = () => {
     setIsScrolled(latest > 0);
   });
 
-  const headerClass = `flex fixed w-full h-16.5 items-center justify-between pl-4.5 pr-[15px] z-index-nav transition ${isScrolled ? 'backdrop-blur-[20px]' : ''} lg:h-24 lg:px-5`; // TODO: 스크롤 시 헤더 스타일 개선
+  const headerClass = `flex fixed w-full h-16.5 items-center justify-between pl-4.5 pr-[15px] z-nav transition ${isScrolled ? 'backdrop-blur-[20px]' : ''} lg:h-24 lg:px-5`; // TODO: 스크롤 시 헤더 스타일 개선
   const authClass =
     'flex w-20 h-9.5 items-center justify-center rounded-lg shadow-1 text-sm font-medium';
   const resumeClass =
