@@ -463,8 +463,8 @@ const TeamProjectPage = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-12 gap-8">
-              <div className="col-span-12 divide-y-2 divide-divider-strong">
+            <div className="flex flex-col gap-8">
+              <div className="w-full divide-y-2 divide-divider-strong">
                 {/* 4. 강의 소개 */}
                 <div>
                   <h2 className="text-[40px] font-bold text-text-title mb-8">
