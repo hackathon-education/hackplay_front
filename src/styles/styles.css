@@ -38,6 +38,7 @@
 
   /* Card */
   --color-card-bg: var(--neutral-000);
+  /* TODO: hover 색상 너무 연하지 않은지 확인 */
   --color-card-hover-bg: var(--neutral-100);
   --color-card-bg-glass: rgba(var(--neutral-000-rgb), 0.33);
   --color-card-border: var(--neutral-200);

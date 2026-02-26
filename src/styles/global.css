@@ -5,6 +5,12 @@
   }
 }
 
+/* 🎯 전역 드래그(선택) 스타일 설정 */
+::selection {
+  background-color: rgba(var(--primary-500-rgb), 0.3);
+  color: var(--neutral-1000); 
+}
+
 html,
 body {
   font-family: var(--base-font-family);

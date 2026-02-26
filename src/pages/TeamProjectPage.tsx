@@ -10,6 +10,8 @@ import ToggleArrowIcon from '@/assets/lecture/toggle-arrow-icon.svg?react';
 import WorkflowIcon from '@/assets/lecture/workflow-icon.svg?react';
 import { useState } from 'react';
 
+import { AnimatePresence, motion } from 'framer-motion';
+
 import BooksIcon from '@/assets/lecture/books-icon.webp';
 import CodingWomanIllustration from '@/assets/lecture/coding-woman-illustration.webp';
 import LectureMainBg from '@/assets/lecture/lecture-main-bg.webp';
@@ -292,10 +294,10 @@ const FeatureCard = ({
   desc: string;
   icon: React.ReactNode;
 }) => (
-  <div className="flex-1 bg-card-bg-glass px-[37px] py-7 rounded-20 border border-card-border shadow-2 flex flex-col gap-[13px] items-start">
+  <div className="flex-1 bg-card-bg-glass px-6 py-7 lg:px-[37px] rounded-20 border border-card-border shadow-2 flex flex-col gap-[13px] items-start transition-transform hover:-translate-y-1">
     <div className="w-9 h-9 flex items-center justify-center text-text-title -mt-0.5">{icon}</div>
-    <h4 className="text-2xl font-bold text-text-title leading-tight">{title}</h4>
-    <p className="text-text-base text-xl leading-[1.2]">{desc}</p>
+    <h4 className="text-xl lg:text-2xl font-bold text-text-title leading-tight">{title}</h4>
+    <p className="text-text-base text-base lg:text-xl leading-[1.2]">{desc}</p>
   </div>
 );
 
@@ -311,27 +313,26 @@ interface ReviewProps {
 const reviewsData: ReviewProps[] = [
   {
     userName: '백엔드 지망생',
-    rating: 3,
+    rating: 5,
     comment:
       '단순한 클론 코딩이 아니라 시스템 디자인 자체를 배울 수 있어서 좋았습니다. 면접에서 아키텍처 질문에 답변할 자신감이 생겼어요.',
   },
 ];
 
-// --- 수강평 카드 컴포넌트 ---
 const ReviewCard = ({ review }: { review: ReviewProps }) => (
-  <div className="border border-card-border h-[221px] flex flex-col justify-center pl-[31px] pr-13 pt-6 pb-[23px] rounded-20 bg-card-bg shadow-2">
+  <div className="border border-card-border lg:h-[221px] flex flex-col justify-center p-6 lg:pl-[31px] lg:pr-13 lg:pt-6 lg:pb-[23px] rounded-20 bg-card-bg shadow-2 hover:bg-card-hover-bg transition-colors">
     <div className="flex mb-9">
       {[...Array(5)].map((_, i) => (
         <StarIcon
           key={i}
-          className={i < review.rating ? 'text-icon-yellow-500' : 'text-icon-neutral-250'}
+          className={`w-[17px] h-[17px] ${i < review.rating ? 'text-icon-yellow-500' : 'text-icon-neutral-250'}`}
         />
       ))}
     </div>
-    <p className="text-text-base flex-grow leading-[1.2]">"{review.comment}"</p>
-    <div className="flex gap-4 mt-7.5 items-center">
+    <p className="text-text-base flex-grow leading-[1.2] mb-7.5">"{review.comment}"</p>
+    <div className="flex gap-4 items-center">
       {/* TODO: 프로필 이미지 삽입 */}
-      <div className="w-8 h-8 rounded-full bg-profile-img-border"></div>
+      <div className="w-8 h-8 rounded-full bg-profile-img-border" />
       <p className="font-medium text-text-title">{review.userName}</p>
     </div>
   </div>
@@ -388,6 +389,73 @@ const ReviewSkeleton = () => (
   </div>
 );
 
+const ChapterSection = ({ chapter }: { chapter: ChapterProps }) => {
+  const [isOpen, setIsOpen] = useState(true);
+
+  return (
+    <div className="w-full max-w-[929px] flex flex-col mb-12 lg:mb-16.5 pl-15">
+      <div className="flex flex-col">
+        <span className="mb-3 text-sm lg:text-xl font-bold text-text-accent uppercase">
+          CHAPTER {chapter.number} <span className="inline-block -translate-y-px">•</span>{' '}
+          {chapter.category}
+        </span>
+        <div className="flex items-center justify-between -ml-1 lg:-ml-15 mt-1">
+          <div className="flex gap-3 items-center">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className={`flex items-center justify-center w-12 h-12 transition-all duration-300 hover:opacity-80 ${isOpen ? 'text-icon-blue-200' : '-rotate-90 text-text-accent'}`}
+            >
+              <ToggleArrowIcon />
+            </button>
+            <h3 className="text-2xl lg:text-[40px] font-medium text-text-meta -translate-y-[3px] leading-none">
+              {chapter.title}
+            </h3>
+          </div>
+          {/* <span className="mr-3.5 w-17.5 h-8 flex items-center justify-center bg-chip-active-bg rounded-10 font-medium text-text-meta">
+                              {formatTotalDuration(chapter.units)}
+                            </span> */}
+        </div>
+        <p className="text-base lg:text-2xl text-text-base font-medium mt-0.5 leading-[40px] tracking-widest">
+          {chapter.description}
+        </p>
+      </div>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="overflow-hidden mt-7 rounded-10"
+          >
+            <div className="bg-card-bg rounded-10 border border-card-border shadow-2 overflow-hidden">
+              <div className="flex items-center justify-between h-[45px] pl-6 pr-3.5 bg-icon-bg border-b border-card-border">
+                <div className="flex items-center gap-[21px]">
+                  <div className="flex gap-2.5">
+                    <div className="w-4 h-4 rounded-full bg-card-border" />
+                    <div className="w-4 h-4 rounded-full bg-card-border" />
+                  </div>
+                  <div className="flex items-center gap-2.5 text-text-base font-medium tracking-widest">
+                    <FolderIcon className="w-5.5 h-[19px]" />
+                    src / modules / {chapter.number}
+                  </div>
+                </div>
+                <span className="text-sm font-medium text-text-base">JavaScript</span>
+              </div>
+              <div className="divide-y divide-divider-strong">
+                {chapter.units.map((unit) => (
+                  <UnitItem key={unit.id} unit={unit} />
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
 // --- Main Page Component ---
 
 const TeamProjectPage = () => {
@@ -395,114 +463,101 @@ const TeamProjectPage = () => {
   const [isLoading, setIsLoading] = useState(false); // TODO: API fetch 로직에 로딩 상태 연결
 
   return (
-    <div className="relative overflow-hidden -mx-[15px] lg:-mx-5 -mt-16.5 lg:-mt-24 bg-bg">
-      {/* 1. 배경 컴포넌트 */}
+    <div className="relative overflow-hidden min-h-screen -mx-[15px] lg:-mx-5 -mt-16.5 lg:-mt-24 bg-bg">
+      {/* 배경 컴포넌트 */}
       {/* TODO: 배경 지울지 확인 */}
       {/* <img src={LectureMainBg} className="absolute inset-0 w-full object-cover object-top z-0" /> */}
-
-      <div className="relative z-base px-[15px] lg:px-5 pt-[215px]">
-        <div className="w-full max-w-[1422px] mb-[108.93px] mx-auto">
-          {/* 2. 히어로 섹션 & 로딩 처리 */}
+      <div className="relative z-base px-[15px] lg:px-5 pt-24 lg:pt-[215px] pb-[108.93px]">
+        <div className="max-w-[1422px] mx-auto">
+          {/* Hero Section */}
           {isLoading ? (
             <HeroSkeleton />
           ) : (
-            <section className="flex flex-col gap-5.5">
-              {/* 헤더 */}
+            <section className="grid lg:grid-cols-[1fr_395px] gap-5.5 mb-9.5">
               <div>
-                {/* 카테고리 배지 */}
                 <div className="flex gap-4.5">
-                  {LECTURE_INFO.categories.map((category) => (
-                    <CategoryBadge key={category}>{category}</CategoryBadge>
+                  {LECTURE_INFO.categories.map((cat) => (
+                    <CategoryBadge key={cat}>{cat}</CategoryBadge>
                   ))}
                 </div>
-                {/* 강의명 */}
                 <h1 className="text-4xl lg:text-[54px] font-bold text-text-title mb-4 leading-[1.2]">
                   {LECTURE_INFO.title}
-                  <br />
-                  <span className="text-text-accent">{LECTURE_INFO.subTitle}</span>
+                  <span className="block text-text-accent">{LECTURE_INFO.subTitle}</span>
                 </h1>
-                {/* 메타 정보 (별점 & 팀) */}
                 <div className="flex items-center gap-9.5 text-text-meta ml-0.5 text-xl">
                   <div className="flex items-center">
-                    <img src={StarRatingIcon} alt="별점" className="w-9 h-9 object-contain" />
+                    <img src={StarRatingIcon} alt="별점" className="w-9 h-9" />
                     <span className="font-semibold mr-2">{LECTURE_INFO.rating}</span>
                     <span>({LECTURE_INFO.reviewCount}+ 리뷰)</span>
                   </div>
                   <div className="flex items-center gap-[11px]">
-                    <TeamMembersIcon title="팀원" />
+                    <TeamMembersIcon className="text-text-meta" />
                     <span>{LECTURE_INFO.teamCount} Team Members</span>
                   </div>
                 </div>
-              </div>
-              <div className="flex gap-5.5 h-[502px]">
-                {/* 메인 배너 이미지 */}
-                <div className="flex-[1005] h-full">
-                  <div className="w-full h-full rounded-20 border border-banner-border shadow-1 overflow-hidden relative">
-                    <img
-                      src={CodingWomanIllustration}
-                      alt="강의 메인 배너: 안경을 쓰고 노란색 상의를 입은 여성이 노트북으로 코딩을 하는 일러스트"
-                      className="w-full h-full object-cover object-[50%_-32px] relative"
-                    />
-                    {/* TODO: 사파리 뷰포트 밖 렌더링 중단 개선 */}
-                    <div className="absolute inset-0 bg-gradient-banner-glass backdrop-blur-[4px]" />
-                    <div className="absolute bottom-0 flex items-center bg-gradient-overlay w-full py-8.5">
-                      <p className="font-semibold text-[40px] text-text-white pl-[41px]">
-                        협업, 로그인 및 게시물 저장 기능 개발
-                      </p>
-                    </div>
+
+                {/* Banner */}
+                <div className="relative lg:h-[502px] rounded-20 overflow-hidden border border-banner-border shadow-1 group mt-5.5">
+                  <img
+                    src={CodingWomanIllustration}
+                    className="w-full h-full object-cover object-[50%_-32px] transition-transform duration-700 group-hover:scale-105"
+                    alt="배너"
+                  />
+                  <div className="absolute inset-0 bg-gradient-banner-glass backdrop-blur-[4px]" />
+                  <div className="absolute bottom-0 flex items-center bg-gradient-overlay w-full py-8.5">
+                    <h2 className="text-2xl lg:text-[40px] font-semibold text-text-white pl-[41px] leading-none">
+                      협업, 로그인 및 게시물 저장 기능 개발
+                    </h2>
                   </div>
                 </div>
-                {/* 학습 정보 카드 */}
-                <div className="flex-[395] h-full">
-                  <section className="bg-card-bg rounded-20 border border-card-border shadow-3 py-5 flex flex-col h-full">
-                    {/* 헤더 */}
-                    <h3 className="text-text-meta text-lg font-semibold px-5 pb-2.5 flex gap-2.5 items-center border-b border-divider leading-none pt-0.5">
-                      <img src={BooksIcon} alt="학습 정보 아이콘" className="w-5 h-5" />
-                      학습 정보
-                    </h3>
-                    {/* 학습 시간, 수강료, 총 수강생 */}
-                    <div className="space-y-4 px-5 py-6 mb-2">
-                      {COURSE_INFO.map((info) => (
-                        <div
-                          key={info.label}
-                          className="flex justify-between text-[15px] items-center text-text-title leading-tight"
-                        >
-                          <div className="flex gap-1.5 items-center">
-                            <span className="text-icon">{info.icon}</span>
-                            <span>{info.label}</span>
-                          </div>
-                          <span className="font-medium">{info.value}</span>
-                        </div>
-                      ))}
-                    </div>
-                    {/* 학습 목표 */}
-                    <div className="flex items-center mb-5 gap-[15px] px-5">
-                      <h3 className="text-meta font-semibold pl-[1px]">학습 목표</h3>
-                      <hr className="flex-1 border-divider" />
-                    </div>
-                    <ul className="space-y-4.5 pl-5 pr-[15px]">
-                      {LEARNING_GOALS.map((goal, i) => (
-                        <li key={i} className="flex gap-1.5 text-[15px] text-text-title">
-                          <span>·</span> {goal}
-                        </li>
-                      ))}
-                    </ul>
-                    {/* 강의 수강하기 버튼 */}
-                    {/* TODO: 버튼 클릭 시 모달 삽입 */}
-                    <div className="px-5 mt-auto mb-1.5">
-                      <button className="w-full h-11.5 bg-btn-default-bg hover:bg-btn-default-bg-hover active:bg-btn-default-bg-active text-btn-default-text font-bold rounded-xl transition-all text-sm">
-                        수강하기
-                      </button>
-                    </div>
-                  </section>
-                </div>
               </div>
+
+              {/* Info Card */}
+              <aside className="lg:self-end h-[502px] bg-card-bg rounded-20 border border-card-border shadow-3 pb-6.5 flex flex-col">
+                <h3 className="flex items-center gap-2.5 text-text-meta text-lg font-semibold px-5 pb-2.5 border-b border-divider leading-none pt-5.5">
+                  <img src={BooksIcon} className="w-5 h-5" alt="" />
+                  학습 정보
+                </h3>
+                <div className="space-y-4 px-5 py-6 mb-2">
+                  {COURSE_INFO.map((info) => (
+                    <div
+                      key={info.label}
+                      className="flex justify-between items-center text-[15px] text-text-title leading-tight"
+                    >
+                      <div className="flex items-center gap-1.5 text-icon">
+                        {info.icon}
+                        <span className="text-text-title">{info.label}</span>
+                      </div>
+                      <span className="font-medium">{info.value}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="space-y-5 mb-auto">
+                  <div className="flex items-center gap-[15px] pl-[21px] pr-5">
+                    <p className="font-semibold text-text-meta">학습 목표</p>
+                    <hr className="flex-1 border-divider" />
+                  </div>
+                  <ul className="space-y-4.5 pl-5 pr-[15px]">
+                    {LEARNING_GOALS.map((goal, i) => (
+                      <li key={i} className="flex gap-1.5 text-text-title text-[15px]">
+                        <span>·</span> {goal}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="px-5">
+                  {/* TODO: 버튼 클릭 시 모달 삽입 */}
+                  <button className="w-full h-11.5 bg-btn-default-bg hover:bg-btn-default-bg-hover active:bg-btn-default-bg-active active:scale-[0.98] transition-all rounded-xl font-bold text-sm text-btn-default-text">
+                    수강하기
+                  </button>
+                </div>
+              </aside>
             </section>
           )}
 
-          <div className="max-w-[1007px] mt-9.5 ml-[1px]">
-            {/* 3. 탭 */}
-            <div className="w-[287px] border-b-2 border-tab-border-default ml-5.5 mb-10.5">
+          {/* Tabs & Content */}
+          <div className="max-w-[1007px] ml-[1px]">
+            <nav className="flex w-fit gap-[45px] border-b-2 border-tab-border-default ml-5.5 mb-10.5">
               {isLoading ? (
                 <div className="flex justify-between pb-2">
                   <SkeletonBase className="w-16 h-6" />
@@ -510,172 +565,123 @@ const TeamProjectPage = () => {
                   <SkeletonBase className="w-16 h-6" />
                 </div>
               ) : (
-                <div className="flex justify-between">
+                <>
                   {TABS.map((tab) => (
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`relative pb-2 text-xl cursor-pointer ${activeTab === tab.id ? 'font-medium text-tab-text-active' : 'text-tab-text-default'}`}
+                      className={`pb-2 text-xl transition-all relative ${
+                        activeTab === tab.id
+                          ? 'font-medium text-tab-text-active'
+                          : 'text-tab-text-default'
+                      }`}
                     >
                       {tab.label}
                       {activeTab === tab.id && (
-                        <div className="absolute bottom-[-2px] left-0 w-full h-[2px] bg-tab-border-active" />
+                        <div className="absolute -bottom-0.5 left-0 w-full h-0.5 bg-tab-border-active" />
                       )}
                     </button>
                   ))}
-                </div>
+                </>
               )}
-            </div>
+            </nav>
 
-            <div className="flex flex-col gap-8">
-              <div className="w-full divide-y-2 divide-divider-strong">
-                {/* 4. 강의 소개 */}
-                <div>
-                  <h2 className="text-[40px] font-bold text-text-title mb-8">
-                    단순한 기능 구현을 넘어, 실무 흐름을 설계합니다.
-                  </h2>
-                  <p className="text-text-body mb-15.5 leading-[40px] text-[28px] tracking-widest font-medium">
+            {/* Intro  Section */}
+            <div className="pb-[33px] border-b-2 border-divider-strong">
+              <div className="space-y-8 mb-15.5">
+                <h2 className="text-3xl lg:text-[40px] font-bold text-text-title leading-none">
+                  단순한 기능 구현을 넘어, 실무 흐름을 설계합니다.
+                </h2>
+                <div className="text-xl lg:text-[28px] text-text-body leading-[40px] tracking-widest font-medium">
+                  <p>
                     대부분의 프론트엔드 강의는 화면을 그리고, API를 붙이고, “동작합니다”에서
                     끝납니다. 하지만 실무는 다릅니다.
-                    <div className="ml-3.5">
-                      •<span className="ml-3">이 기능은 어디에 만들어야 할까요?</span>
-                      <br />•<span className="ml-3">API 요청은 왜 여기서 호출하면 안 될까요?</span>
-                      <br />•
-                      <span className="ml-3">
-                        에러가 났을 때, 사용자에게는 어떻게 보여줘야 할까요?
-                      </span>
-                    </div>
+                  </p>
+                  <ul className="grid ml-3.5">
+                    <li>
+                      <span className="mr-3">•</span>이 기능은 어디에 만들어야 할까요?
+                    </li>
+                    <li>
+                      <span className="mr-3">•</span>API 요청은 왜 여기서 호출하면 안 될까요?
+                    </li>
+                    <li>
+                      <span className="mr-3">•</span>에러가 났을 때, 사용자에게는 어떻게 보여줘야
+                      할까요?
+                    </li>
+                  </ul>
+                  <p>
                     이 강의는 “되기만 하는 코드”가 아니라, “팀에서 통하는 코드”를 만드는 방법을
                     다룹니다.
                   </p>
-                  <div className="flex gap-26 px-13.5 mb-13">
-                    <FeatureCard
-                      icon={<RocketIcon />}
-                      title="협업을 전제로 한 구조 설계"
-                      desc="프로젝트 폴더 구조, 역할 분리, 파일 위치까지 “왜 이렇게 나뉘는지”를 기준으로 이해합니다."
-                    />
-                    <FeatureCard
-                      icon={<WorkflowIcon />}
-                      title="실제 회사 Git 흐름"
-                      desc="이슈 생성 → 브랜치 분기 → 커밋 → PR → 머지 등 혼자서는 절대 익히기 힘든 협업 사이클을 그대로 경험합니다."
-                    />
-                  </div>
-                  <p className="text-text-body mb-[33px] leading-[40px] text-[28px] tracking-widest font-medium">
-                    이 강의는 단순한 코드 받아쓰기 강의가 아닙니다. 각 단계마다 이런 질문을
-                    던집니다. “왜 이렇게 설계했을까?”, “회사에서는 이걸 어떻게 판단할까?”
-                    <br />그 질문에 답하는 과정이 당신을 ‘혼자 일하는 개발자’에서 ‘팀의 개발자’로
-                    바꿔줍니다.
-                  </p>
                 </div>
-
-                {/* 5. 커리큘럼 */}
-                <div>
-                  {isLoading ? (
-                    <div className="pl-[21px] mt-20">
-                      {[1, 2].map((i) => (
-                        <ChapterSkeleton key={i} />
-                      ))}
-                    </div>
-                  ) : (
-                    <>
-                      <div className="flex flex-col mb-8 mt-1.5">
-                        <div className="flex text-text-accent mb-10.5 items-center gap-3.5">
-                          <div className="flex items-center justify-center w-11.5 h-11.5 rounded-10 bg-icon-bg">
-                            <RoadmapIcon />
-                          </div>
-                          <h3 className="font-bold text-xl uppercase tracking-[1px]">
-                            ENGINEERING ROADMAP
-                          </h3>
-                        </div>
-                        <h2 className="text-[40px] font-bold text-text-title ml-0.5 mb-7">
-                          프론트엔드 중급 과정 커리큘럼
-                        </h2>
-                        <p className="text-text-body text-2xl tracking-[1.2px] font-medium w-[790px] leading-[1.24]">
-                      엔지니어로서 마주할 복잡한 문제들을 하나씩 해결해가며 마일스톤을 달성하세요.
-                      각 섹션은 실무 아키텍처를 그대로 반영합니다.
-                        </p>
-                      </div>
-
-                      <div className="pl-[21px]">
-                        {CHAPTERS.map((chapter) => (
-                          <div
-                            key={chapter.number}
-                            className="w-full max-w-[929px] flex flex-col pl-15 mb-16.5"
-                          >
-                            <div className="flex flex-col mb-7">
-                              <span className="mb-3 text-xl font-bold text-text-accent uppercase">
-                                CHAPTER {chapter.number}{' '}
-                                <span className="inline-block -translate-y-px">•</span>{' '}
-                                {chapter.category}
-                              </span>
-
-                              <div className="flex -ml-15 items-center justify-between mt-1">
-                                <div className="flex gap-3 items-center">
-                                  {/* TODO: 버튼 토글 기능 구현 */}
-                                  {/* TODO: 버튼 토글 상태에 따라 버튼 색 분기 */}
-                                  <button className="flex items-center justify-center w-12 h-12 text-icon-blue-200 cursor-pointer hover:opacity-80 transition-opacity">
-                                    <ToggleArrowIcon />
-                                  </button>
-                                  <h3 className="text-[40px] font-medium text-text-meta -translate-y-[3px]">
-                                    {chapter.title}
-                                  </h3>
-                                </div>
-                                {/* <span className="mr-3.5 w-17.5 h-8 flex items-center justify-center bg-chip-active-bg rounded-10 font-medium text-text-meta">
-                              {formatTotalDuration(chapter.units)}
-                            </span> */}
-                              </div>
-
-                              <p className="text-2xl text-text-base font-medium leading-[40px] tracking-widest mt-0.5">
-                                {chapter.description}
-                              </p>
-                            </div>
-
-                            <div className="bg-card-bg rounded-10 border border-card-border shadow-2 overflow-hidden">
-                              <div className="flex items-center justify-between h-[45px] pl-6 pr-3.5 bg-icon-bg border-b border-card-border">
-                                <div className="flex gap-[21px]">
-                                  <div className="flex gap-2.5 items-center">
-                                    <div className="w-4 h-4 rounded-full bg-card-border"></div>
-                                    <div className="w-4 h-4 rounded-full bg-card-border"></div>
-                                  </div>
-                                  <div className="flex items-center gap-2.5 text-text-base font-medium tracking-widest">
-                                    <FolderIcon />
-                                    src / modules / {chapter.number}
-                                  </div>
-                                </div>
-                                <span className="text-sm font-medium text-text-base">
-                                  JavaScript
-                                </span>
-                              </div>
-
-                              <div className="divide-y divide-divider-strong">
-                                {chapter.units.map((unit) => (
-                                  <UnitItem key={unit.id} unit={unit} />
-                                ))}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </div>
-
-                {/* 6. 수강평 */}
-                <section className="mt-17.5 max-w-[952px] mx-auto">
-                  <h2 className="text-[40px] font-bold text-text-title mb-5">수강평</h2>
-                  <div className="ml-[55px] grid grid-cols-2 gap-x-[105px] gap-y-4">
-                    {isLoading
-                      ? Array.from({ length: 4 }).map((_, i) => <ReviewSkeleton key={i} />)
-                      : Array.from({ length: 10 }).map((_, index) => (
-                          <ReviewCard
-                            key={`${reviewsData[0].userName}-${index}`}
-                            review={reviewsData[0]}
-                          />
-                        ))}
-                  </div>
-                </section>
               </div>
+
+              <div className="grid md:grid-cols-2 gap-26 px-13.5 mb-13">
+                <FeatureCard
+                  icon={<RocketIcon />}
+                  title="협업을 전제로 한 구조 설계"
+                  desc="프로젝트 폴더 구조, 역할 분리, 파일 위치까지 “왜 이렇게 나뉘는지”를 기준으로 이해합니다."
+                />
+                <FeatureCard
+                  icon={<WorkflowIcon />}
+                  title="실제 회사 Git 흐름"
+                  desc="이슈 생성 → 브랜치 분기 → 커밋 → PR → 머지 등 혼자서는 절대 익히기 힘든 협업 사이클을 그대로 경험합니다."
+                />
+              </div>
+              <p className="text-text-body leading-[40px] text-[28px] tracking-widest font-medium">
+                이 강의는 단순한 코드 받아쓰기 강의가 아닙니다. 각 단계마다 이런 질문을 던집니다.
+                “왜 이렇게 설계했을까?”, “회사에서는 이걸 어떻게 판단할까?”
+                <br />그 질문에 답하는 과정이 당신을 ‘혼자 일하는 개발자’에서 ‘팀의 개발자’로
+                바꿔줍니다.
+              </p>
             </div>
+
+            {/* Curriculum */}
+            <section className="mt-1.5 border-b-2 border-tab-border-default">
+              {isLoading ? (
+                <div className="pl-[21px] mt-20">
+                  {[1, 2].map((i) => (
+                    <ChapterSkeleton key={i} />
+                  ))}
+                </div>
+              ) : (
+                <>
+                  <div className="flex items-center gap-3.5 mb-10.5 text-text-accent">
+                    <div className="p-[12.5px] bg-icon-bg rounded-10">
+                      <RoadmapIcon />
+                    </div>
+                    <h3 className="text-xl font-bold tracking-[1px] uppercase">
+                      Engineering Roadmap
+                    </h3>
+                  </div>
+
+                  <h2 className="text-[40px] font-bold text-text-title ml-0.5 mb-7">
+                    프론트엔드 중급 과정 커리큘럼
+                  </h2>
+                  <p className="text-text-body text-2xl tracking-[1.2px] font-medium w-[790px] leading-[1.24] mb-8">
+                    엔지니어로서 마주할 복잡한 문제들을 하나씩 해결해가며 마일스톤을 달성하세요. 각
+                    섹션은 실무 아키텍처를 그대로 반영합니다.
+                  </p>
+                  <div className="pl-[21px]">
+                    {CHAPTERS.map((chapter) => (
+                      <ChapterSection key={chapter.number} chapter={chapter} />
+                    ))}
+                  </div>
+                </>
+              )}
+            </section>
+
+            {/* Reviews */}
+            <section className="mt-17.5 max-w-[952px] mx-auto">
+              <h2 className="text-[40px] font-bold text-text-title mb-5">수강평</h2>
+              <div className="grid md:grid-cols-2 gap-x-[105px] gap-y-4 ml-[55px]">
+                {isLoading
+                  ? Array.from({ length: 4 }).map((_, i) => <ReviewSkeleton key={i} />)
+                  : Array.from({ length: 10 }).map((_, i) => (
+                      <ReviewCard key={`${reviewsData[0].userName}-${i}`} review={reviewsData[0]} />
+                    ))}
+              </div>
+            </section>
           </div>
         </div>
       </div>
