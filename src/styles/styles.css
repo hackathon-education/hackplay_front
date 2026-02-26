@@ -111,6 +111,7 @@
   /* Link */
   --color-link-btn-default-border: var(--neutral-150);
   --color-link-btn-default-bg: var(--neutral-100);
+  --color-link-btn-default-bg-hover: var(--neutral-150);
   --color-link-btn-default-text: var(--neutral-800);
 
   --color-link-btn-accent-bg: var(--primary-500);
