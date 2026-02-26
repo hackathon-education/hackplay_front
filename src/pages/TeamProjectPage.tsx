@@ -1,3 +1,5 @@
+// TODO: 페이지 반응형 개선
+
 import FolderIcon from '@/assets/lecture/folder-icon.svg?react';
 import MoneyBagIcon from '@/assets/lecture/money-bag-icon.svg?react';
 import PersonIcon from '@/assets/lecture/person-icon.svg?react';
