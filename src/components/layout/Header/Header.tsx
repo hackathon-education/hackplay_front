@@ -2,7 +2,7 @@ import LogoPrimary from '@/assets/logo/logo-primary.svg?react';
 import MenuIcon from '@/assets/navigation/menu-icon.svg?react';
 import { FilePen } from 'lucide-react';
 import { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 
 import { useMotionValueEvent, useScroll } from 'framer-motion';
 
@@ -15,6 +15,7 @@ import UserDropdown from './UserDropdown';
 
 const Header = () => {
   const { isLoggedIn } = useAuthStore();
+  const { pathname } = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -22,6 +23,9 @@ const Header = () => {
   useMotionValueEvent(scrollY, 'change', (latest) => {
     setIsScrolled(latest > 0);
   });
+
+  const isDarkBgPage = pathname === ROUTES.MAIN;
+  const showWhiteContent = !isScrolled && isDarkBgPage;
 
   const headerClass = `
     flex fixed top-0 w-full h-16.5 items-center justify-between z-nav transition-all duration-300
@@ -58,7 +62,7 @@ const Header = () => {
           >
             <LogoPrimary
               className={`transition-colors duration-300 ${
-                isScrolled ? 'text-black' : 'text-white'
+                showWhiteContent ? 'text-white' : 'text-black'
               } lg:text-black`}
             />
           </NavLink>
@@ -105,7 +109,7 @@ const Header = () => {
           >
             <MenuIcon
               className={`transition-colors duration-300 ${
-                isScrolled ? 'text-text-title' : 'text-white'
+                showWhiteContent ? 'text-white' : 'text-text-title'
               }`}
             />
           </button>
