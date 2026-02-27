@@ -15,7 +15,7 @@ const HeaderTabs = ({ variant, onItemClick }: HeaderTabsProps) => {
 
   const listClass =
     variant === 'desktop'
-      ? 'hidden lg:flex w-[500px] h-14 items-center justify-center gap-10 rounded-20 border border-nav-border bg-nav-bg shadow-1'
+      ? 'lg:flex w-[500px] h-14 items-center justify-center gap-10 rounded-20 border border-nav-border bg-nav-bg shadow-1'
       : '';
 
   const dividerClass =
