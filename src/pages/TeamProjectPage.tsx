@@ -1,5 +1,4 @@
 // TODO: 페이지 반응형 개선
-
 import FolderIcon from '@/assets/lecture/folder-icon.svg?react';
 import MoneyBagIcon from '@/assets/lecture/money-bag-icon.svg?react';
 import PersonIcon from '@/assets/lecture/person-icon.svg?react';
@@ -19,6 +18,7 @@ import CodingWomanIllustration from '@/assets/lecture/coding-woman-illustration.
 import LectureMainBg from '@/assets/lecture/lecture-main-bg.webp';
 import StarRatingIcon from '@/assets/lecture/star-rating-icon.webp';
 import CategoryBadge from '@/components/lecture/CategoryBadge';
+import FeatureCard from '@/components/lecture/FeatureCard';
 import UnitItem from '@/components/lecture/UnitItem';
 import { UnitItemProps } from '@/components/lecture/UnitItem';
 
@@ -284,24 +284,6 @@ const formatUnitDuration = (minutes: number) => {
 
   return `${h}:${m.toString().padStart(2, '0')}:00`;
 };
-
-// --- Sub Components ---
-
-const FeatureCard = ({
-  title,
-  desc,
-  icon,
-}: {
-  title: string;
-  desc: string;
-  icon: React.ReactNode;
-}) => (
-  <div className="flex-1 bg-card-bg-glass px-6 py-7 lg:px-[37px] rounded-20 border border-card-border shadow-2 flex flex-col gap-[13px] items-start transition-transform hover:-translate-y-1">
-    <div className="w-9 h-9 flex items-center justify-center text-text-title -mt-0.5">{icon}</div>
-    <h4 className="text-xl lg:text-2xl font-bold text-text-title leading-tight">{title}</h4>
-    <p className="text-text-base text-base lg:text-xl leading-[1.2]">{desc}</p>
-  </div>
-);
 
 // --- 수강평 데이터 타입 ---
 interface ReviewProps {
