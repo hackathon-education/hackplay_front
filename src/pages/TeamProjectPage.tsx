@@ -4,7 +4,6 @@ import MoneyBagIcon from '@/assets/lecture/money-bag-icon.svg?react';
 import PersonIcon from '@/assets/lecture/person-icon.svg?react';
 import RoadmapIcon from '@/assets/lecture/roadmap-icon.svg?react';
 import RocketIcon from '@/assets/lecture/rocket-icon.svg?react';
-import StarIcon from '@/assets/lecture/star-icon.svg?react';
 import TeamMembersIcon from '@/assets/lecture/team-members-icon.svg?react';
 import TimeIcon from '@/assets/lecture/time-icon.svg?react';
 import ToggleArrowIcon from '@/assets/lecture/toggle-arrow-icon.svg?react';
@@ -19,6 +18,7 @@ import LectureMainBg from '@/assets/lecture/lecture-main-bg.webp';
 import StarRatingIcon from '@/assets/lecture/star-rating-icon.webp';
 import CategoryBadge from '@/components/lecture/CategoryBadge';
 import FeatureCard from '@/components/lecture/FeatureCard';
+import ReviewCard, { ReviewProps } from '@/components/lecture/ReviewCard';
 import UnitItem from '@/components/lecture/UnitItem';
 import { UnitItemProps } from '@/components/lecture/UnitItem';
 
@@ -285,13 +285,6 @@ const formatUnitDuration = (minutes: number) => {
   return `${h}:${m.toString().padStart(2, '0')}:00`;
 };
 
-// --- 수강평 데이터 타입 ---
-interface ReviewProps {
-  userName: string;
-  rating: number;
-  comment: string;
-}
-
 // --- 수강평 더미 데이터 ---
 // TODO: 프론트 강의에 맞는 리뷰로 수정
 const reviewsData: ReviewProps[] = [
@@ -302,25 +295,6 @@ const reviewsData: ReviewProps[] = [
       '단순한 클론 코딩이 아니라 시스템 디자인 자체를 배울 수 있어서 좋았습니다. 면접에서 아키텍처 질문에 답변할 자신감이 생겼어요.',
   },
 ];
-
-const ReviewCard = ({ review }: { review: ReviewProps }) => (
-  <div className="border border-card-border lg:h-[221px] flex flex-col justify-center p-6 lg:pl-[31px] lg:pr-13 lg:pt-6 lg:pb-[23px] rounded-20 bg-card-bg shadow-2 hover:bg-card-hover-bg transition-colors">
-    <div className="flex mb-9">
-      {[...Array(5)].map((_, i) => (
-        <StarIcon
-          key={i}
-          className={`w-[17px] h-[17px] ${i < review.rating ? 'text-icon-yellow-500' : 'text-icon-neutral-250'}`}
-        />
-      ))}
-    </div>
-    <p className="text-text-base flex-grow leading-[1.2] mb-7.5">"{review.comment}"</p>
-    <div className="flex gap-4 items-center">
-      {/* TODO: 프로필 이미지 삽입 */}
-      <div className="w-8 h-8 rounded-full bg-profile-img-border" />
-      <p className="font-medium text-text-title">{review.userName}</p>
-    </div>
-  </div>
-);
 
 // --- Skeleton Components ---
 
