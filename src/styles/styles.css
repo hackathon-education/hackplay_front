@@ -54,6 +54,7 @@
   --color-divider: var(--neutral-150);
   --color-divider-secondary: var(--neutral-100);
   --color-divider-strong: var(--neutral-200);
+  --color-divider-heavy: var(--neutral-900);
 
   /* Drawer */
   --color-drawer-bg: var(--neutral-000);
@@ -92,6 +93,7 @@
 
   /* Icon */
   --color-icon: var(--neutral-600);
+  --color-icon-border: var(--neutral-900);
   --color-icon-bg: rgba(var(--neutral-250-rgb), 0.2);
   --color-icon-blue-200: var(--primary-200);
   --color-icon-yellow-500: var(--yellow-500);
