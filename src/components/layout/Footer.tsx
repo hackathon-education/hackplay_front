@@ -3,6 +3,7 @@ import InstagramIcon from '@/assets/common/instagram-icon.svg?react';
 import MailIcon from '@/assets/common/mail-icon.svg?react';
 import NotionIcon from '@/assets/common/notion-icon.svg?react';
 import LogoMono from '@/assets/logo/logo-mono.svg?react';
+import { Link } from 'react-router-dom';
 
 interface SnsIconProps {
   href: string;
@@ -24,10 +25,13 @@ const SnsIcon = ({ href, ariaLabel, children }: SnsIconProps) => (
 
 const Footer = () => {
   const menus = [
-    // TODO: 메뉴 5개 각각 href 값 넣기
+    // TODO: 문의하기 외 메뉴들 href 값 넣기
     { name: '공지사항', href: '/notice' },
     { name: 'FAQ', href: '/faq' },
-    { name: '문의하기', href: '/contact' },
+    {
+      name: '문의하기',
+      href: 'https://docs.google.com/forms/d/e/1FAIpQLScYFGXxA0_GkEXsiwA28O3PbFEC_PCKcqqjJdNu_24ExuCJ8A/viewform?usp=dialog',
+    },
     { name: '피드백제안', href: '/feedback' },
     { name: '개발인원 소개 및 포트폴리오', href: '/team' },
   ];
@@ -36,15 +40,26 @@ const Footer = () => {
     <footer className="w-full divide-y divide-divider-heavy border-t border-banner-border bg-nav-bg pb-10 text-sm text-nav-text-default">
       {/* 상단 서비스 메뉴 */}
       <nav className="flex flex-wrap gap-x-6 gap-y-2 px-6 py-4 md:gap-10 md:px-12.5 lg:px-50">
-        {menus.map((menu) => (
-          <a
-            key={menu.name}
-            href={menu.href}
-            className="transition-colors hover:text-nav-text-hover"
-          >
-            {menu.name}
-          </a>
-        ))}
+        {menus.map((menu) => {
+          const isExternal = menu.href.startsWith('http');
+          const className = 'transition-colors hover:text-nav-text-hover';
+
+          return isExternal ? (
+            <a
+              key={menu.name}
+              href={menu.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={className}
+            >
+              {menu.name}
+            </a>
+          ) : (
+            <Link key={menu.name} to={menu.href} className={className}>
+              {menu.name}
+            </Link>
+          );
+        })}
       </nav>
 
       <div className="grid grid-cols-1 gap-10 px-6 pt-10 md:grid-cols-2 md:px-12.5 lg:px-50">
