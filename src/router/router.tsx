@@ -3,6 +3,7 @@ import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import PublicRoute from '@/components/PublicRoute';
 import ScrollToTop from '@/components/ScrollToTop';
+import AuthLayout from '@/components/layout/AuthLayout';
 import MainLayout from '@/components/layout/MainLayout';
 import { ROUTES } from '@/constants/routes';
 import BasicLearningPage from '@/pages/BasicLearningPage';
@@ -28,25 +29,13 @@ const router = createBrowserRouter([
   {
     element: <RootLayout />,
     children: [
+      // 1. 메인 레이아웃 (헤더/네비게이션 포함)
       {
         element: <MainLayout />,
         children: [
           {
             path: ROUTES.MAIN,
             element: <MainPage />,
-          },
-          {
-            element: <PublicRoute />,
-            children: [
-              {
-                path: ROUTES.SIGNUP,
-                element: <SignupPage />,
-              },
-              {
-                path: ROUTES.SIGNIN,
-                element: <LoginPage />,
-              },
-            ],
           },
           {
             path: ROUTES.COURSES.ROOT,
@@ -84,6 +73,25 @@ const router = createBrowserRouter([
           {
             path: ROUTES.PROJECTS,
             element: <ProjectsPage />,
+          },
+        ],
+      },
+      // 2. 인증 레이아웃 (로그인, 회원가입 전용)
+      {
+        element: <PublicRoute />,
+        children: [
+          {
+            element: <AuthLayout />,
+            children: [
+              {
+                path: ROUTES.SIGNUP,
+                element: <SignupPage />,
+              },
+              {
+                path: ROUTES.SIGNIN,
+                element: <LoginPage />,
+              },
+            ],
           },
         ],
       },
