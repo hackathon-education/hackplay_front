@@ -37,7 +37,7 @@ const LockModal = ({ isOpen, onClose, message }: LockModalProps) => {
             exit={{ scale: 0.95, opacity: 0, y: 10 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
           >
-            <LockIcon className="mb-5 h-12 w-12 lg:mb-7.5 lg:h-auto lg:w-auto" />
+            <LockIcon className="mb-5 h-12 w-12 text-text-accent lg:mb-7.5 lg:h-auto lg:w-auto" />
 
             <h2 className="text-text-title mb-4 text-xl font-bold lg:mb-6 lg:text-2xl">
               조금만 기다려주세요!

@@ -42,7 +42,7 @@ const AuthLayout = () => {
           </Link>
 
           {/* 카드 컨테이너 */}
-          <div className="w-full max-w-[422px] bg-auth-bg rounded-20 shadow-2 border border-card-border-auth overflow-hidden divide-y divide-divider px-[11px]">
+          <div className="w-full max-w-[422px] bg-auth-bg rounded-20 shadow-2 border border-card-border-auth overflow-hidden divide-y divide-divider px-2.5">
             <div className="py-3.5 text-center">
               <h2 className="text-2xl font-bold text-text-title leading-[1.21] mb-2.5">
                 환영합니다!

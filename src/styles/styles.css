@@ -100,6 +100,7 @@
   --color-icon-blue-200: var(--primary-200);
   --color-icon-yellow-500: var(--yellow-500);
   --color-icon-neutral-250: var(--neutral-250);
+  --color-icon-neutral-650: var(--neutral-650);
 
   /* Input */
   --color-input-default-border: var(--neutral-150);
@@ -111,6 +112,11 @@
   --color-input-disabled-border: var(--primary-500);
   --color-input-disabled-bg: rgba(var(--primary-500-rgb), 0.1);
   --color-input-disabled-text: rgba(var(--neutral-950-rgb), 0.5);
+
+  --color-input-focus-border: var(--primary-500);
+  --color-input-focus-ring: var(--primary-500);
+
+  --color-placeholder-text: var(--neutral-700);
 
   /* Link */
   --color-link-btn-default-border: var(--neutral-150);
