@@ -110,8 +110,8 @@ const LoginPage = () => {
           <button
             type="submit"
             disabled={!isValid}
-            className={`w-full h-14 text-white font-bold rounded-2xl transition-all mt-4
-              ${isValid ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'}`}
+            className={`w-full h-12.5 font-semibold text-sm rounded-2xl transition-all
+              ${isValid ? 'bg-btn-default-bg hover:bg-btn-default-bg-hover cursor-pointer text-btn-default-text' : 'bg-btn-disabled-bg cursor-not-allowed text-btn-disabled-text'}`}
           >
             로그인
           </button>
