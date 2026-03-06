@@ -25,43 +25,55 @@ const AuthLayout = () => {
 
   return (
     <>
-      <div className="min-h-screen flex flex-col relative overflow-hidden h-[1115px]">
+      <div className="relative flex min-h-screen lg:h-[1115px] flex-col overflow-x-hidden">
         {/* 배경 */}
         <img
           src={AuthBg}
           alt=""
-          className="absolute inset-0 w-full object-cover object-top z-0 h-full"
+          className="absolute inset-0 z-0 h-full w-full object-cover object-top"
         />
 
         <main
-          className={`flex-1 flex flex-col items-center z-base px-10 ${isLoginPage ? 'pt-[11.56%]' : 'pt-[8.02%]'}`}
+          className={`z-base relative flex flex-1 flex-col items-center px-6 py-12 md:px-10 ${
+            isLoginPage ? 'md:pt-[11.56%]' : 'md:pt-[8.02%]'
+          }`}
         >
           {/* 로고 */}
-          <Link to={ROUTES.MAIN}>
-            <LogoPrimary className="mb-16.5 w-auto h-[31.5px]" />
+          <Link to={ROUTES.MAIN} className="mb-10 md:mb-16.5">
+            <LogoPrimary className="h-7 w-auto md:h-[31.5px]" />
           </Link>
 
           {/* 카드 컨테이너 */}
-          <div className="w-full max-w-[422px] bg-auth-bg rounded-20 shadow-2 border border-card-border-auth overflow-hidden divide-y divide-divider px-2.5">
-            <div className="py-3.5 text-center">
-              <h2 className="text-2xl font-bold text-text-title leading-[1.21] mb-2.5">
+          <div className="border-card-border-auth bg-auth-bg shadow-2 divide-divider w-full max-w-[422px] divide-y overflow-hidden rounded-20 border px-2.5">
+            <div className="py-6 text-center md:py-3.5">
+              <h2 className="text-text-title mb-2.5 text-xl font-bold leading-[1.21] md:text-2xl">
                 환영합니다!
               </h2>
-              <p className="text-text-base leading-[1.21] mb-10">{config.description}</p>
+              <p className="text-text-base mb-8 leading-[1.21] md:mb-10">{config.description}</p>
 
               {/* 입력 폼 영역 */}
-              <Outlet />
+              <div className="px-2 md:px-0">
+                <Outlet />
+              </div>
             </div>
 
             {/* 하단 배너/푸터 영역 */}
             <div
-              className={`mt-3.5 mb-4 px-8 py-[23px] flex flex-col bg-no-repeat bg-center gap-1 rounded-2xl ${isLoginPage ? '' : 'items-end'}`}
-              style={{ backgroundImage: `url(${config.footerBg})`, backgroundSize: '100%' }}
+              className={`mt-3.5 mb-4 flex flex-col gap-1 rounded-2xl bg-center bg-no-repeat px-6 py-5 md:px-8 md:py-[23px] ${
+                isLoginPage ? 'items-start' : 'items-end'
+              }`}
+              style={{
+                backgroundImage: `url(${config.footerBg})`,
+                backgroundSize: 'cover',
+              }}
             >
-              <span className="font-semibold text-text-title leading-[1.2]">
+              <span className="text-text-title text-sm font-semibold leading-[1.2] md:text-base">
                 {config.footerText}
               </span>
-              <Link to={config.linkHref} className="text-sm text-text-accent leading-[1.3]">
+              <Link
+                to={config.linkHref}
+                className="text-text-accent text-xs leading-[1.3] md:text-sm"
+              >
                 {config.linkText}
               </Link>
             </div>
