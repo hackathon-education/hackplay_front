@@ -2,6 +2,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import { axiosInstance } from '@/api/axios';
+import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
 import { ROUTES } from '@/constants/routes';
 import { useAuthStore } from '@/store/authStore';
@@ -50,6 +51,7 @@ const LoginPage = () => {
     <div className="flex justify-center items-start">
       <div className="flex flex-col w-full max-w-[500px] mx-auto">
         <form className="flex flex-col gap-3.5" onSubmit={handleSubmit(onSubmit)}>
+          {/* 이메일 입력 영역 */}
           <div className="flex flex-col gap-1">
             <Input
               type="email"
@@ -72,6 +74,7 @@ const LoginPage = () => {
             )}
           </div>
 
+          {/* 비밀번호 입력 영역 */}
           <div className="flex flex-col gap-1">
             <Input
               type="password"
@@ -107,14 +110,9 @@ const LoginPage = () => {
             )}
           </div>
 
-          <button
-            type="submit"
-            disabled={!isValid}
-            className={`w-full h-12.5 font-semibold text-sm rounded-2xl transition-all
-              ${isValid ? 'bg-btn-default-bg hover:bg-btn-default-bg-hover cursor-pointer text-btn-default-text' : 'bg-btn-disabled-bg cursor-not-allowed text-btn-disabled-text'}`}
-          >
+          <Button type="submit" disabled={!isValid}>
             로그인
-          </button>
+          </Button>
         </form>
       </div>
     </div>
