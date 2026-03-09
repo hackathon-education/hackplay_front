@@ -29,11 +29,13 @@
   --neutral-100: #f9fafb;
   --neutral-150: #f0f0f0;
   --neutral-200: #d5d5d5;
+  --neutral-200-rgb: 213, 213, 213;
   --neutral-250: #d9d9d9;
   --neutral-250-rgb: 217, 217, 217;
   --neutral-300: #cdcdcd;
   --neutral-600: #767676;
   --neutral-600-rgb: 118, 118, 118;
+  --neutral-650: #6b6b6b;
   --neutral-700: #7f8894;
   --neutral-750: #454f5d;
   --neutral-800: #333d4b;

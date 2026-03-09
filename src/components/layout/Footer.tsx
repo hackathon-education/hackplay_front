@@ -102,7 +102,7 @@ const Footer = () => {
               <InstagramIcon />
             </SnsIcon>
             <SnsIcon href="mailto:contact@hackplay.com" ariaLabel="Email">
-              <MailIcon />
+              <MailIcon className="text-icon-neutral-650" />
             </SnsIcon>
           </div>
 

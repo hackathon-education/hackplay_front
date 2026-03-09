@@ -9,6 +9,8 @@
 
   /* Background */
   --color-bg: var(--neutral-100);
+  --color-auth-bg: rgba(var(--neutral-000-rgb), 0.03);
+  --background-auth: url('@/assets/auth/auth-bg.webp');
 
   /* Badge */
   --color-badge-bg: var(--primary-150);
@@ -38,10 +40,10 @@
 
   /* Card */
   --color-card-bg: var(--neutral-000);
-  /* TODO: hover 색상 너무 연하지 않은지 확인 */
   --color-card-hover-bg: var(--neutral-100);
   --color-card-bg-glass: rgba(var(--neutral-000-rgb), 0.33);
   --color-card-border: var(--neutral-200);
+  --color-card-border-auth: rgba(var(--neutral-200-rgb), 0.5);
 
   /* Chip */
   --color-chip-default-bg: transparent;
@@ -70,9 +72,6 @@
   --color-dropdown-hover-bg: var(--neutral-100);
   --color-dropdown-hover-text: var(--primary-500);
 
-  /* Error */
-  --color-error-600: var(--error-600);
-
   /* Font */
   --font-base: var(--base-font-family);
 
@@ -98,6 +97,7 @@
   --color-icon-blue-200: var(--primary-200);
   --color-icon-yellow-500: var(--yellow-500);
   --color-icon-neutral-250: var(--neutral-250);
+  --color-icon-neutral-650: var(--neutral-650);
 
   /* Input */
   --color-input-default-border: var(--neutral-150);
@@ -109,6 +109,13 @@
   --color-input-disabled-border: var(--primary-500);
   --color-input-disabled-bg: rgba(var(--primary-500-rgb), 0.1);
   --color-input-disabled-text: rgba(var(--neutral-950-rgb), 0.5);
+
+  --color-input-focus-border: var(--primary-500);
+  --color-input-focus-ring: var(--primary-500);
+
+  --color-input-error-border: var(--error-600);
+
+  --color-placeholder-text: var(--neutral-700);
 
   /* Link */
   --color-link-btn-default-border: var(--neutral-150);
@@ -160,23 +167,7 @@
   --color-text-meta: var(--neutral-1000);
   --color-text-white: var(--neutral-000);
   --color-text-body: var(--neutral-600);
-
-  /** Font Weight **/
-  --font-weight-590: 590;
-
-  /** Border Radius **/
-  --radius-xs: 0.313rem; /* 5px */
-  --radius-sm: 0.438rem; /* 7px */
-  --radius-md: 0.563rem; /* 9px */
-  --radius-lg: 0.625rem; /* 10px */
-  --radius-xl: 0.75rem; /* 12px */
-  --radius-1.5xl: 0.925rem; /* 14.8px */
-  --radius-2xl: 1.25rem; /* 20px */
-  --radius-2.5xl: 1.398rem; /* 22.36px */
-  --radius-2.7xl: 1.737rem; /* 27.79px */
-  --radius-3xl: 1.844rem; /* 29.5px */
-  --radius-4xl: 2.281rem; /* 36.5px */
-  --radius-5xl: 2.604rem; /* 41.67px */
+  --color-text-error: var(--error-600);
 
   /** Colors **/
   --color-blue-100: #cddefe;
