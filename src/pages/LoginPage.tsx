@@ -1,3 +1,4 @@
+import ErrorIcon from '@/assets/common/close-icon.svg?react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
@@ -52,7 +53,7 @@ const LoginPage = () => {
       <div className="flex flex-col w-full max-w-[500px] mx-auto">
         <form className="flex flex-col gap-3.5" onSubmit={handleSubmit(onSubmit)}>
           {/* 이메일 입력 영역 */}
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-2">
             <Input
               type="email"
               iconType="email"
@@ -66,11 +67,16 @@ const LoginPage = () => {
                 },
               })}
               className={
-                errors.email ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
+                errors.email
+                  ? 'border-input-error-border focus:!border-input-error-border focus:!ring-input-error-border'
+                  : ''
               }
             />
             {errors.email && (
-              <span className="text-red-500 text-sm ml-2">{errors.email.message}</span>
+              <div className="flex text-text-error ml-[17px] items-center gap-1">
+                <ErrorIcon className="size-4 stroke-current stroke-[1.5px]" />
+                <span className="text-sm leading-tight">{errors.email.message}</span>
+              </div>
             )}
           </div>
 
@@ -102,11 +108,16 @@ const LoginPage = () => {
                 },
               })}
               className={
-                errors.password ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
+                errors.password
+                  ? 'border-input-error-border focus:!border-input-error-border focus:!ring-input-error-border'
+                  : ''
               }
             />
             {errors.password && (
-              <span className="text-red-500 text-sm ml-2">{errors.password.message}</span>
+              <div className="flex text-text-error ml-[17px] items-center gap-1">
+                <ErrorIcon className="size-4 stroke-current stroke-[1.5px]" />
+                <span className="text-sm leading-tight">{errors.password.message}</span>
+              </div>
             )}
           </div>
 

@@ -72,9 +72,6 @@
   --color-dropdown-hover-bg: var(--neutral-100);
   --color-dropdown-hover-text: var(--primary-500);
 
-  /* Error */
-  --color-error-600: var(--error-600);
-
   /* Font */
   --font-base: var(--base-font-family);
 
@@ -115,6 +112,8 @@
 
   --color-input-focus-border: var(--primary-500);
   --color-input-focus-ring: var(--primary-500);
+
+  --color-input-error-border: var(--error-600);
 
   --color-placeholder-text: var(--neutral-700);
 
@@ -168,6 +167,7 @@
   --color-text-meta: var(--neutral-1000);
   --color-text-white: var(--neutral-000);
   --color-text-body: var(--neutral-600);
+  --color-text-error: var(--error-600);
 
   /** Colors **/
   --color-blue-100: #cddefe;
