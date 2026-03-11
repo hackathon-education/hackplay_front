@@ -81,7 +81,7 @@ const LoginPage = () => {
           </div>
 
           {/* 비밀번호 입력 영역 */}
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-2">
             <Input
               type="password"
               iconType="password"
@@ -121,7 +121,7 @@ const LoginPage = () => {
             )}
           </div>
 
-          <Button type="submit" disabled={!isValid}>
+          <Button type="submit" disabled={!isValid} size="wfullh50">
             로그인
           </Button>
         </form>
