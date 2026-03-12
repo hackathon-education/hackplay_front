@@ -19,6 +19,7 @@
   --color-banner-border: var(--neutral-150);
 
   /* Border Radius */
+  --radius-4: 0.25rem; /* 4px */
   --radius-10: 0.625rem; /* 10px */
   --radius-14: 0.875rem; /* 14px */
   --radius-20: 1.25rem; /* 20px */
@@ -108,7 +109,7 @@
 
   --color-input-disabled-border: var(--primary-500);
   --color-input-disabled-bg: rgba(var(--primary-500-rgb), 0.1);
-  --color-input-disabled-text: rgba(var(--neutral-950-rgb), 0.5);
+  --color-input-disabled-text: var(--neutral-700);
 
   --color-input-focus-border: var(--primary-500);
   --color-input-focus-ring: var(--primary-500);

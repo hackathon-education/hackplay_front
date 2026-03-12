@@ -54,7 +54,7 @@ const UnitItem = ({ unit }: UnitItemComponentProps) => {
               <TriangleRightIcon className="w-4 h-4 text-btn-default-text translate-x-[3px]" />
             </button>
           ) : (
-            <UnitLockIcon />
+            <UnitLockIcon className="text-text-base stroke-current [stroke-opacity:0.3] stroke-[2px]" />
           )}
         </div>
       </div>

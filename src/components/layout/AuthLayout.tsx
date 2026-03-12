@@ -1,5 +1,5 @@
 import LogoPrimary from '@/assets/logo/logo-primary.svg?react';
-import { Link, Outlet, useLocation, useOutlet } from 'react-router-dom';
+import { Link, useLocation, useOutlet } from 'react-router-dom';
 
 import { AnimatePresence, motion } from 'framer-motion';
 
