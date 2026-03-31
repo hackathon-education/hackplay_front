@@ -23,6 +23,7 @@
   --radius-10: 0.625rem; /* 10px */
   --radius-14: 0.875rem; /* 14px */
   --radius-20: 1.25rem; /* 20px */
+  --radius-30: 1.875rem; /* 30px */
   --radius-50: 3.125rem; /* 50px */
 
   /* Button */
@@ -45,6 +46,7 @@
   --color-card-bg-glass: rgba(var(--neutral-000-rgb), 0.33);
   --color-card-border: var(--neutral-200);
   --color-card-border-auth: rgba(var(--neutral-200-rgb), 0.5);
+  --color-card-border-lavender-200: var(--lavender-200);
 
   /* Chip */
   --color-chip-default-bg: transparent;
@@ -154,6 +156,7 @@
   --shadow-2: 0 4px 4px 0 rgba(var(--neutral-1000-rgb), 0.25);
   --shadow-3: 0 4px 4px 0 rgba(var(--primary-300-rgb), 0.1);
   --shadow-4: 0px 6px 6px 0px rgba(var(--neutral-1000-rgb), 0.25);
+  --shadow-5: 1px 1px 20px 0px rgba(var(--primary-350-rgb), 0.25);
 
   /* Tab */
   --color-tab-border-default: var(--neutral-200);
@@ -209,7 +212,6 @@
   --color-yellow: #ffd23d;
 
   /** Shadow **/
-  --shadow-5: 0px 10px 19.9px 0px rgba(0, 0, 0, 0.28);
   --shadow-6: 1px 1px 50px 0px rgba(0, 0, 0, 0.4);
   --shadow-7: 1px 1px 20px -9px rgba(0, 0, 0, 0.4);
   --shadow-8: 1px 1px 30px -9px rgba(0, 0, 0, 0.4);

@@ -6,6 +6,8 @@
   --primary-200: #b0d7fb;
   --primary-300: #8cc2d7;
   --primary-300-rgb: 140, 194, 215;
+  --primary-350: #698cff;
+  --primary-350-rgb: 105, 140, 255;
   --primary-400: #0091f2;
   --primary-400-rgb: 0, 145, 242;
 
@@ -50,4 +52,7 @@
 
   /* Yellow */
   --yellow-500: #f8b500;
+
+  /* Lavender */
+  --lavender-200: #d3d5ff;
 }
