@@ -87,36 +87,30 @@ const CoursesPage = () => {
         {/* 카드 컨테이너 */}
         <div className="flex justify-center gap-10 h-[495px] max-w-[1040px] mx-auto">
           {/* 프론트엔드 */}
-          <motion.div className="position-card group relative rounded-30 w-80 h-120 shadow-1 transition-all duration-300 self-end">
-            <div className="overflow-hidden rounded-30">
-              <img
-                src={FeChar}
-                alt=""
-                className="w-full h-full object-cover grayscale brightness-[1.02] transition-all duration-300"
-              />
-            </div>
+          <motion.div className="position-card group relative rounded-30 w-80 h-120 shadow-1 transition-all duration-300 self-end overflow-hidden">
+            <img
+              src={FeChar}
+              alt=""
+              className="w-full h-full object-cover grayscale brightness-[1.02] transition-all duration-300"
+            />
           </motion.div>
 
           {/* 백엔드 */}
-          <motion.div className="position-card group relative rounded-30 w-80 h-120 shadow-5 transition-all duration-300 border border-card-border-lavender-200">
-            <div className="overflow-hidden rounded-30">
-              <img
-                src={BeChar}
-                alt=""
-                className="w-full h-full object-cover grayscale brightness-[1.02] transition-all duration-300"
-              />
-            </div>
+          <motion.div className="position-card group relative rounded-30 w-80 h-120 shadow-5 transition-all duration-300 border border-card-border-lavender-200 overflow-hidden">
+            <img
+              src={BeChar}
+              alt=""
+              className="w-full h-full object-cover grayscale brightness-[1.02] transition-all duration-300"
+            />
           </motion.div>
 
           {/* 디자이너 */}
-          <motion.div className="position-card group relative rounded-30 w-80 h-120 shadow-1 transition-all duration-300 self-end">
-            <div className="overflow-hidden rounded-30">
-              <img
-                src={DeChar}
-                alt=""
-                className="w-full h-full object-cover grayscale brightness-[1.02] transition-all duration-300"
-              />
-            </div>
+          <motion.div className="position-card group relative rounded-30 w-80 h-120 shadow-1 transition-all duration-300 self-end overflow-hidden">
+            <img
+              src={DeChar}
+              alt=""
+              className="w-full h-full object-cover grayscale brightness-[1.02] transition-all duration-300"
+            />
           </motion.div>
         </div>
       </div>
