@@ -18,6 +18,8 @@
   --primary-700: #0064c1;
 
   /* Blue - Dark */
+  --primary-750: #3854c5;
+  --primary-750-rgb: 56, 84, 197;
   --primary-800: #005eb5;
   --primary-850: #004b91;
   --primary-900: #00386c;
@@ -55,4 +57,8 @@
 
   /* Lavender */
   --lavender-200: #d3d5ff;
+
+  /* Magenta */
+  --magenta-500: #aa256a;
+  --magenta-500-rgb: 170, 37, 106;
 }

@@ -93,6 +93,12 @@
     rgba(80, 0, 65, 0.24) 99.89%
   );
 
+  --background-image-gradient-card-glass: linear-gradient(
+    156deg,
+    rgba(var(--primary-750-rgb), 0.4) 0.02%,
+    rgba(var(--magenta-500-rgb), 0.4) 99.98%
+  );
+
   /* Icon */
   --color-icon: var(--neutral-600);
   --color-icon-border: var(--neutral-900);
