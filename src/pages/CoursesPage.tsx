@@ -1,23 +1,25 @@
+import BeComputerIcon from '@/assets/step/be-computer-icon.svg?react';
+import BeDataIcon from '@/assets/step/be-data-icon.svg?react';
+import BeSecurityIcon from '@/assets/step/be-security-icon.svg?react';
+import BeSettingIcon from '@/assets/step/be-setting-icon.svg?react';
+import DeELearningIcon from '@/assets/step/de-e-learning-icon.svg?react';
+import DeGuideIcon from '@/assets/step/de-guide-icon.svg?react';
+import DeLayoutIcon from '@/assets/step/de-layout-icon.svg?react';
+import DeWebIcon from '@/assets/step/de-web-icon.svg?react';
+import FeComputerIcon from '@/assets/step/fe-computer-icon.svg?react';
+import FeProgrammingIcon from '@/assets/step/fe-programming-icon.svg?react';
+import FeTypewriterWithScreenIcon from '@/assets/step/fe-typewriter-with-screen-icon.svg?react';
+import FeWorkstationIcon from '@/assets/step/fe-workstation-icon.svg?react';
+import LevelLockIcon from '@/assets/step/level-lock-icon.svg?react';
+import LevelLockOpenIcon from '@/assets/step/level-lock-open-icon.svg?react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { AnimatePresence, motion } from 'framer-motion';
 
 import BeChar from '@/assets/step/be-character.webp';
-import BeComputerIcon from '@/assets/step/be-computer-icon.webp';
-import BeDataIcon from '@/assets/step/be-data-icon.webp';
-import BeSecurityIcon from '@/assets/step/be-security-icon.webp';
-import BeSettingIcon from '@/assets/step/be-setting-icon.webp';
 import DeChar from '@/assets/step/de-character.webp';
-import DeELearningIcon from '@/assets/step/de-e-learning-icon.webp';
-import DeGuideIcon from '@/assets/step/de-guide-icon.webp';
-import DeLayoutIcon from '@/assets/step/de-layout-icon.webp';
-import DeWebIcon from '@/assets/step/de-web-icon.webp';
 import FeChar from '@/assets/step/fe-character.webp';
-import FeComputerIcon from '@/assets/step/fe-computer-icon.webp';
-import FeProgrammingIcon from '@/assets/step/fe-programming-icon.webp';
-import FeTypewriterWithScreenIcon from '@/assets/step/fe-typewriter-with-screen-icon.webp';
-import FeWorkstationIcon from '@/assets/step/fe-workstation-icon.webp';
 import StepBg from '@/assets/step/step-bg.webp';
 import InfoPanel from '@/components/InfoPanel';
 
@@ -27,22 +29,22 @@ import { useLockModal } from '../hooks/useLockModal';
 
 const JOB_DETAILS = {
   fe: [
-    { icon: FeWorkstationIcon, text: '웹/앱 화면을 구현' },
-    { icon: FeTypewriterWithScreenIcon, text: '사용자와 상호작용 파트 개발' },
-    { icon: FeProgrammingIcon, text: 'API를 호출하여 데이터를 화면에 표시' },
-    { icon: FeComputerIcon, text: '반응형·접근성 고려' },
+    { icon: <FeWorkstationIcon />, text: '웹/앱 화면을 구현' },
+    { icon: <FeTypewriterWithScreenIcon />, text: '사용자와 상호작용 파트 개발' },
+    { icon: <FeProgrammingIcon />, text: 'API를 호출하여 데이터를 화면에 표시' },
+    { icon: <FeComputerIcon />, text: '반응형·접근성 고려' },
   ],
   be: [
-    { icon: BeSettingIcon, text: '서버, 데이터베이스, API 설계 및 개발' },
-    { icon: BeDataIcon, text: '비즈니스 로직 구현 및 데이터 처리' },
-    { icon: BeSecurityIcon, text: '보안, 인증, 권한 관리 기능 개발' },
-    { icon: BeComputerIcon, text: '서버 성능 최적화 및 에러 로그 관리' },
+    { icon: <BeSettingIcon />, text: '서버, 데이터베이스, API 설계 및 개발' },
+    { icon: <BeDataIcon />, text: '비즈니스 로직 구현 및 데이터 처리' },
+    { icon: <BeSecurityIcon />, text: '보안, 인증, 권한 관리 기능 개발' },
+    { icon: <BeComputerIcon />, text: '서버 성능 최적화 및 에러 로그 관리' },
   ],
   de: [
-    { icon: DeWebIcon, text: '서비스의 UI/UX 설계 및 디자인 시안 제작' },
-    { icon: DeLayoutIcon, text: '사용자 경험(UX) 흐름 기획 및 화면 구성 정의' },
-    { icon: DeGuideIcon, text: '색상, 컴포넌트 스타일 등 디자인 가이드 제공' },
-    { icon: DeELearningIcon, text: '디자인이 실제 화면에 구현되도록 지원' },
+    { icon: <DeWebIcon />, text: '서비스의 UI/UX 설계 및 디자인 시안 제작' },
+    { icon: <DeLayoutIcon />, text: '사용자 경험 흐름 기획 및 화면 구성 정의' },
+    { icon: <DeGuideIcon />, text: '색상, 컴포넌트 스타일 등 디자인' },
+    { icon: <DeELearningIcon />, text: '디자인이 실제 화면에 구현되도록 지원' },
   ],
 };
 
@@ -109,24 +111,24 @@ const CoursesPage = () => {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3, ease: 'easeOut' }}
-                    className="absolute inset-0 z-nav bg-gradient-card-glass backdrop-blur-[15px] flex flex-col items-center px-[13px]"
+                    className="absolute inset-0 z-nav bg-gradient-card-glass backdrop-blur-[15px] flex flex-col items-center px-[13px] pt-[35px] pb-[23px]"
                   >
                     {/* 포지션 뱃지 */}
-                    <div className="bg-[#007AFF] px-8 py-3 rounded-full mb-8 shadow-lg">
-                      <span className="text-white text-2xl font-bold">{pos.title}</span>
+                    <div className="bg-badge-position-bg px-7 py-[13.5px] rounded-50 mb-8">
+                      <span className="text-text-white text-xl font-semibold leading-[1.2]">
+                        {pos.title}
+                      </span>
                     </div>
 
                     {/* 상세 설명 리스트 */}
-                    <div className="w-full space-y-3 mb-auto">
+                    <div className="w-full px-[7px] space-y-2.5 mb-auto">
                       {JOB_DETAILS[pos.id].map((item, idx) => (
                         <div
                           key={idx}
-                          className="flex items-center gap-3 bg-white/10 border border-white/30 rounded-xl px-4 py-3 backdrop-blur-sm"
+                          className="flex items-center gap-2 bg-list-bg border border-banner-border rounded-xl px-[13px] py-[11.5px]"
                         >
-                          <span className="text-white text-lg">
-                            <img src={item.icon} alt="" className="w-6 h-6 object-contain" />
-                          </span>
-                          <p className="text-white text-[15px] font-medium leading-tight">
+                          <span className="text-text-white w-4 h-4">{item.icon}</span>
+                          <p className="text-text-white text-sm font-medium leading-tight">
                             {item.text}
                           </p>
                         </div>
@@ -134,28 +136,24 @@ const CoursesPage = () => {
                     </div>
 
                     {/* 단계 선택 섹션 */}
-                    <div className="w-full mt-6">
-                      <p className="text-white text-center font-bold mb-4">단계 선택</p>
-                      <div className="flex justify-between gap-2">
+                    <div className="w-full mt-[17px]">
+                      <p className="text-text-white text-center font-medium mb-4 leading-[1.2]">
+                        단계 선택
+                      </p>
+                      <div className="flex justify-between gap-1.5">
                         {['초급', '중급', '고급'].map((level) => (
                           <div
                             key={level}
-                            className="flex-1 bg-white/80 rounded-2xl py-3 flex flex-col items-center gap-1 shadow-inner"
+                            className="flex-1 bg-btn-white-bg rounded-20 pt-[13px] pb-[25px] flex flex-col items-center gap-2"
                           >
-                            <span className="text-[#0056b3] text-xs font-bold">{level}</span>
-                            <svg
-                              className="w-5 h-5 text-[#0056b3]"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                              />
-                            </svg>
+                            <span className="text-text-highlight text-sm font-medium leading-none">
+                              {level}
+                            </span>
+                            {level === '초급' ? (
+                              <LevelLockOpenIcon className="w-[23px] h-[29px] text-icon-blue-820" />
+                            ) : (
+                              <LevelLockIcon className="w-[23px] h-[29px] text-icon-blue-820" />
+                            )}
                           </div>
                         ))}
                       </div>
