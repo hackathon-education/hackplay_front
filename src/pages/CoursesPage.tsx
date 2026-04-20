@@ -21,7 +21,6 @@ import BeChar from '@/assets/step/be-character.webp';
 import DeChar from '@/assets/step/de-character.webp';
 import FeChar from '@/assets/step/fe-character.webp';
 import StepBg from '@/assets/step/step-bg.webp';
-import InfoPanel from '@/components/InfoPanel';
 
 import LockModal from '../components/LockModal';
 import { JOB_TYPES } from '../constants/jobTypes';
@@ -149,7 +148,7 @@ const CoursesPage = () => {
                             <span className="text-text-highlight text-sm font-medium leading-none">
                               {level}
                             </span>
-                            {level === '초급' ? (
+                            {pos.id === 'fe' && level === '중급' ? (
                               <LevelLockOpenIcon className="w-[23px] h-[29px] text-icon-blue-820" />
                             ) : (
                               <LevelLockIcon className="w-[23px] h-[29px] text-icon-blue-820" />
