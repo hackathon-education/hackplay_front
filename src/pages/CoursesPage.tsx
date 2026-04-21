@@ -21,6 +21,8 @@ import BeChar from '@/assets/step/be-character.webp';
 import DeChar from '@/assets/step/de-character.webp';
 import FeChar from '@/assets/step/fe-character.webp';
 import StepBg from '@/assets/step/step-bg.webp';
+import Button from '@/components/common/Button';
+import { ROUTES } from '@/constants/routes';
 
 import LockModal from '../components/LockModal';
 import { JOB_TYPES } from '../constants/jobTypes';
@@ -49,10 +51,28 @@ const JOB_DETAILS = {
 
 const CoursesPage = () => {
   const [hoveredTab, setHoveredTab] = useState<'fe' | 'be' | 'de' | null>('fe');
+  const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
+
   const navigate = useNavigate();
   const { isLockModalOpen, closeLockModal, handleLockedItemClick } = useLockModal();
 
-  // 각 포지션별 데이터 설정
+  const FRONT_INTERMEDIATE_DETAIL = {
+    title: '중급',
+    subtitle: 'Frontend 개발 과정',
+    features: [
+      '실제 회사와 동일한 Git 협업 흐름 실습',
+      '회원가입 · 로그인 · 인증(JWT) 구현',
+      'API 연동 및 상태 관리 경험',
+      '낙관적 업데이트와 UX 품질 개선',
+    ],
+    contents: [
+      '프로젝트 구조 이해 및 브랜치 전략',
+      'Conventional Commits & Pull Request 실습',
+      '회원가입 / 로그인 인증 흐름 구현',
+      '게시물 저장 기능 및 접근 제어 처리',
+    ],
+  };
+
   const positions = [
     { id: 'fe' as const, image: FeChar, title: 'Frontend', data: JOB_TYPES.FRONT },
     { id: 'be' as const, image: BeChar, title: 'Backend', data: JOB_TYPES.BACK },
@@ -140,21 +160,29 @@ const CoursesPage = () => {
                         단계 선택
                       </p>
                       <div className="flex justify-between gap-1.5">
-                        {['초급', '중급', '고급'].map((level) => (
-                          <div
-                            key={level}
-                            className="flex-1 bg-btn-white-bg rounded-20 pt-[13px] pb-[25px] flex flex-col items-center gap-2"
-                          >
-                            <span className="text-text-highlight text-sm font-medium leading-none">
-                              {level}
-                            </span>
-                            {pos.id === 'fe' && level === '중급' ? (
-                              <LevelLockOpenIcon className="w-[23px] h-[29px] text-icon-blue-820" />
-                            ) : (
-                              <LevelLockIcon className="w-[23px] h-[29px] text-icon-blue-820" />
-                            )}
-                          </div>
-                        ))}
+                        {['초급', '중급', '고급'].map((level) => {
+                          const isFeIntermediate = pos.id === 'fe' && level === '중급';
+                          return (
+                            <button
+                              key={level}
+                              onClick={() =>
+                                isFeIntermediate
+                                  ? setSelectedCourse('fe-intermediate')
+                                  : handleLockedItemClick()
+                              }
+                              className="flex-1 bg-btn-white-bg rounded-20 pt-[13px] pb-[25px] flex flex-col items-center gap-2 hover:bg-white transition-colors"
+                            >
+                              <span className="text-text-highlight text-sm font-medium leading-none">
+                                {level}
+                              </span>
+                              {isFeIntermediate ? (
+                                <LevelLockOpenIcon className="w-[23px] h-[29px] text-icon-blue-820" />
+                              ) : (
+                                <LevelLockIcon className="w-[23px] h-[29px] text-icon-blue-820" />
+                              )}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
                   </motion.div>
@@ -164,6 +192,93 @@ const CoursesPage = () => {
           ))}
         </div>
       </div>
+
+      {/* 상세 정보 모달 */}
+      <AnimatePresence>
+        {selectedCourse === 'fe-intermediate' && (
+          <>
+            {/* 딤 배경 */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 z-modal-backdrop bg-black/30"
+              onClick={() => setSelectedCourse(null)}
+            />
+
+            {/* 모달 카드 */}
+            <motion.div
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 50, opacity: 0 }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+              className="absolute left-[50.3%] top-[54%] -translate-x-1/2 -translate-y-1/2 z-modal w-[340px] bg-white rounded-20 flex flex-col text-left shadow-2 border border-card-border"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="space-y-3 border-b-[0.67px] border-divider p-[23px] pb-2">
+                <div className="flex justify-between items-center">
+                  <div className="text-4xl leading-[40px] -translate-y-[3px]">📗</div>
+                  <span className="text-icon text-[0.625rem] font-medium leading-normal tracking-[0.5px] uppercase">
+                    Intermediate
+                  </span>
+                </div>
+                <h3 className="text-[1.75rem] font-bold leading-normal text-text-title -translate-y-[1px]">
+                  {FRONT_INTERMEDIATE_DETAIL.title}
+                </h3>
+                <p className="text-text-base text-[0.813rem] leading-normal">
+                  {FRONT_INTERMEDIATE_DETAIL.subtitle}
+                </p>
+              </div>
+
+              <div className="p-6 pb-5 divide-y-[0.67px] divide-divider">
+                <section className="pb-5">
+                  <h4 className="text-[0.938rem] font-semibold text-text-title leading-[22.5px] -translate-y-[1px] mb-[12.5px]">
+                    강의 특징
+                  </h4>
+                  <ul className="space-y-2">
+                    {FRONT_INTERMEDIATE_DETAIL.features.map((f, i) => (
+                      <li
+                        key={i}
+                        className="text-text-base text-[0.813rem] leading-[22.79px] flex gap-2"
+                      >
+                        <span className="text-primary-500">•</span> {f}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+
+                <section className="pt-5">
+                  <h4 className="text-[0.938rem] font-semibold text-text-title leading-[23px] -translate-y-[1px] mb-[12.5px]">
+                    학습 내용
+                  </h4>
+                  <ul className="space-y-2">
+                    {FRONT_INTERMEDIATE_DETAIL.contents.map((c, i) => (
+                      <li
+                        key={i}
+                        className="text-text-base text-[0.813rem] leading-[23px] flex gap-2"
+                      >
+                        <span className="text-primary-500">•</span> {c}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              </div>
+
+              <div className="p-[23px] pt-0">
+                <Button
+                  size="wfullh42"
+                  rounded="default"
+                  onClick={() =>
+                    navigate(ROUTES.COURSES.LECTURE_MAIN('fe', 'intermediate', 'team-project'))
+                  }
+                >
+                  선택하기
+                </Button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       <LockModal
         isOpen={isLockModalOpen}
