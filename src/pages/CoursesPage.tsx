@@ -104,95 +104,102 @@ const CoursesPage = () => {
 
         {/* 카드 컨테이너 */}
         <div className="flex justify-center gap-10 h-[495px] max-w-[1040px] mx-auto">
-          {positions.map((pos) => (
-            <motion.div
-              key={pos.id}
-              className={`position-card relative rounded-30 w-80 h-120 overflow-hidden ${
-                pos.id == 'be'
-                  ? 'shadow-5 border border-card-border-lavender-200'
-                  : 'self-end shadow-1'
-              }`}
-              onMouseEnter={() => setHoveredTab(pos.id)}
-              onMouseLeave={() => setHoveredTab(null)}
-            >
-              {/* 기본 캐릭터 이미지 (호버 시 블러 처리) */}
-              <img
-                src={pos.image}
-                alt={pos.title}
-                className={`w-full h-full object-cover transition-all duration-300 ${hoveredTab === pos.id ? '' : 'grayscale brightness-[1.02]'}`}
-              />
+          {positions.map((pos) => {
+            // 현재 포지션의 상세 모달이 열려있는지 확인
+            const isCurrentCourseSelected = selectedCourse?.startsWith(pos.id);
+            // 호버 중이거나, 해당 포지션의 모달이 열려있을 때 오버레이 유지
+            const shouldShowOverlay = hoveredTab === pos.id || isCurrentCourseSelected;
 
-              {/* 호버 오버레이 (디졸브 애니메이션) */}
-              <AnimatePresence>
-                {hoveredTab === pos.id && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3, ease: 'easeOut' }}
-                    className="absolute inset-0 z-nav bg-gradient-card-glass backdrop-blur-[15px] flex flex-col items-center px-[13px] pt-[35px] pb-[23px]"
-                  >
-                    {/* 포지션 뱃지 */}
-                    <div className="bg-badge-position-bg px-7 py-[13.5px] rounded-50 mb-8">
-                      <span className="text-text-white text-xl font-semibold leading-[1.2]">
-                        {pos.title}
-                      </span>
-                    </div>
+            return (
+              <motion.div
+                key={pos.id}
+                className={`position-card relative rounded-30 w-80 h-120 overflow-hidden ${
+                  pos.id == 'be'
+                    ? 'shadow-5 border border-card-border-lavender-200'
+                    : 'self-end shadow-1'
+                }`}
+                onMouseEnter={() => setHoveredTab(pos.id)}
+                onMouseLeave={() => setHoveredTab(null)}
+              >
+                {/* 기본 캐릭터 이미지 (조건부 그레이스케일 해제) */}
+                <img
+                  src={pos.image}
+                  alt={pos.title}
+                  className={`w-full h-full object-cover transition-all duration-300 ${
+                    shouldShowOverlay ? '' : 'grayscale brightness-[1.02]'
+                  }`}
+                />
 
-                    {/* 상세 설명 리스트 */}
-                    <div className="w-full px-[7px] space-y-2.5 mb-auto">
-                      {JOB_DETAILS[pos.id].map((item, idx) => (
-                        <div
-                          key={idx}
-                          className="flex items-center gap-2 bg-list-bg border border-banner-border rounded-xl px-[13px] py-[11.5px]"
-                        >
-                          <span className="text-text-white w-4 h-4">{item.icon}</span>
-                          <p className="text-text-white text-sm font-medium leading-tight">
-                            {item.text}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
+                {/* 호버 오버레이 */}
+                <AnimatePresence>
+                  {shouldShowOverlay && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.3, ease: 'easeOut' }}
+                      className="absolute inset-0 z-nav bg-gradient-card-glass backdrop-blur-[15px] flex flex-col items-center px-[13px] pt-[35px] pb-[23px]"
+                    >
+                      {/* 포지션 뱃지 */}
+                      <div className="bg-badge-position-bg px-7 py-[13.5px] rounded-50 mb-8">
+                        <span className="text-text-white text-xl font-semibold leading-[1.2]">
+                          {pos.title}
+                        </span>
+                      </div>
 
-                    {/* 단계 선택 섹션 */}
-                    <div className="w-full mt-[17px]">
-                      <p className="text-text-white text-center font-medium mb-4 leading-[1.2]">
-                        단계 선택
-                      </p>
-                      <div className="flex justify-between gap-1.5">
-                        {['초급', '중급', '고급'].map((level) => {
-                          const isAvailable = pos.id === 'fe' && level === '중급';
+                      {/* 상세 설명 리스트 */}
+                      <div className="w-full px-[7px] space-y-2.5 mb-auto">
+                        {JOB_DETAILS[pos.id].map((item, idx) => (
+                          <div
+                            key={idx}
+                            className="flex items-center gap-2 bg-list-bg border border-banner-border rounded-xl px-[13px] py-[11.5px]"
+                          >
+                            <span className="text-text-white w-4 h-4">{item.icon}</span>
+                            <p className="text-text-white text-sm font-medium leading-tight">
+                              {item.text}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
 
-                          return (
-                            <button
-                              onClick={
-                                (
-                                  e,
-                                ) =>
+                      {/* 단계 선택 섹션 */}
+                      <div className="w-full mt-[17px]">
+                        <p className="text-text-white text-center font-medium mb-4 leading-[1.2]">
+                          단계 선택
+                        </p>
+                        <div className="flex justify-between gap-1.5">
+                          {['초급', '중급', '고급'].map((level) => {
+                            const isAvailable = pos.id === 'fe' && level === '중급';
+
+                            return (
+                              <button
+                                key={level}
+                                onClick={(e) =>
                                   isAvailable
                                     ? setSelectedCourse('fe-intermediate')
                                     : handleLockedItemClick(e)
-                              }
-                              className="flex-1 bg-btn-white-bg rounded-20 pt-[13px] pb-[25px] flex flex-col items-center gap-2 hover:bg-white transition-colors"
-                            >
-                              <span className="text-text-highlight text-sm font-medium leading-none">
-                                {level}
-                              </span>
-                              {isAvailable ? (
-                                <LevelLockOpenIcon className="w-[23px] h-[29px] text-icon-blue-820" />
-                              ) : (
-                                <LevelLockIcon className="w-[23px] h-[29px] text-icon-blue-820" />
-                              )}
-                            </button>
-                          );
-                        })}
+                                }
+                                className="flex-1 bg-btn-white-bg rounded-20 pt-[13px] pb-[25px] flex flex-col items-center gap-2 hover:bg-white transition-colors"
+                              >
+                                <span className="text-text-highlight text-sm font-medium leading-none">
+                                  {level}
+                                </span>
+                                {isAvailable ? (
+                                  <LevelLockOpenIcon className="w-[23px] h-[29px] text-icon-blue-820" />
+                                ) : (
+                                  <LevelLockIcon className="w-[23px] h-[29px] text-icon-blue-820" />
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
                       </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
 
