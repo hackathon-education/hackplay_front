@@ -80,48 +80,50 @@ const CoursesPage = () => {
   ];
 
   return (
-    <div className="relative lg:h-[1114px] overflow-hidden -mx-[15px] lg:-mx-5 -mt-16.5 lg:-mt-24">
+    <div className="relative min-h-screen lg:h-[1114px] overflow-hidden -mx-[15px] lg:-mx-5 -mt-16.5 lg:-mt-24">
       {/* 배경 */}
-      <img src={StepBg} alt="" className="absolute inset-0 z-0" />
+      <img
+        src={StepBg}
+        alt=""
+        className="absolute inset-0 z-0 w-full h-full 2xl:h-auto object-cover"
+      />
 
-      <div className="relative z-base px-[15px] lg:px-5 pt-34">
+      <div className="relative z-base px-[15px] lg:px-5 pt-20 lg:pt-34 pb-20">
         {/* 헤더 섹션 */}
-        <div className="flex flex-col items-center mb-[45px]">
-          <div className="w-13.5 h-13.5 bg-logo-bg rounded-full flex items-center justify-center mb-5 shadow-1 border border-logo-border">
+        <div className="flex flex-col items-center mb-10 lg:mb-[45px]">
+          <div className="w-12 h-12 lg:w-13.5 lg:h-13.5 bg-logo-bg rounded-full flex items-center justify-center mb-4 lg:mb-5 shadow-1 border border-logo-border">
             <img
               src={`${import.meta.env.BASE_URL}favicon/android-chrome-512x512.png`}
               alt=""
-              className="w-8 -translate-y-[1px]"
+              className="w-6 lg:w-8 -translate-y-[1px]"
             />
           </div>
-          <h2 className="text-[34px] font-bold text-text-title mb-2.5 leading-[1.21]">
+          <h2 className="text-2xl lg:text-[34px] font-bold text-text-title mb-2.5 leading-[1.21] text-center">
             나의 포지션 선택
           </h2>
-          <p className="text-text-base text-xl leading-[1.2]">
+          <p className="text-text-base text-base lg:text-xl leading-[1.2] text-center break-keep">
             각 포지션에 대해 알아보고 원하는 포지션을 선택해주세요!
           </p>
         </div>
 
-        {/* 카드 컨테이너 */}
-        <div className="flex justify-center gap-10 h-[495px] max-w-[1040px] mx-auto">
+        {/* 카드 컨테이너 - 모바일에서 세로 정렬, 데스크탑에서 가로 정렬 */}
+        <div className="flex flex-col lg:flex-row justify-center items-center gap-6 lg:gap-10 lg:h-[495px] max-w-[1040px] mx-auto">
           {positions.map((pos) => {
-            // 현재 포지션의 상세 모달이 열려있는지 확인
             const isCurrentCourseSelected = selectedCourse?.startsWith(pos.id);
-            // 호버 중이거나, 해당 포지션의 모달이 열려있을 때 오버레이 유지
             const shouldShowOverlay = hoveredTab === pos.id || isCurrentCourseSelected;
 
             return (
               <motion.div
                 key={pos.id}
-                className={`position-card relative rounded-30 w-80 h-120 overflow-hidden ${
+                className={`position-card relative rounded-30 w-full max-w-[320px] h-[480px] lg:w-80 lg:h-120 overflow-hidden ${
                   pos.id == 'be'
-                    ? 'shadow-5 border border-card-border-lavender-200'
-                    : 'self-end shadow-1'
+                    ? 'shadow-5 border border-card-border-lavender-200 lg:self-start'
+                    : 'lg:self-end shadow-1'
                 }`}
                 onMouseEnter={() => setHoveredTab(pos.id)}
                 onMouseLeave={() => setHoveredTab(null)}
               >
-                {/* 기본 캐릭터 이미지 (조건부 그레이스케일 해제) */}
+                {/* 기본 캐릭터 이미지 */}
                 <img
                   src={pos.image}
                   alt={pos.title}
@@ -140,14 +142,12 @@ const CoursesPage = () => {
                       transition={{ duration: 0.3, ease: 'easeOut' }}
                       className="absolute inset-0 z-nav bg-gradient-card-glass backdrop-blur-[15px] flex flex-col items-center px-[13px] pt-[35px] pb-[23px]"
                     >
-                      {/* 포지션 뱃지 */}
                       <div className="bg-badge-position-bg px-7 py-[13.5px] rounded-50 mb-8">
                         <span className="text-text-white text-xl font-semibold leading-[1.2]">
                           {pos.title}
                         </span>
                       </div>
 
-                      {/* 상세 설명 리스트 */}
                       <div className="w-full px-[7px] space-y-2.5 mb-auto">
                         {JOB_DETAILS[pos.id].map((item, idx) => (
                           <div
@@ -162,7 +162,6 @@ const CoursesPage = () => {
                         ))}
                       </div>
 
-                      {/* 단계 선택 섹션 */}
                       <div className="w-full mt-[17px]">
                         <p className="text-text-white text-center font-medium mb-4 leading-[1.2]">
                           단계 선택
@@ -207,22 +206,20 @@ const CoursesPage = () => {
       <AnimatePresence>
         {selectedCourse === 'fe-intermediate' && (
           <>
-            {/* 딤 배경 */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 z-modal-backdrop bg-black/30"
+              className="fixed inset-0 z-modal-backdrop bg-black/30"
               onClick={() => setSelectedCourse(null)}
             />
 
-            {/* 모달 카드 */}
             <motion.div
-              initial={{ y: 50, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 50, opacity: 0 }}
+              initial={{ y: 50, opacity: 0, x: '-50%' }}
+              animate={{ y: '-50%', opacity: 1, x: '-50%' }}
+              exit={{ y: 50, opacity: 0, x: '-50%' }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
-              className="absolute left-[50.3%] top-[54%] -translate-x-1/2 -translate-y-1/2 z-modal w-[340px] bg-white rounded-20 flex flex-col text-left shadow-2 border border-card-border"
+              className="fixed left-1/2 lg:left-[50.3%] top-1/2 lg:top-[55.5%] z-modal w-[calc(100%-32px)] max-w-[340px] bg-white rounded-20 flex flex-col text-left shadow-2 border border-card-border"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="space-y-3 border-b-[0.67px] border-divider p-[23px] pb-2">
@@ -256,7 +253,6 @@ const CoursesPage = () => {
                     ))}
                   </ul>
                 </section>
-
                 <section className="pt-5">
                   <h4 className="text-[0.938rem] font-semibold text-text-title leading-[23px] -translate-y-[1px] mb-[12.5px]">
                     학습 내용
