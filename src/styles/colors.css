@@ -6,6 +6,8 @@
   --primary-200: #b0d7fb;
   --primary-300: #8cc2d7;
   --primary-300-rgb: 140, 194, 215;
+  --primary-350: #698cff;
+  --primary-350-rgb: 105, 140, 255;
   --primary-400: #0091f2;
   --primary-400-rgb: 0, 145, 242;
 
@@ -16,8 +18,12 @@
   --primary-700: #0064c1;
 
   /* Blue - Dark */
+  --primary-750: #3854c5;
+  --primary-750-rgb: 56, 84, 197;
   --primary-800: #005eb5;
+  --primary-820: #2b74a5;
   --primary-850: #004b91;
+  --primary-870: #075080;
   --primary-900: #00386c;
 
   /* Blue - Darker */
@@ -50,4 +56,11 @@
 
   /* Yellow */
   --yellow-500: #f8b500;
+
+  /* Lavender */
+  --lavender-200: #d3d5ff;
+
+  /* Magenta */
+  --magenta-500: #aa256a;
+  --magenta-500-rgb: 170, 37, 106;
 }

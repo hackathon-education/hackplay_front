@@ -14,6 +14,7 @@
 
   /* Badge */
   --color-badge-bg: var(--primary-150);
+  --color-badge-position-bg: var(--primary-500);
 
   /* Banner */
   --color-banner-border: var(--neutral-150);
@@ -23,6 +24,7 @@
   --radius-10: 0.625rem; /* 10px */
   --radius-14: 0.875rem; /* 14px */
   --radius-20: 1.25rem; /* 20px */
+  --radius-30: 1.875rem; /* 30px */
   --radius-50: 3.125rem; /* 50px */
 
   /* Button */
@@ -39,12 +41,15 @@
   --color-btn-secondary-bg-active: var(--neutral-850);
   --color-btn-secondary-text: var(--neutral-000);
 
+  --color-btn-white-bg: rgba(var(--neutral-000-rgb), 0.75);
+
   /* Card */
   --color-card-bg: var(--neutral-000);
   --color-card-hover-bg: var(--neutral-100);
   --color-card-bg-glass: rgba(var(--neutral-000-rgb), 0.33);
   --color-card-border: var(--neutral-200);
   --color-card-border-auth: rgba(var(--neutral-200-rgb), 0.5);
+  --color-card-border-lavender-200: var(--lavender-200);
 
   /* Chip */
   --color-chip-default-bg: transparent;
@@ -91,11 +96,18 @@
     rgba(80, 0, 65, 0.24) 99.89%
   );
 
+  --background-image-gradient-card-glass: linear-gradient(
+    156deg,
+    rgba(var(--primary-750-rgb), 0.4) 0.02%,
+    rgba(var(--magenta-500-rgb), 0.4) 99.98%
+  );
+
   /* Icon */
   --color-icon: var(--neutral-600);
   --color-icon-border: var(--neutral-900);
   --color-icon-bg: rgba(var(--neutral-250-rgb), 0.2);
   --color-icon-blue-200: var(--primary-200);
+  --color-icon-blue-820: var(--primary-820);
   --color-icon-yellow-500: var(--yellow-500);
   --color-icon-neutral-250: var(--neutral-250);
   --color-icon-neutral-650: var(--neutral-650);
@@ -127,6 +139,9 @@
   --color-link-btn-accent-bg: var(--primary-500);
   --color-link-btn-accent-text: var(--neutral-000);
 
+  /* List */
+  --color-list-bg: rgba(var(--neutral-1000-rgb), 0.1);
+
   /* Logo */
   --color-logo-bg: var(--neutral-000);
   --color-logo-border: var(--neutral-150);
@@ -154,6 +169,7 @@
   --shadow-2: 0 4px 4px 0 rgba(var(--neutral-1000-rgb), 0.25);
   --shadow-3: 0 4px 4px 0 rgba(var(--primary-300-rgb), 0.1);
   --shadow-4: 0px 6px 6px 0px rgba(var(--neutral-1000-rgb), 0.25);
+  --shadow-5: 1px 1px 20px 0px rgba(var(--primary-350-rgb), 0.25);
 
   /* Tab */
   --color-tab-border-default: var(--neutral-200);
@@ -165,51 +181,13 @@
   --color-text-base: var(--neutral-700);
   --color-text-title: var(--neutral-800);
   --color-text-accent: var(--primary-500);
+  --color-text-highlight: var(--primary-870);
   --color-text-meta: var(--neutral-1000);
   --color-text-white: var(--neutral-000);
   --color-text-body: var(--neutral-600);
   --color-text-error: var(--error-600);
 
-  /** Colors **/
-  --color-blue-100: #cddefe;
-  --color-blue-200: #9bbdfd;
-  --color-blue-300: #4a98e0;
-  --color-blue-330: #42a7ff;
-  --color-blue-350: #41a2e3;
-  --color-blue-400: #0071bc;
-  --color-blue-420: #266db0;
-  --color-blue-450: #2b74a5;
-  --color-blue-500: #075080;
-  --color-blue-600: #0052cc;
-  --color-blue-700: #003f9e;
-
-  --color-gray-50: #fafafa;
-  --color-gray-80: #f6f6f6;
-  --color-gray-90: #f5f5f5;
-  --color-gray-100: #f4f4f4;
-  --color-gray-120: #f3f3f3;
-  --color-gray-150: #eeeeee;
-  --color-gray-180: #dddddd;
-  --color-gray-200: #d9d9d9;
-  --color-gray-250: #cfcfcf;
-  --color-gray-260: #cacaca;
-  --color-gray-270: #c9c9c9;
-  --color-gray-300: #c0c0c0;
-  --color-gray-400: #a8a8a8;
-  --color-gray-500: #939393;
-  --color-gray-600: #888888;
-  --color-gray-620: #666666;
-  --color-gray-630: #5d5d5d;
-  --color-gray-650: #474747;
-  --color-gray-700: #363636;
-
-  --color-white: #ffffff;
-  --color-black: #000000;
-  --color-green: #1cd200;
-  --color-yellow: #ffd23d;
-
   /** Shadow **/
-  --shadow-5: 0px 10px 19.9px 0px rgba(0, 0, 0, 0.28);
   --shadow-6: 1px 1px 50px 0px rgba(0, 0, 0, 0.4);
   --shadow-7: 1px 1px 20px -9px rgba(0, 0, 0, 0.4);
   --shadow-8: 1px 1px 30px -9px rgba(0, 0, 0, 0.4);
@@ -228,6 +206,7 @@
   --z-index-dropdown: 100;
 
   /* Layer 4: 모달, 오버레이 (최우선) */
+  --z-index-modal-backdrop: 9999;
   --z-index-modal: 10000;
 
   /* Layer 5: 토스트, 알림 (최상위) */

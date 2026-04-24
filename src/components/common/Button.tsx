@@ -2,12 +2,14 @@ import { ButtonHTMLAttributes, ReactNode } from 'react';
 
 const SIZES = {
   wfullh50: 'w-full h-[50px]',
+  wfullh42: 'w-full h-[42px]',
   w74h43: 'w-[74px] h-[43px]',
   none: '',
 } as const;
 
 const ROUNDED = {
   sm: 'rounded-[10px]',
+  default: 'rounded-[12px]',
   md: 'rounded-[14px]',
   lg: 'rounded-[16px]',
   full: 'rounded-full',

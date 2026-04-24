@@ -1,168 +1,295 @@
-import { useEffect, useState } from 'react';
+import BeComputerIcon from '@/assets/step/be-computer-icon.svg?react';
+import BeDataIcon from '@/assets/step/be-data-icon.svg?react';
+import BeSecurityIcon from '@/assets/step/be-security-icon.svg?react';
+import BeSettingIcon from '@/assets/step/be-setting-icon.svg?react';
+import DeELearningIcon from '@/assets/step/de-e-learning-icon.svg?react';
+import DeGuideIcon from '@/assets/step/de-guide-icon.svg?react';
+import DeLayoutIcon from '@/assets/step/de-layout-icon.svg?react';
+import DeWebIcon from '@/assets/step/de-web-icon.svg?react';
+import FeComputerIcon from '@/assets/step/fe-computer-icon.svg?react';
+import FeProgrammingIcon from '@/assets/step/fe-programming-icon.svg?react';
+import FeTypewriterWithScreenIcon from '@/assets/step/fe-typewriter-with-screen-icon.svg?react';
+import FeWorkstationIcon from '@/assets/step/fe-workstation-icon.svg?react';
+import LevelLockIcon from '@/assets/step/level-lock-icon.svg?react';
+import LevelLockOpenIcon from '@/assets/step/level-lock-open-icon.svg?react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
-import InfoPanel from '@/components/InfoPanel';
+import BeChar from '@/assets/step/be-character.webp';
+import DeChar from '@/assets/step/de-character.webp';
+import FeChar from '@/assets/step/fe-character.webp';
+import StepBg from '@/assets/step/step-bg.webp';
+import Button from '@/components/common/Button';
+import { ROUTES } from '@/constants/routes';
 
-import Backend from '../assets/backend.png';
-import Designer from '../assets/designer.png';
-import Frontend from '../assets/frontend.png';
 import LockModal from '../components/LockModal';
 import { JOB_TYPES } from '../constants/jobTypes';
 import { useLockModal } from '../hooks/useLockModal';
 
+const JOB_DETAILS = {
+  fe: [
+    { icon: <FeWorkstationIcon />, text: '웹/앱 화면을 구현' },
+    { icon: <FeTypewriterWithScreenIcon />, text: '사용자와 상호작용 파트 개발' },
+    { icon: <FeProgrammingIcon />, text: 'API를 호출하여 데이터를 화면에 표시' },
+    { icon: <FeComputerIcon />, text: '반응형·접근성 고려' },
+  ],
+  be: [
+    { icon: <BeSettingIcon />, text: '서버, 데이터베이스, API 설계 및 개발' },
+    { icon: <BeDataIcon />, text: '비즈니스 로직 구현 및 데이터 처리' },
+    { icon: <BeSecurityIcon />, text: '보안, 인증, 권한 관리 기능 개발' },
+    { icon: <BeComputerIcon />, text: '서버 성능 최적화 및 에러 로그 관리' },
+  ],
+  de: [
+    { icon: <DeWebIcon />, text: '서비스의 UI/UX 설계 및 디자인 시안 제작' },
+    { icon: <DeLayoutIcon />, text: '사용자 경험 흐름 기획 및 화면 구성 정의' },
+    { icon: <DeGuideIcon />, text: '색상, 컴포넌트 스타일 등 디자인' },
+    { icon: <DeELearningIcon />, text: '디자인이 실제 화면에 구현되도록 지원' },
+  ],
+};
+
 const CoursesPage = () => {
-  const [selectedTab, setSelectedTab] = useState<'fe' | 'be' | 'design' | null>(null);
-  const [animatingTab, setAnimatingTab] = useState<'fe' | 'be' | 'design' | null>(null);
+  const [hoveredTab, setHoveredTab] = useState<'fe' | 'be' | 'de' | null>(null);
+  const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
+
   const navigate = useNavigate();
   const { isLockModalOpen, closeLockModal, handleLockedItemClick } = useLockModal();
 
-  const handleBackendClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-
-    if (selectedTab === 'fe' || selectedTab === 'design') {
-      setSelectedTab(null);
-      setAnimatingTab(null);
-    }
-
-    handleLockedItemClick(e);
+  const FRONT_INTERMEDIATE_DETAIL = {
+    title: '중급',
+    subtitle: 'Frontend 개발 과정',
+    features: [
+      '실제 회사와 동일한 Git 협업 흐름 실습',
+      '회원가입 · 로그인 · 인증(JWT) 구현',
+      'API 연동 및 상태 관리 경험',
+      '낙관적 업데이트와 UX 품질 개선',
+    ],
+    contents: [
+      '프로젝트 구조 이해 및 브랜치 전략',
+      'Conventional Commits & Pull Request 실습',
+      '회원가입 / 로그인 인증 흐름 구현',
+      '게시물 저장 기능 및 접근 제어 처리',
+    ],
   };
 
-  const handleDesignerClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-
-    if (selectedTab === 'fe' || selectedTab === 'be') {
-      setSelectedTab(null);
-      setAnimatingTab(null);
-    }
-
-    handleLockedItemClick(e);
-  };
-
-  const handleTabClick = (tab: 'fe' | 'be' | 'design') => {
-    if (selectedTab === tab) {
-      setSelectedTab(null);
-      setTimeout(() => setAnimatingTab(null), 300);
-    } else {
-      setSelectedTab(tab);
-      setAnimatingTab(tab);
-    }
-  };
-
-  // 외부 클릭 시 패널 닫기
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element;
-      if (selectedTab && !target.closest('.position-card') && !target.closest('.info-panel')) {
-        setSelectedTab(null);
-      }
-    };
-
-    if (selectedTab) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [selectedTab]);
+  const positions = [
+    { id: 'fe' as const, image: FeChar, title: 'Frontend', data: JOB_TYPES.FRONT },
+    { id: 'be' as const, image: BeChar, title: 'Backend', data: JOB_TYPES.BACK },
+    { id: 'de' as const, image: DeChar, title: 'Designer', data: JOB_TYPES.DESIGN },
+  ];
 
   return (
-    <div className="max-w-[600px] mx-auto my-[50px] p-[30px] border-2 border-[#0059b3] rounded-[10px] text-center">
-      <h2 className="text-[1.5rem] font-bold text-center mb-10">나의 포지션 선택</h2>
+    <div className="relative min-h-screen lg:h-[1114px] overflow-hidden -mx-[15px] lg:-mx-5 -mt-16.5 lg:-mt-24">
+      {/* 배경 */}
+      <img
+        src={StepBg}
+        alt=""
+        className="absolute inset-0 z-0 w-full h-full 2xl:h-auto object-cover"
+      />
 
-      <div className="flex justify-center gap-10 mb-10 flex-nowrap py-2.5">
-        {/* 프론트엔드 */}
-        <div
-          className={`position-card relative bg-white border-2 ${
-            selectedTab === 'fe' ? 'border-[#007bff]' : 'border-transparent'
-          } ${
-            selectedTab === 'fe' || animatingTab === 'fe' ? 'z-dropdown' : ''
-          } rounded-2xl p-5 w-[200px] cursor-pointer shadow-[0_4px_8px_rgba(0,0,0,0.05)] transition-all duration-200 ease-in-out text-center ${
-            selectedTab !== 'fe'
-              ? 'hover:-translate-y-1 hover:shadow-[0_6px_12px_rgba(0,0,0,0.1)]'
-              : ''
-          }`}
-          onClick={() => handleTabClick('fe')}
-        >
-          <img src={Frontend} alt="Front end" className="w-full rounded-xl mb-3" />
-          <button
-            className={`bg-none border border-[#007bff] rounded-full px-3 py-1.5 text-[0.9rem] cursor-pointer ${
-              selectedTab === 'fe' ? 'bg-[#007bff] text-white' : 'text-[#007bff]'
-            }`}
-          >
-            {JOB_TYPES.FRONT}
-          </button>
-
-          <AnimatePresence>
-            {selectedTab === 'fe' && <InfoPanel type="fe" onClose={() => setSelectedTab(null)} />}
-          </AnimatePresence>
+      <div className="relative z-base px-[15px] lg:px-5 pt-20 lg:pt-34 pb-20">
+        {/* 헤더 섹션 */}
+        <div className="flex flex-col items-center mb-10 lg:mb-[45px]">
+          <div className="w-12 h-12 lg:w-13.5 lg:h-13.5 bg-logo-bg rounded-full flex items-center justify-center mb-4 lg:mb-5 shadow-1 border border-logo-border">
+            <img
+              src={`${import.meta.env.BASE_URL}favicon/android-chrome-512x512.png`}
+              alt=""
+              className="w-6 lg:w-8 -translate-y-[1px]"
+            />
+          </div>
+          <h2 className="text-2xl lg:text-[34px] font-bold text-text-title mb-2.5 leading-[1.21] text-center">
+            나의 포지션 선택
+          </h2>
+          <p className="text-text-base text-base lg:text-xl leading-[1.2] text-center break-keep">
+            각 포지션에 대해 알아보고 원하는 포지션을 선택해주세요!
+          </p>
         </div>
 
-        {/* 백엔드 */}
-        <div
-          className={`position-card relative bg-white border-2 ${
-            selectedTab === 'be' ? 'border-[#007bff]' : 'border-transparent'
-          } ${
-            selectedTab === 'be' || animatingTab === 'be' ? 'z-dropdown' : ''
-          } rounded-2xl p-5 w-[200px] cursor-pointer shadow-[0_4px_8px_rgba(0,0,0,0.05)] transition-all duration-200 ease-in-out text-center ${
-            selectedTab !== 'be'
-              ? 'hover:-translate-y-1 hover:shadow-[0_6px_12px_rgba(0,0,0,0.1)]'
-              : ''
-          }`}
-          // onClick={() => handleTabClick('be')}
-          onClick={handleBackendClick}
-        >
-          <img src={Backend} alt="Back end" className="w-full rounded-xl mb-3" />
-          <button
-            className={`bg-none border border-[#007bff] rounded-full px-3 py-1.5 text-[0.9rem] cursor-pointer ${
-              selectedTab === 'be' ? 'bg-[#007bff] text-white' : 'text-[#007bff]'
-            }`}
-          >
-            {JOB_TYPES.BACK}
-          </button>
+        {/* 카드 컨테이너 - 모바일에서 세로 정렬, 데스크탑에서 가로 정렬 */}
+        <div className="flex flex-col lg:flex-row justify-center items-center gap-6 lg:gap-10 lg:h-[495px] max-w-[1040px] mx-auto">
+          {positions.map((pos) => {
+            const isCurrentCourseSelected = selectedCourse?.startsWith(pos.id);
+            const shouldShowOverlay = hoveredTab === pos.id || isCurrentCourseSelected;
 
-          <AnimatePresence>
-            {selectedTab === 'be' && <InfoPanel type="be" onClose={() => setSelectedTab(null)} />}
-          </AnimatePresence>
-        </div>
+            return (
+              <motion.div
+                key={pos.id}
+                className={`position-card relative rounded-30 w-full max-w-[320px] h-[480px] lg:w-80 lg:h-120 overflow-hidden ${
+                  pos.id == 'be'
+                    ? 'shadow-5 border border-card-border-lavender-200 lg:self-start'
+                    : 'lg:self-end shadow-1'
+                }`}
+                onMouseEnter={() => setHoveredTab(pos.id)}
+                onMouseLeave={() => setHoveredTab(null)}
+              >
+                {/* 기본 캐릭터 이미지 */}
+                <img
+                  src={pos.image}
+                  alt={pos.title}
+                  className={`w-full h-full object-cover transition-all duration-300 ${
+                    shouldShowOverlay ? '' : 'grayscale brightness-[1.02]'
+                  }`}
+                />
 
-        {/* 디자이너 */}
-        <div
-          className={`position-card relative bg-white border-2 ${
-            selectedTab === 'design' ? 'border-[#007bff]' : 'border-transparent'
-          } ${
-            selectedTab === 'design' || animatingTab === 'design' ? 'z-dropdown' : ''
-          } rounded-2xl p-5 w-[200px] cursor-pointer shadow-[0_4px_8px_rgba(0,0,0,0.05)] transition-all duration-200 ease-in-out text-center ${
-            selectedTab !== 'design'
-              ? 'hover:-translate-y-1 hover:shadow-[0_6px_12px_rgba(0,0,0,0.1)]'
-              : ''
-          }`}
-          // onClick={() => handleTabClick('design')}
-          onClick={handleDesignerClick}
-        >
-          <img src={Designer} alt="Designer" className="w-full rounded-xl mb-3" />
-          <button
-            className={`bg-none border border-[#007bff] rounded-full px-3 py-1.5 text-[0.9rem] cursor-pointer ${
-              selectedTab === 'design' ? 'bg-[#007bff] text-white' : 'text-[#007bff]'
-            }`}
-          >
-            {JOB_TYPES.DESIGN}
-          </button>
+                {/* 호버 오버레이 */}
+                <AnimatePresence>
+                  {shouldShowOverlay && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.3, ease: 'easeOut' }}
+                      className="absolute inset-0 z-nav bg-gradient-card-glass backdrop-blur-[15px] flex flex-col items-center px-[13px] pt-[35px] pb-[23px]"
+                    >
+                      <div className="bg-badge-position-bg px-7 py-[13.5px] rounded-50 mb-8">
+                        <span className="text-text-white text-xl font-semibold leading-[1.2]">
+                          {pos.title}
+                        </span>
+                      </div>
 
-          <AnimatePresence>
-            {selectedTab === 'design' && (
-              <InfoPanel type="design" onClose={() => setSelectedTab(null)} />
-            )}
-          </AnimatePresence>
+                      <div className="w-full px-[7px] space-y-2.5 mb-auto">
+                        {JOB_DETAILS[pos.id].map((item, idx) => (
+                          <div
+                            key={idx}
+                            className="flex items-center gap-2 bg-list-bg border border-banner-border rounded-xl px-[13px] py-[11.5px]"
+                          >
+                            <span className="text-text-white w-4 h-4">{item.icon}</span>
+                            <p className="text-text-white text-sm font-medium leading-tight">
+                              {item.text}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="w-full mt-[17px]">
+                        <p className="text-text-white text-center font-medium mb-4 leading-[1.2]">
+                          단계 선택
+                        </p>
+                        <div className="flex justify-between gap-1.5">
+                          {['초급', '중급', '고급'].map((level) => {
+                            const isAvailable = pos.id === 'fe' && level === '중급';
+
+                            return (
+                              <button
+                                key={level}
+                                onClick={(e) =>
+                                  isAvailable
+                                    ? setSelectedCourse('fe-intermediate')
+                                    : handleLockedItemClick(e)
+                                }
+                                className="flex-1 bg-btn-white-bg rounded-20 pt-[13px] pb-[25px] flex flex-col items-center gap-2 hover:bg-white transition-colors"
+                              >
+                                <span className="text-text-highlight text-sm font-medium leading-none">
+                                  {level}
+                                </span>
+                                {isAvailable ? (
+                                  <LevelLockOpenIcon className="w-[23px] h-[29px] text-icon-blue-820" />
+                                ) : (
+                                  <LevelLockIcon className="w-[23px] h-[29px] text-icon-blue-820" />
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
+
+      {/* 상세 정보 모달 */}
+      <AnimatePresence>
+        {selectedCourse === 'fe-intermediate' && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-modal-backdrop bg-black/30"
+              onClick={() => setSelectedCourse(null)}
+            />
+
+            <motion.div
+              initial={{ y: 50, opacity: 0, x: '-50%' }}
+              animate={{ y: '-50%', opacity: 1, x: '-50%' }}
+              exit={{ y: 50, opacity: 0, x: '-50%' }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+              className="fixed left-1/2 lg:left-[50.3%] top-1/2 lg:top-[55.5%] z-modal w-[calc(100%-32px)] max-w-[340px] bg-white rounded-20 flex flex-col text-left shadow-2 border border-card-border"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="space-y-3 border-b-[0.67px] border-divider p-[23px] pb-2">
+                <div className="flex justify-between items-center">
+                  <div className="text-4xl leading-[40px] -translate-y-[3px]">📗</div>
+                  <span className="text-icon text-[0.625rem] font-medium leading-normal tracking-[0.5px] uppercase">
+                    Intermediate
+                  </span>
+                </div>
+                <h3 className="text-[1.75rem] font-bold leading-normal text-text-title -translate-y-[1px]">
+                  {FRONT_INTERMEDIATE_DETAIL.title}
+                </h3>
+                <p className="text-text-base text-[0.813rem] leading-normal">
+                  {FRONT_INTERMEDIATE_DETAIL.subtitle}
+                </p>
+              </div>
+
+              <div className="p-6 pb-5 divide-y-[0.67px] divide-divider">
+                <section className="pb-5">
+                  <h4 className="text-[0.938rem] font-semibold text-text-title leading-[22.5px] -translate-y-[1px] mb-[12.5px]">
+                    강의 특징
+                  </h4>
+                  <ul className="space-y-2">
+                    {FRONT_INTERMEDIATE_DETAIL.features.map((f, i) => (
+                      <li
+                        key={i}
+                        className="text-text-base text-[0.813rem] leading-[22.79px] flex gap-2"
+                      >
+                        <span className="text-primary-500">•</span> {f}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+                <section className="pt-5">
+                  <h4 className="text-[0.938rem] font-semibold text-text-title leading-[23px] -translate-y-[1px] mb-[12.5px]">
+                    학습 내용
+                  </h4>
+                  <ul className="space-y-2">
+                    {FRONT_INTERMEDIATE_DETAIL.contents.map((c, i) => (
+                      <li
+                        key={i}
+                        className="text-text-base text-[0.813rem] leading-[23px] flex gap-2"
+                      >
+                        <span className="text-primary-500">•</span> {c}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              </div>
+
+              <div className="p-[23px] pt-0">
+                <Button
+                  size="wfullh42"
+                  rounded="default"
+                  onClick={() =>
+                    navigate(ROUTES.COURSES.LECTURE_MAIN('fe', 'intermediate', 'team-project'))
+                  }
+                >
+                  선택하기
+                </Button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       <LockModal
         isOpen={isLockModalOpen}
         onClose={closeLockModal}
-        message="이 강의는 현재 잠겨 있습니다."
+        message="이 강의는 현재 준비 중입니다."
       />
     </div>
   );
