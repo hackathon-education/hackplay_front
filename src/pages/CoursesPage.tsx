@@ -50,7 +50,7 @@ const JOB_DETAILS = {
 };
 
 const CoursesPage = () => {
-  const [hoveredTab, setHoveredTab] = useState<'fe' | 'be' | 'de' | null>('fe');
+  const [hoveredTab, setHoveredTab] = useState<'fe' | 'be' | 'de' | null>(null);
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
 
   const navigate = useNavigate();
