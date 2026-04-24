@@ -161,21 +161,24 @@ const CoursesPage = () => {
                       </p>
                       <div className="flex justify-between gap-1.5">
                         {['초급', '중급', '고급'].map((level) => {
-                          const isFeIntermediate = pos.id === 'fe' && level === '중급';
+                          const isAvailable = pos.id === 'fe' && level === '중급';
+
                           return (
                             <button
-                              key={level}
-                              onClick={() =>
-                                isFeIntermediate
-                                  ? setSelectedCourse('fe-intermediate')
-                                  : handleLockedItemClick()
+                              onClick={
+                                (
+                                  e,
+                                ) =>
+                                  isAvailable
+                                    ? setSelectedCourse('fe-intermediate')
+                                    : handleLockedItemClick(e)
                               }
                               className="flex-1 bg-btn-white-bg rounded-20 pt-[13px] pb-[25px] flex flex-col items-center gap-2 hover:bg-white transition-colors"
                             >
                               <span className="text-text-highlight text-sm font-medium leading-none">
                                 {level}
                               </span>
-                              {isFeIntermediate ? (
+                              {isAvailable ? (
                                 <LevelLockOpenIcon className="w-[23px] h-[29px] text-icon-blue-820" />
                               ) : (
                                 <LevelLockIcon className="w-[23px] h-[29px] text-icon-blue-820" />
