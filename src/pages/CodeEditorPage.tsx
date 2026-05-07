@@ -353,6 +353,11 @@ const WORKSPACE_TO_OUTLINE_LESSON_ID = Object.fromEntries(
   OUTLINE_LESSON_IDS.map((lessonId) => [getWorkspaceIdForOutlineLesson(lessonId), lessonId]),
 ) as Record<string, string>;
 
+type WorkspaceNavState = {
+  lectureMainPath?: string;
+  projectId?: string;
+};
+
 const buildPracticeTipFileTree = (files: string[]): PracticeTipFileNode[] => {
   const root: PracticeTipFileNode = {
     name: `My First Project (${files.length})`,
@@ -755,6 +760,13 @@ const CodeEditorPage = () => {
   const navigate = useNavigate();
   const path = location.pathname;
   const { lectureId } = useParams<{ lectureId: string }>();
+  const navState = location.state as WorkspaceNavState | null;
+  const stateProjectId = navState?.projectId?.toString().trim();
+  const [activeProjectId, setActiveProjectId] = useState<string>(() => {
+    if (typeof window === 'undefined') return '';
+    const cached = sessionStorage.getItem('workspaceProjectId') ?? '';
+    return cached;
+  });
 
   const userRole = JOB_TYPES.FRONT; // 사용자 직무
   const [leftSectionTab, setLeftSectionTab] = useState<'weekGuide' | 'learning' | 'practiceTip'>(
@@ -782,6 +794,15 @@ const CodeEditorPage = () => {
     TEAM_PROJECT_WEEK_GUIDES[activeWeekGuideChapterNumber] ?? TEAM_PROJECT_WEEK_GUIDES[1];
   const noRequest = activeWeekGuide.handoffs.length === 0;
   const isContentOnlyWorkspace = activeWeekGuideChapterNumber === 1 || activeWeekGuideChapterNumber === 2;
+
+  useEffect(() => {
+    const next = stateProjectId ?? '';
+    if (!next) return;
+    setActiveProjectId(next);
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('workspaceProjectId', next);
+    }
+  }, [stateProjectId]);
 
   // 코드 에디터 관련 상태
   const [files, setFiles] = useState<FileNode[]>([
@@ -830,17 +851,16 @@ const CodeEditorPage = () => {
   // 프로젝트 ID가 바뀌면 서버에서 루트 디렉토리 트리 조회
   useEffect(() => {
     if (isContentOnlyWorkspace) return;
-
-    const segments = path.split('/').filter(Boolean);
-    const projectId = segments[segments.length - 1] ?? '';
-    // const projectId = 5; // 임시 하드코딩
-    if (!projectId) return;
+    if (!activeProjectId) {
+      toast.error('프로젝트 정보가 없어 워크스페이스를 불러올 수 없습니다.');
+      return;
+    }
 
     let mounted = true;
 
     (async () => {
       try {
-        const res = await getProjectDirTree(projectId);
+        const res = await getProjectDirTree(activeProjectId);
         if (!mounted) return;
         if (res && res.code === 200 && res.data) {
           const rootPath = res.data.path || '';
@@ -860,7 +880,7 @@ const CodeEditorPage = () => {
     return () => {
       mounted = false;
     };
-  }, [path, isContentOnlyWorkspace]);
+  }, [activeProjectId, isContentOnlyWorkspace]);
   const [editorTabs, setEditorTabs] = useState<Tab[]>([]);
   const [activeTabId, setActiveTabId] = useState<string | undefined>();
   const [fileContents, setFileContents] = useState<Record<string, string>>({});
@@ -1073,11 +1093,12 @@ const CodeEditorPage = () => {
     // 파일 내용 로드
     const loadFileContent = async () => {
       try {
-        const segments = path.split('/').filter(Boolean);
-        const projectId = segments[segments.length - 1] ?? '';
-        if (!projectId) return;
+        if (!activeProjectId) {
+          toast.error('프로젝트 정보가 없어 파일을 불러올 수 없습니다.');
+          return;
+        }
 
-        const res = await getFile(projectId, filePath);
+        const res = await getFile(activeProjectId, filePath);
         if (res && res.code === 200 && res.data) {
           setFileContents((prev) => ({ ...prev, [filePath]: res.data.content }));
         } else {
@@ -1102,16 +1123,17 @@ const CodeEditorPage = () => {
   // 파일 삭제
   const handleDeleteFile = async (filePath: string) => {
     try {
-      const segments = path.split('/').filter(Boolean);
-      const projectId = segments[segments.length - 1] ?? '';
-      if (!projectId) return;
+      if (!activeProjectId) {
+        toast.error('프로젝트 정보가 없어 파일을 삭제할 수 없습니다.');
+        return;
+      }
 
       const body = {
         path: filePath.startsWith('/') ? filePath.slice(1) : filePath,
       };
 
       // 서버에 파일 삭제 요청
-      await deleteFile(projectId, body);
+      await deleteFile(activeProjectId, body);
 
       // 로컬 파일 트리에서 노드 제거
       const removeNode = (nodes: FileNode[]): FileNode[] =>
@@ -1140,9 +1162,10 @@ const CodeEditorPage = () => {
     content?: string,
   ) => {
     try {
-      // 프로젝트 ID 추출 - 추후 API 연동
-      const segments = path.split('/').filter(Boolean);
-      const projectId = segments[segments.length - 1] ?? '';
+      if (!activeProjectId) {
+        toast.error('프로젝트 정보가 없어 파일을 생성할 수 없습니다.');
+        return;
+      }
 
       const body = {
         name,
@@ -1151,7 +1174,7 @@ const CodeEditorPage = () => {
       };
 
       // 서버에 파일 생성 요청
-      await createFile(projectId, body);
+      await createFile(activeProjectId, body);
 
       // 로컬 파일 트리에 새 노드 추가
       const normalizedParent = parentPath.startsWith('/') ? parentPath : `/${parentPath}`;
@@ -1180,8 +1203,10 @@ const CodeEditorPage = () => {
   // 파일 이름 변경 핸들러
   const handleRenameFile = async (currentPath: string, newName: string) => {
     try {
-      const segments = path.split('/').filter(Boolean);
-      const projectId = segments[segments.length - 1] ?? '';
+      if (!activeProjectId) {
+        toast.error('프로젝트 정보가 없어 파일명을 변경할 수 없습니다.');
+        return;
+      }
 
       const body = {
         currentPath,
@@ -1189,7 +1214,7 @@ const CodeEditorPage = () => {
       };
 
       // 서버에 파일 이름 변경 요청
-      await renameFile(projectId, body);
+      await renameFile(activeProjectId, body);
 
       // 로컬 파일 트리 업데이트
       const parentPath = currentPath.substring(0, currentPath.lastIndexOf('/'));
@@ -1241,8 +1266,10 @@ const CodeEditorPage = () => {
   // 파일 이동 핸들러
   const handleMoveFile = async (currentPath: string, newParentDir: string) => {
     try {
-      const segments = path.split('/').filter(Boolean);
-      const projectId = segments[segments.length - 1] ?? '';
+      if (!activeProjectId) {
+        toast.error('프로젝트 정보가 없어 파일을 이동할 수 없습니다.');
+        return;
+      }
 
       const body = {
         currentPath,
@@ -1250,7 +1277,7 @@ const CodeEditorPage = () => {
       };
 
       // 서버에 파일 이동 요청
-      await moveFile(projectId, body);
+      await moveFile(activeProjectId, body);
 
       // 새로운 경로 계산
       const fileName = currentPath.split('/').pop() || '';
@@ -1387,16 +1414,16 @@ const CodeEditorPage = () => {
     if (!activeTab) return;
 
     try {
-      // 프로젝트 ID 추출
-      const segments = path.split('/').filter(Boolean);
-      const projectId = segments[segments.length - 1] ?? '';
-      if (!projectId) return;
+      if (!activeProjectId) {
+        toast.error('프로젝트 정보가 없어 저장할 수 없습니다.');
+        return;
+      }
 
       // 파일 경로에서 프로젝트 루트를 기준으로 한 상대 경로 추출
       const filePath = activeTab.path.startsWith('/') ? activeTab.path.slice(1) : activeTab.path;
 
       // 파일 내용 수정 API 호출
-      await updateFileContent(projectId, {
+      await updateFileContent(activeProjectId, {
         path: filePath,
         content: fileContents[activeTab.path] || '',
       });
@@ -1436,13 +1463,13 @@ const CodeEditorPage = () => {
   }, []);
 
   const lectureMainHref = useMemo(() => {
-    const fromState = (location.state as { lectureMainPath?: string } | null)?.lectureMainPath;
+    const fromState = navState?.lectureMainPath;
     if (fromState) return fromState;
     if (lectureId?.startsWith('team-project')) {
       return ROUTES.COURSES.LECTURE_MAIN('fe', 'intermediate', 'team-project');
     }
     return ROUTES.COURSES.ROOT;
-  }, [location.state, lectureId]);
+  }, [navState?.lectureMainPath, lectureId]);
 
   const weekLabel = useMemo(() => {
     const m = lectureId?.match(/(\d+)/);
@@ -1621,7 +1648,7 @@ const CodeEditorPage = () => {
     setLeftSectionTab('weekGuide');
     setLessonIntroModal(nextLessonIntro);
     navigate(ROUTES.WORKSPACE(nextLectureId), {
-      state: { lectureMainPath: lectureMainHref },
+      state: { lectureMainPath: lectureMainHref, projectId: activeProjectId || undefined },
     });
   };
 
@@ -1646,7 +1673,7 @@ const CodeEditorPage = () => {
     setSelectedOutlineLessonId(lessonId);
     setLeftSectionTab('weekGuide');
     navigate(ROUTES.WORKSPACE(workspaceId), {
-      state: { lectureMainPath: lectureMainHref },
+      state: { lectureMainPath: lectureMainHref, projectId: activeProjectId || undefined },
     });
   };
 

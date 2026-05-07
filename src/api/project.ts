@@ -79,8 +79,7 @@ interface GetDirTreeResponse {
  */
 export const getProjectDirTree = async (projectId: string): Promise<GetDirTreeResponse> => {
   const response = await axiosInstance.get<GetDirTreeResponse>(
-    // `/v1/projects/${projectId}/dirs/tree`,
-    `/v1/projects/5/dirs/tree`, // 임시 하드코딩
+    `/v1/projects/${projectId}/dirs/tree`,
   );
   return response.data;
 };
@@ -109,8 +108,7 @@ export const updateFileContent = async (
   fileData: UpdateFileContentRequest,
 ): Promise<UpdateFileContentResponse> => {
   const response = await axiosInstance.patch<UpdateFileContentResponse>(
-    // `/v1/projects/${projectId}/files`,
-    `/v1/projects/5/files`, // 임시 하드코딩
+    `/v1/projects/${projectId}/files`,
     fileData,
   );
   return response.data;
@@ -141,8 +139,7 @@ interface GetFileResponse {
  */
 export const getFile = async (projectId: string, filePath: string): Promise<GetFileResponse> => {
   const response = await axiosInstance.get<GetFileResponse>(
-    // `/v1/projects/${projectId}/files`,
-    `/v1/projects/5/files`, // 임시 하드코딩
+    `/v1/projects/${projectId}/files`,
     {
       params: { path: filePath.startsWith('/') ? filePath.slice(1) : filePath },
     },
