@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { TbTrash } from 'react-icons/tb';
 import { TfiSave } from 'react-icons/tfi';
 import { Globe, Sparkles } from 'lucide-react';
 
@@ -122,9 +121,6 @@ const BottomPanel = ({
             title="저장"
           >
             <TfiSave className="h-4 w-4 text-gray-620 stroke-[0.5]" />
-          </button>
-          <button type="button" className="rounded p-1.5 hover:bg-gray-100" title="터미널 비우기">
-            <TbTrash className="h-5 w-5 text-gray-620" />
           </button>
         </div>
       </div>
