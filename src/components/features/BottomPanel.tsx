@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { TbTrash } from 'react-icons/tb';
-import { TfiControlPlay, TfiControlStop, TfiSave } from 'react-icons/tfi';
+import { TfiSave } from 'react-icons/tfi';
+import { Globe, Sparkles } from 'lucide-react';
 
 import { Terminal } from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
@@ -11,6 +11,8 @@ interface BottomPanelProps {
   onSave?: () => void;
   isAutoSaveEnabled: boolean;
   setIsAutoSaveEnabled: (val: boolean) => void;
+  /** 하단 브레드크럼 (예: C: > Users > ... > index.html) */
+  breadcrumbPath?: string;
 }
 
 const BottomPanel = ({
@@ -19,13 +21,13 @@ const BottomPanel = ({
   onSave,
   isAutoSaveEnabled,
   setIsAutoSaveEnabled,
+  breadcrumbPath = '',
 }: BottomPanelProps) => {
-  const [isTerminalExpanded, setIsTerminalExpanded] = useState(true);
+  const [bottomTab, setBottomTab] = useState<'log' | 'command'>('log');
 
   const terminalDivRef = useRef<HTMLDivElement | null>(null);
   const terminalRef = useRef<Terminal | null>(null);
 
-  // 1. xterm 초기화
   useEffect(() => {
     const terminal = new Terminal({
       convertEol: true,
@@ -50,95 +52,99 @@ const BottomPanel = ({
     };
   }, []);
 
-  // 2. terminalOutput prop 변화 시 출력
   useEffect(() => {
     if (terminalOutput && terminalRef.current) {
       terminalRef.current.writeln(terminalOutput);
     }
   }, [terminalOutput]);
 
-  // 3. Run / Stop 출력 예시
-  const handleRun = () => {
-    terminalRef.current?.writeln('\x1b[32m[Run] Running...\x1b[0m');
-  };
-
-  const handleStop = () => {
-    terminalRef.current?.writeln('\x1b[31m[Stop] Stopped.\x1b[0m');
-  };
-
   return (
-    <div className="flex flex-col bg-white">
-      {/* 툴바 */}
-      <div className="flex items-center justify-between px-[1.438rem] py-[1.094rem] border-x-[0.5px] border-gray-200">
-        <div className="flex items-center gap-[1.188rem]">
-          {/* <button onClick={onOpenWebPage}> */}
-          <button onClick={handleRun}>
-            <TfiControlPlay className="w-4.5 h-4.5 text-gray-620 stroke-[0.5]" />
-          </button>
-          <button onClick={handleStop}>
-            <TfiControlStop className="w-4.5 h-4.5 text-gray-620 stroke-[0.5]" />
-          </button>
-        </div>
-
-        <div className="flex items-center gap-[1.188rem]">
-          {/* 자동 저장 토글 */}
-          <div className="flex items-center gap-2 pr-2 border-r border-gray-200">
-            <span className="text-xs text-gray-600">자동 저장</span>
-
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                className="sr-only peer"
-                checked={isAutoSaveEnabled}
-                onChange={() => setIsAutoSaveEnabled(!isAutoSaveEnabled)}
-              />
-              <div
-                className="
-                w-10 h-5 bg-gray-300 rounded-full peer
-                peer-checked:bg-blue-500 transition
-              "
-              ></div>
-              <div
-                className="
-                absolute left-0.5 top-0.5 
-                w-4 h-4 bg-white rounded-full 
-                transition-all
-                peer-checked:translate-x-5
-              "
-              ></div>
-            </label>
-          </div>
-          <button
-            onClick={() => {
-              if (onSave) {
-                onSave();
-              }
-            }}
-          >
-            <TfiSave className="w-4 h-4 text-gray-620 stroke-[0.5]" />
-          </button>
-          <button>
-            <TbTrash className="w-5 h-5 text-gray-620" />
-          </button>
-        </div>
-      </div>
-
-      {/* 터미널 영역 */}
-      <div className="flex h-[10.625rem] border-t-[0.5px] border-l-[0.5px] border-gray-200 pt-[0.563rem] px-[0.813rem]">
-        {/* <button
-          onClick={() => setIsTerminalExpanded(!isTerminalExpanded)}
-          className="flex items-center justify-between px-4 py-2 bg-gray-50 hover:bg-gray-100 border-b border-gray-200"
+    <div className="flex flex-col border-x-[0.5px] border-t-[0.5px] border-gray-200 bg-white">
+      <div className="flex flex-wrap items-center gap-2 border-b border-gray-100 px-3 py-2.5">
+        <button
+          type="button"
+          onClick={() => onOpenWebPage?.()}
+          className="inline-flex items-center gap-2 rounded-xl bg-[#1890FF] px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#1677d9]"
         >
-          <span className="text-xs text-gray-500">{isTerminalExpanded ? '' : ''}</span>
-        </button> */}
-        {isTerminalExpanded && (
-          <div
-            ref={terminalDivRef}
-            id="terminal"
-            className="bg-white w-full h-full overflow-y-auto"
-          />
-        )}
+          <Globe className="h-4 w-4" />
+          웹 페이지 열기
+        </button>
+        <button
+          type="button"
+          onClick={() => terminalRef.current?.writeln('\x1b[35m[AI 셀프 채점] 준비 중입니다.\x1b[0m')}
+          className="inline-flex items-center gap-2 rounded-xl border border-violet-200 bg-white px-4 py-2 text-sm font-semibold text-violet-700 transition-colors hover:bg-violet-50"
+        >
+          <Sparkles className="h-4 w-4 text-violet-500" />
+          AI 셀프 채점
+        </button>
       </div>
+
+      <div className="flex items-center justify-between border-b border-gray-100 px-3 py-1.5">
+        <div className="flex gap-1">
+          <button
+            type="button"
+            onClick={() => setBottomTab('log')}
+            className={`rounded-lg px-3 py-1 text-xs font-semibold ${
+              bottomTab === 'log' ? 'bg-neutral-150 text-neutral-900' : 'text-neutral-500 hover:bg-neutral-100'
+            }`}
+          >
+            로그
+          </button>
+          <button
+            type="button"
+            onClick={() => setBottomTab('command')}
+            className={`rounded-lg px-3 py-1 text-xs font-semibold ${
+              bottomTab === 'command'
+                ? 'bg-neutral-150 text-neutral-900'
+                : 'text-neutral-500 hover:bg-neutral-100'
+            }`}
+          >
+            명령어
+          </button>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="hidden text-xs text-gray-600 sm:inline">자동 저장</span>
+          <label className="relative inline-flex cursor-pointer items-center">
+            <input
+              type="checkbox"
+              className="peer sr-only"
+              checked={isAutoSaveEnabled}
+              onChange={() => setIsAutoSaveEnabled(!isAutoSaveEnabled)}
+            />
+            <div className="h-5 w-10 rounded-full bg-gray-300 transition peer-checked:bg-blue-500" />
+            <div className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white transition-all peer-checked:translate-x-5" />
+          </label>
+          <button
+            type="button"
+            onClick={() => onSave?.()}
+            className="rounded p-1.5 hover:bg-gray-100"
+            title="저장"
+          >
+            <TfiSave className="h-4 w-4 text-gray-620 stroke-[0.5]" />
+          </button>
+        </div>
+      </div>
+
+      <div className="flex min-h-[10rem] flex-col border-b border-gray-100">
+        <div className="flex items-center gap-2 border-b border-gray-50 px-3 py-1.5 text-xs font-semibold text-neutral-600">
+          <span className="font-mono text-neutral-400">&lt;/&gt;</span>
+          실행 결과
+        </div>
+        <div
+          ref={terminalDivRef}
+          id="terminal"
+          className={`min-h-[8.5rem] w-full flex-1 overflow-y-auto bg-white px-1 py-1 ${bottomTab !== 'log' ? 'hidden' : ''}`}
+        />
+        <div
+          className={`min-h-[8.5rem] flex-1 overflow-y-auto bg-neutral-50 px-3 py-2 text-sm text-neutral-600 ${bottomTab !== 'command' ? 'hidden' : ''}`}
+        >
+          명령어 입력 영역은 추후 연결됩니다.
+        </div>
+      </div>
+
+      {breadcrumbPath ? (
+        <div className="truncate px-3 py-1.5 font-mono text-[11px] text-neutral-500">{breadcrumbPath}</div>
+      ) : null}
     </div>
   );
 };
