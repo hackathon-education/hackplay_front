@@ -11,6 +11,9 @@ import WorkflowIcon from '@/assets/lecture/workflow-icon.svg?react';
 import { useState } from 'react';
 
 import { AnimatePresence, motion } from 'framer-motion';
+import { useNavigate, useParams } from 'react-router-dom';
+
+import { ROUTES } from '@/constants/routes';
 
 import BooksIcon from '@/assets/lecture/books-icon.webp';
 import CodingWomanIllustration from '@/assets/lecture/coding-woman-illustration.webp';
@@ -125,6 +128,7 @@ const CHAPTERS: ChapterProps[] = [
         title: '팀 코드와 로컬 환경 동기화',
         type: 'Practice Lab',
         duration: 65,
+        isLocked: false,
       },
       {
         id: '2-2',
@@ -175,6 +179,7 @@ const CHAPTERS: ChapterProps[] = [
         title: '회원가입 화면 구성',
         type: 'Practice Lab',
         duration: 65,
+        isLocked: false,
       },
       {
         id: '3-2',
@@ -347,7 +352,13 @@ const ReviewSkeleton = () => (
   </div>
 );
 
-const ChapterSection = ({ chapter }: { chapter: ChapterProps }) => {
+const ChapterSection = ({
+  chapter,
+  onUnitPlay,
+}: {
+  chapter: ChapterProps;
+  onUnitPlay?: (unit: UnitItemProps, chapterNumber: string) => void;
+}) => {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
@@ -403,7 +414,13 @@ const ChapterSection = ({ chapter }: { chapter: ChapterProps }) => {
               </div>
               <div className="divide-y divide-divider-strong">
                 {chapter.units.map((unit) => (
-                  <UnitItem key={unit.id} unit={unit} />
+                  <UnitItem
+                    key={unit.id}
+                    unit={unit}
+                    onPlay={
+                      onUnitPlay ? () => onUnitPlay(unit, chapter.number) : undefined
+                    }
+                  />
                 ))}
               </div>
             </div>
@@ -416,9 +433,52 @@ const ChapterSection = ({ chapter }: { chapter: ChapterProps }) => {
 
 // --- Main Page Component ---
 
+/** CHAPTER 01/02는 학습 내용 화면, CHAPTER 03부터 코드 에디터 워크스페이스로 이동한다. */
+const TEAM_PROJECT_CHAPTER_ONE_WORKSPACE_ID = 'team-project-1';
+const TEAM_PROJECT_CHAPTER_TWO_UNIT_ID = '2-1';
+const TEAM_PROJECT_CHAPTER_TWO_WORKSPACE_ID = 'team-project-2';
+const TEAM_PROJECT_CHAPTER_THREE_UNIT_ID = '3-1';
+const TEAM_PROJECT_CHAPTER_THREE_WORKSPACE_ID = 'team-project-3';
+
 const TeamProjectPage = () => {
+  const navigate = useNavigate();
+  const { job, level, lectureId } = useParams<{
+    job: string;
+    level: string;
+    lectureId: string;
+  }>();
+
   const [activeTab, setActiveTab] = useState('intro'); // TODO: 탭 클릭 시 해당 섹션으로 스크롤 구현. 스크롤 시 탭 전환 구현.
   const [isLoading, setIsLoading] = useState(false); // TODO: API fetch 로직에 로딩 상태 연결
+
+  const handleUnitPlay = (unit: UnitItemProps, chapterNumber: string) => {
+    if (lectureId !== 'team-project') return;
+
+    const lectureMainPath =
+      job && level && lectureId
+        ? ROUTES.COURSES.LECTURE_MAIN(job, level, lectureId)
+        : ROUTES.COURSES.ROOT;
+
+    if (chapterNumber === '01') {
+      navigate(ROUTES.WORKSPACE(TEAM_PROJECT_CHAPTER_ONE_WORKSPACE_ID), {
+        state: { lectureMainPath },
+      });
+      return;
+    }
+
+    if (chapterNumber === '02' && unit.id === TEAM_PROJECT_CHAPTER_TWO_UNIT_ID) {
+      navigate(ROUTES.WORKSPACE(TEAM_PROJECT_CHAPTER_TWO_WORKSPACE_ID), {
+        state: { lectureMainPath },
+      });
+      return;
+    }
+
+    if (chapterNumber === '03' && unit.id === TEAM_PROJECT_CHAPTER_THREE_UNIT_ID) {
+      navigate(ROUTES.WORKSPACE(TEAM_PROJECT_CHAPTER_THREE_WORKSPACE_ID), {
+        state: { lectureMainPath },
+      });
+    }
+  };
 
   return (
     <div className="relative overflow-hidden min-h-screen -mx-[15px] lg:-mx-5 -mt-16.5 lg:-mt-24 bg-bg">
@@ -622,7 +682,11 @@ const TeamProjectPage = () => {
                   </p>
                   <div className="pl-[21px]">
                     {CHAPTERS.map((chapter) => (
-                      <ChapterSection key={chapter.number} chapter={chapter} />
+                      <ChapterSection
+                        key={chapter.number}
+                        chapter={chapter}
+                        onUnitPlay={handleUnitPlay}
+                      />
                     ))}
                   </div>
                 </>
