@@ -1,3 +1,4 @@
+import JobIcon from '@/assets/auth/briefcase-icon.svg?react';
 import CheckIcon from '@/assets/common/check-icon.svg?react';
 import ErrorIcon from '@/assets/common/close-icon.svg?react';
 import { useEffect, useMemo, useState } from 'react';
@@ -537,19 +538,42 @@ const MyPage = () => {
                       <div className="flex flex-col gap-[7px]">
                         <label className="text-sm text-text-base leading-tight">희망 직무</label>
                         <div className="flex items-center gap-2">
-                          <select
-                            {...registerSettings('role')}
-                            className="h-12.5 min-w-[210px] appearance-none rounded-2xl border border-input-default-border bg-input-default-bg px-4 text-sm font-semibold outline-none focus:ring-1 focus:ring-input-focus-ring"
-                          >
-                            <option value="PLAN">{JOB_TYPES.PLAN}</option>
-                            <option value="DESIGN">{JOB_TYPES.DESIGN}</option>
-                            <option value="FRONT">{JOB_TYPES.FRONT}</option>
-                            <option value="BACK">{JOB_TYPES.BACK}</option>
-                          </select>
+                          <div className="relative w-full">
+                            <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
+                              <JobIcon className="text-text-base w-4.5 -translate-x-[1px]" />
+                            </div>
+
+                            <select
+                              {...registerSettings('role', { required: '직무를 선택해 주세요.' })}
+                              className={`
+        w-full h-12.5 rounded-2xl border border-input-default-border bg-input-default-bg 
+        pl-[43px] pr-10 text-sm font-semibold outline-none appearance-none 
+        focus:border-input-focus-border focus:ring-1 focus:ring-input-focus-ring transition-all
+        ${settingsErrors.role ? 'border-input-error-border focus:!border-input-error-border focus:!ring-input-error-border' : ''}
+      `}
+                            >
+                              <option value="" hidden>
+                                직무를 선택해 주세요.
+                              </option>
+                              <option value="PLAN">기획</option>
+                              <option value="DESIGN">디자인</option>
+                              <option value="FRONT">{JOB_TYPES.FRONT}</option>
+                              <option value="BACK">{JOB_TYPES.BACK}</option>
+                            </select>
+                          </div>
+                          {settingsErrors.role && (
+                            <div className="flex text-text-error ml-[17px] items-center gap-1">
+                              <ErrorIcon className="size-4 stroke-current stroke-[1.5px]" />
+                              <span className="text-sm leading-tight">
+                                {settingsErrors.role.message}
+                              </span>
+                            </div>
+                          )}
                           <Button
                             type="button"
                             size="w53h35"
                             rounded="xs"
+                            className="shrink-0"
                             onClick={() => saveSettingsField('role')}
                             disabled={currentSettings.role === profile.role}
                           >
