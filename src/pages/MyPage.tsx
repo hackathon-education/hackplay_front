@@ -93,10 +93,7 @@ const MyPage = () => {
   const [pwModalTitle, setPwModalTitle] = useState('');
   const [pwModalDesc, setPwModalDesc] = useState<string | undefined>(undefined);
   const [pwModalConfirmText, setPwModalConfirmText] = useState('');
-  const [pendingAction, setPendingAction] = useState<null | {
-    type: 'CHANGE_PASSWORD';
-    newPassword: string;
-  }>(null);
+  const [pendingAction, setPendingAction] = useState<null | 'CHANGE_PASSWORD'>(null);
 
   // Forms
   const {
@@ -147,16 +144,6 @@ const MyPage = () => {
 
     toast.success('변경 사항이 저장되었습니다.');
   };
-
-  const {
-    register: registerPw,
-    handleSubmit: handleSubmitPw,
-    watch: watchPw,
-    formState: { errors: pwErrors, isValid: pwIsValid },
-    reset: resetPw,
-  } = useForm<{ newPassword: string; confirmNewPassword: string }>({
-    mode: 'onChange',
-  });
 
   const {
     register: registerWithdraw,
@@ -212,7 +199,7 @@ const MyPage = () => {
     setVerifyCodeError('');
   }, [verifyCode, isCodeSent, isCodeVerified]);
 
-  const openPasswordModalFor = (action: NonNullable<typeof pendingAction>, title: string) => {
+  const openPasswordModalFor = (action: 'CHANGE_PASSWORD', title: string) => {
     setPendingAction(action);
     setPwModalTitle(title);
     setPwModalDesc('아래 항목에 정보를 입력해주세요.');
@@ -223,14 +210,13 @@ const MyPage = () => {
   const handlePasswordConfirm = async (currentPassword: string, newPassword: string) => {
     if (!pendingAction) return;
     try {
-      if (pendingAction.type === 'CHANGE_PASSWORD') {
+      if (pendingAction === 'CHANGE_PASSWORD') {
         const res = await changeMyPassword({
           currentPassword,
           newPassword,
         });
         if (res.code !== 200) throw new Error(res.message);
         toast.success('비밀번호를 변경했습니다.');
-        resetPw();
       }
     } catch (e: any) {
       toast.error(e?.response?.data?.message ?? e?.message ?? '요청 처리에 실패했습니다.');
@@ -294,15 +280,6 @@ const MyPage = () => {
     } finally {
       setIsVerifyingCode(false);
     }
-  };
-
-  const onSubmitPassword: SubmitHandler<{ newPassword: string; confirmNewPassword: string }> = (
-    data,
-  ) => {
-    openPasswordModalFor(
-      { type: 'CHANGE_PASSWORD', newPassword: data.newPassword },
-      '비밀번호 변경',
-    );
   };
 
   const onSubmitWithdraw: SubmitHandler<{ password: string; confirmPassword: string }> = async (
@@ -407,7 +384,7 @@ const MyPage = () => {
 
           {/* Content Area */}
           <section className="relative flex-1">
-            <div className="min-h-[700px] rounded-20 rounded-tl-none border border-l-0 border-card-border bg-tab-bg-default p-8 lg:p-[55px]">
+            <div className="min-h-[538px] rounded-20 rounded-tl-none border border-l-0 border-card-border bg-tab-bg-default p-8 lg:p-[55px]">
               <div className={`${activeTab === 'settings' ? 'max-w-[299px] mx-auto' : ''}`}>
                 <h2 className="text-2xl text-text-accent leading-[1.2]">{TAB_LABEL[activeTab]}</h2>
 
@@ -583,29 +560,15 @@ const MyPage = () => {
                       </div>
                     </div>
 
-                    <div className="rounded-3xl border border-card-border bg-card-bg p-6 lg:p-8">
-                      <h3 className="text-lg font-bold text-text-title">비밀번호 변경</h3>
-                      <form
-                        className="mt-6 flex flex-col gap-5"
-                        onSubmit={handleSubmitPw(onSubmitPassword)}
-                      >
-                        <Input
-                          type="password"
-                          iconType="password"
-                          placeholder="새 비밀번호"
-                          {...registerPw('newPassword', { required: true })}
-                        />
-                        <Input
-                          type="password"
-                          iconType="confirmPassword"
-                          placeholder="비밀번호 확인"
-                          {...registerPw('confirmNewPassword', { required: true })}
-                        />
-                        <Button type="submit" disabled={!pwIsValid} size="wfullh50">
-                          비밀번호 변경
-                        </Button>
-                      </form>
-                    </div>
+                    <Button
+                      type="button"
+                      onClick={() => openPasswordModalFor('CHANGE_PASSWORD', '비밀번호 변경')}
+                      size="w155h35"
+                      rounded="xs"
+                      className="self-end"
+                    >
+                      비밀번호 변경하기
+                    </Button>
                   </div>
                 )}
 
