@@ -1,3 +1,4 @@
+import ErrorIcon from '@/assets/common/close-icon.svg?react';
 import { useEffect, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -97,14 +98,52 @@ const MyPage = () => {
   // Forms
   const {
     register: registerSettings,
-    handleSubmit: handleSubmitSettings,
     watch: watchSettings,
-    formState: { errors: settingsErrors, isValid: settingsIsValid },
+    formState: { errors: settingsErrors },
     reset: resetSettings,
   } = useForm<{ nickname: string; email: string; role: JobKey }>({
     mode: 'onChange',
     defaultValues: profile,
   });
+
+  const currentSettings = {
+    nickname: watchSettings('nickname'),
+    email: watchSettings('email'),
+    role: watchSettings('role'),
+  };
+
+  const saveSettingsField = (field: 'nickname' | 'email' | 'role') => {
+    const value = currentSettings[field];
+
+    if (field === 'email' && value !== profile.email && !isCodeVerified) {
+      toast.error('이메일 변경 시 인증을 완료해주세요.');
+      return;
+    }
+
+    if (value === profile[field]) {
+      toast('변경 사항이 없어요.');
+      return;
+    }
+
+    if (field === 'nickname' && settingsErrors.nickname) {
+      toast.error(settingsErrors.nickname.message ?? '닉네임을 확인해주세요.');
+      return;
+    }
+
+    const updatedProfile = {
+      ...profile,
+      [field]: value,
+    };
+
+    setProfile(updatedProfile);
+    resetSettings(updatedProfile);
+    setIsCodeSent(false);
+    setIsCodeVerified(false);
+    setVerifyCode('');
+    setVerifyCodeError('');
+
+    toast.success('변경 사항이 저장되었습니다.');
+  };
 
   const {
     register: registerPw,
@@ -198,22 +237,6 @@ const MyPage = () => {
     }
   };
 
-  const onSubmitSettings: SubmitHandler<{ nickname: string; email: string; role: JobKey }> = (
-    data,
-  ) => {
-    const changed: { nickname?: string; email?: string; role?: JobKey } = {};
-    if (data.nickname !== profile.nickname) changed.nickname = data.nickname;
-    if (data.role !== profile.role) changed.role = data.role;
-    if (data.email !== profile.email) changed.email = data.email;
-
-    if (!Object.keys(changed).length) {
-      toast('변경 사항이 없어요.');
-      return;
-    }
-
-    toast.error('프로필 업데이트 기능은 준비 중입니다.');
-  };
-
   const handleSendEmailCode = async (nextEmail: string) => {
     if (!nextEmail) return;
     setIsSendingCode(true);
@@ -248,6 +271,17 @@ const MyPage = () => {
       if (res.data?.code === 200) {
         setIsCodeVerified(true);
         toast.success('이메일 인증이 완료되었습니다.');
+        // 인증 완료 후 자동으로 저장
+        const updatedProfile = {
+          ...profile,
+          email: nextEmail,
+        };
+        setProfile(updatedProfile);
+        resetSettings(updatedProfile);
+        setIsCodeSent(false);
+        setVerifyCode('');
+        setVerifyCodeError('');
+        toast.success('이메일이 변경되었습니다.');
       } else {
         toast.error(res.data?.message ?? '인증에 실패했습니다.');
       }
@@ -367,70 +401,79 @@ const MyPage = () => {
 
           {/* Content Area */}
           <section className="relative flex-1">
-            <div className="min-h-[700px] rounded-[40px] rounded-tl-none border border-l-0 border-card-border bg-tab-bg-default p-8 shadow-1 lg:p-12">
-              <div className="flex flex-col gap-1">
-                <h2 className="text-2xl font-bold tracking-wide text-text-title">
-                  {TAB_LABEL[activeTab]}
-                </h2>
-                <p className="text-sm text-text-body">{TAB_DESC[activeTab]}</p>
-              </div>
+            <div className="min-h-[700px] rounded-20 rounded-tl-none border border-l-0 border-card-border bg-tab-bg-default p-8 lg:p-[55px]">
+              <div className={`${activeTab === 'settings' ? 'max-w-[299px] mx-auto' : ''}`}>
+                <h2 className="text-2xl text-text-accent leading-[1.2]">{TAB_LABEL[activeTab]}</h2>
 
-              {/* Settings */}
-              {activeTab === 'settings' && (
-                <div className="mt-8 flex flex-col gap-6">
-                  <div className="rounded-3xl border border-card-border bg-card-bg p-6 lg:p-8">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-bold text-text-title">개인정보</h3>
-                      {profileLoading && (
-                        <span className="text-xs text-text-body">불러오는 중...</span>
-                      )}
-                    </div>
-
-                    <form
-                      className="mt-6 flex flex-col gap-5"
-                      onSubmit={handleSubmitSettings(onSubmitSettings)}
-                    >
-                      <div className="flex flex-col gap-2">
-                        <label className="text-sm font-semibold text-text-title">닉네임</label>
-                        <Input
-                          iconType="nickname"
-                          iconSize="w-5.5 h-auto -translate-x-[2px]"
-                          placeholder="닉네임"
-                          maxLength={30}
-                          {...registerSettings('nickname', {
-                            required: '닉네임을 입력해주세요',
-                            minLength: {
-                              value: 2,
-                              message: '닉네임은 최소 2자 이상이어야 합니다.',
-                            },
-                          })}
-                          className={settingsErrors.nickname ? 'border-input-error-border' : ''}
-                        />
-                        {settingsErrors.nickname && (
-                          <p className="ml-4 text-sm text-text-error">
-                            {settingsErrors.nickname.message}
-                          </p>
-                        )}
-                      </div>
-
-                      <div className="flex flex-col gap-2">
-                        <label className="text-sm font-semibold text-text-title">이메일</label>
-                        <div className="flex gap-2">
+                {/* Settings */}
+                {activeTab === 'settings' && (
+                  <div className="mt-[35px] flex flex-col gap-[35px]">
+                    <div className="flex flex-col gap-[35px] pr-[13px]">
+                      <div className="flex flex-col gap-[7px]">
+                        <label className="text-sm text-text-base leading-tight">닉네임</label>
+                        <div className="flex items-center gap-2">
                           <Input
-                            type="email"
-                            iconType="email"
-                            placeholder="이메일"
-                            {...registerSettings('email', { required: '이메일을 입력해주세요' })}
-                            className={settingsErrors.email ? 'border-input-error-border' : ''}
+                            iconType="nickname"
+                            iconSize="w-5.5 h-auto -translate-x-[2px]"
+                            maxLength={30}
+                            {...registerSettings('nickname', {
+                              required: '닉네임을 입력해주세요',
+                              minLength: {
+                                value: 2,
+                                message: '닉네임은 최소 2자 이상이어야 합니다.',
+                              },
+                            })}
+                            className={
+                              settingsErrors.nickname
+                                ? 'border-input-error-border focus:!border-input-error-border focus:!ring-input-error-border'
+                                : ''
+                            }
                           />
                           <Button
                             type="button"
-                            size="w74h43"
-                            rounded="sm"
-                            disabled={isSendingCode || watchSettings('email') === profile.email}
-                            onClick={() => handleSendEmailCode(watchSettings('email'))}
+                            size="w53h35"
+                            rounded="xs"
+                            onClick={() => saveSettingsField('nickname')}
+                            disabled={
+                              !!settingsErrors.nickname ||
+                              currentSettings.nickname === profile.nickname
+                            }
                           >
-                            인증
+                            수정
+                          </Button>
+                        </div>
+                        {settingsErrors.nickname && (
+                          <div className="flex text-text-error ml-[17px] items-center gap-1">
+                            <ErrorIcon className="size-4 stroke-current stroke-[1.5px]" />
+                            <span className="text-sm leading-tight">
+                              {settingsErrors.nickname.message}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex flex-col gap-[7px]">
+                        <label className="text-sm text-text-base leading-tight">이메일</label>
+                        <div className="flex items-center gap-2">
+                          <Input
+                            type="email"
+                            iconType="email"
+                            iconSize="w-4.5 h-auto"
+                            {...registerSettings('email', { required: '이메일을 입력해주세요' })}
+                            className={
+                              settingsErrors.email
+                                ? 'border-input-error-border focus:!border-input-error-border focus:!ring-input-error-border'
+                                : ''
+                            }
+                          />
+                          <Button
+                            type="button"
+                            size="w53h35"
+                            rounded="xs"
+                            disabled={isSendingCode || currentSettings.email === profile.email}
+                            onClick={() => handleSendEmailCode(currentSettings.email)}
+                          >
+                            수정
                           </Button>
                         </div>
                         {isCodeSent && !isCodeVerified && (
@@ -442,8 +485,9 @@ const MyPage = () => {
                             />
                             <Button
                               type="button"
-                              size="w74h43"
-                              onClick={() => handleVerifyEmailCode(watchSettings('email'))}
+                              size="w53h35"
+                              rounded="xs"
+                              onClick={() => handleVerifyEmailCode(currentSettings.email)}
                             >
                               확인
                             </Button>
@@ -451,136 +495,138 @@ const MyPage = () => {
                         )}
                       </div>
 
-                      <div className="flex flex-col gap-2">
-                        <label className="text-sm font-semibold text-text-title">희망 직무</label>
-                        <select
-                          {...registerSettings('role')}
-                          className="h-12.5 w-full appearance-none rounded-2xl border border-input-default-border bg-input-default-bg px-4 text-sm font-semibold outline-none focus:ring-1 focus:ring-input-focus-ring"
-                        >
-                          <option value="PLAN">{JOB_TYPES.PLAN}</option>
-                          <option value="DESIGN">{JOB_TYPES.DESIGN}</option>
-                          <option value="FRONT">{JOB_TYPES.FRONT}</option>
-                          <option value="BACK">{JOB_TYPES.BACK}</option>
-                        </select>
+                      <div className="flex flex-col gap-[7px]">
+                        <label className="text-sm text-text-base leading-tight">희망 직무</label>
+                        <div className="flex items-center gap-2">
+                          <select
+                            {...registerSettings('role')}
+                            className="h-12.5 min-w-[210px] appearance-none rounded-2xl border border-input-default-border bg-input-default-bg px-4 text-sm font-semibold outline-none focus:ring-1 focus:ring-input-focus-ring"
+                          >
+                            <option value="PLAN">{JOB_TYPES.PLAN}</option>
+                            <option value="DESIGN">{JOB_TYPES.DESIGN}</option>
+                            <option value="FRONT">{JOB_TYPES.FRONT}</option>
+                            <option value="BACK">{JOB_TYPES.BACK}</option>
+                          </select>
+                          <Button
+                            type="button"
+                            size="w53h35"
+                            rounded="xs"
+                            onClick={() => saveSettingsField('role')}
+                            disabled={currentSettings.role === profile.role}
+                          >
+                            수정
+                          </Button>
+                        </div>
                       </div>
+                    </div>
 
+                    <div className="rounded-3xl border border-card-border bg-card-bg p-6 lg:p-8">
+                      <h3 className="text-lg font-bold text-text-title">비밀번호 변경</h3>
+                      <form
+                        className="mt-6 flex flex-col gap-5"
+                        onSubmit={handleSubmitPw(onSubmitPassword)}
+                      >
+                        <Input
+                          type="password"
+                          iconType="password"
+                          placeholder="새 비밀번호"
+                          {...registerPw('newPassword', { required: true })}
+                        />
+                        <Input
+                          type="password"
+                          iconType="confirmPassword"
+                          placeholder="비밀번호 확인"
+                          {...registerPw('confirmNewPassword', { required: true })}
+                        />
+                        <Button type="submit" disabled={!pwIsValid} size="wfullh50">
+                          비밀번호 변경
+                        </Button>
+                      </form>
+                    </div>
+                  </div>
+                )}
+
+                {/* Payments */}
+                {activeTab === 'payments' && (
+                  <div className="mt-8 rounded-3xl border border-card-border bg-card-bg p-10 text-center">
+                    <p className="text-text-body">결제 내역 기능은 준비 중입니다.</p>
+                  </div>
+                )}
+
+                {/* History */}
+                {activeTab === 'history' && (
+                  <div className="mt-8 flex flex-col gap-6">
+                    <div className="rounded-3xl border border-card-border bg-card-bg p-6 lg:p-8">
+                      <h3 className="mb-6 text-lg font-bold text-text-title">최근 학습</h3>
+                      {recentLearning ? (
+                        <div className="flex flex-col gap-6 lg:flex-row">
+                          <div className="relative aspect-video w-full shrink-0 overflow-hidden rounded-2xl border border-divider bg-gray-100 lg:w-[300px]">
+                            {recentLearning.thumbnailUrl && (
+                              <img
+                                src={recentLearning.thumbnailUrl}
+                                className="h-full w-full object-cover"
+                              />
+                            )}
+                            <button
+                              onClick={() => goResume(recentLearning)}
+                              className="absolute inset-0 flex items-center justify-center bg-black/10"
+                            >
+                              <span className="flex size-12 items-center justify-center rounded-full bg-white/90 shadow-lg">
+                                <span className="ml-1 border-y-[8px] border-y-transparent border-l-[12px] border-l-primary-500" />
+                              </span>
+                            </button>
+                          </div>
+                          <div className="flex flex-1 flex-col justify-center">
+                            <div className="flex gap-2">
+                              <Pill>
+                                {recentLearning.status === 'COMPLETED' ? '완료' : '진행 중'}
+                              </Pill>
+                            </div>
+                            <h4 className="mt-3 text-xl font-bold text-text-title">
+                              {recentLearning.title}
+                            </h4>
+                            <button
+                              onClick={() => goResume(recentLearning)}
+                              className="mt-4 w-fit text-sm font-bold text-text-accent hover:underline"
+                            >
+                              이어서 학습하기 ›
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="text-text-body">학습 이력이 없습니다.</p>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Withdraw */}
+                {activeTab === 'withdraw' && (
+                  <div className="mt-8 rounded-3xl border border-card-border bg-card-bg p-6 lg:p-8">
+                    <h3 className="text-lg font-bold text-text-title text-red-600">회원 탈퇴</h3>
+                    <p className="mt-2 text-sm text-text-body">
+                      탈퇴 시 모든 학습 데이터가 삭제되며 복구할 수 없습니다.
+                    </p>
+                    <form
+                      className="mt-8 flex flex-col gap-4"
+                      onSubmit={handleSubmitWithdraw(onSubmitWithdraw)}
+                    >
+                      <Input
+                        type="password"
+                        placeholder="비밀번호 확인"
+                        {...registerWithdraw('password', { required: true })}
+                      />
                       <Button
                         type="submit"
-                        disabled={!settingsIsValid}
-                        size="wfullh50"
-                        className="mt-4"
+                        disabled={!withdrawIsValid}
+                        className="!bg-red-500 hover:!bg-red-600"
                       >
-                        저장하기
+                        탈퇴하기
                       </Button>
                     </form>
                   </div>
-
-                  <div className="rounded-3xl border border-card-border bg-card-bg p-6 lg:p-8">
-                    <h3 className="text-lg font-bold text-text-title">비밀번호 변경</h3>
-                    <form
-                      className="mt-6 flex flex-col gap-5"
-                      onSubmit={handleSubmitPw(onSubmitPassword)}
-                    >
-                      <Input
-                        type="password"
-                        iconType="password"
-                        placeholder="새 비밀번호"
-                        {...registerPw('newPassword', { required: true })}
-                      />
-                      <Input
-                        type="password"
-                        iconType="confirmPassword"
-                        placeholder="비밀번호 확인"
-                        {...registerPw('confirmNewPassword', { required: true })}
-                      />
-                      <Button type="submit" disabled={!pwIsValid} size="wfullh50">
-                        비밀번호 변경
-                      </Button>
-                    </form>
-                  </div>
-                </div>
-              )}
-
-              {/* Payments */}
-              {activeTab === 'payments' && (
-                <div className="mt-8 rounded-3xl border border-card-border bg-card-bg p-10 text-center">
-                  <p className="text-text-body">결제 내역 기능은 준비 중입니다.</p>
-                </div>
-              )}
-
-              {/* History */}
-              {activeTab === 'history' && (
-                <div className="mt-8 flex flex-col gap-6">
-                  <div className="rounded-3xl border border-card-border bg-card-bg p-6 lg:p-8">
-                    <h3 className="mb-6 text-lg font-bold text-text-title">최근 학습</h3>
-                    {recentLearning ? (
-                      <div className="flex flex-col gap-6 lg:flex-row">
-                        <div className="relative aspect-video w-full shrink-0 overflow-hidden rounded-2xl border border-divider bg-gray-100 lg:w-[300px]">
-                          {recentLearning.thumbnailUrl && (
-                            <img
-                              src={recentLearning.thumbnailUrl}
-                              className="h-full w-full object-cover"
-                            />
-                          )}
-                          <button
-                            onClick={() => goResume(recentLearning)}
-                            className="absolute inset-0 flex items-center justify-center bg-black/10"
-                          >
-                            <span className="flex size-12 items-center justify-center rounded-full bg-white/90 shadow-lg">
-                              <span className="ml-1 border-y-[8px] border-y-transparent border-l-[12px] border-l-primary-500" />
-                            </span>
-                          </button>
-                        </div>
-                        <div className="flex flex-1 flex-col justify-center">
-                          <div className="flex gap-2">
-                            <Pill>
-                              {recentLearning.status === 'COMPLETED' ? '완료' : '진행 중'}
-                            </Pill>
-                          </div>
-                          <h4 className="mt-3 text-xl font-bold text-text-title">
-                            {recentLearning.title}
-                          </h4>
-                          <button
-                            onClick={() => goResume(recentLearning)}
-                            className="mt-4 w-fit text-sm font-bold text-text-accent hover:underline"
-                          >
-                            이어서 학습하기 ›
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      <p className="text-text-body">학습 이력이 없습니다.</p>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Withdraw */}
-              {activeTab === 'withdraw' && (
-                <div className="mt-8 rounded-3xl border border-card-border bg-card-bg p-6 lg:p-8">
-                  <h3 className="text-lg font-bold text-text-title text-red-600">회원 탈퇴</h3>
-                  <p className="mt-2 text-sm text-text-body">
-                    탈퇴 시 모든 학습 데이터가 삭제되며 복구할 수 없습니다.
-                  </p>
-                  <form
-                    className="mt-8 flex flex-col gap-4"
-                    onSubmit={handleSubmitWithdraw(onSubmitWithdraw)}
-                  >
-                    <Input
-                      type="password"
-                      placeholder="비밀번호 확인"
-                      {...registerWithdraw('password', { required: true })}
-                    />
-                    <Button
-                      type="submit"
-                      disabled={!withdrawIsValid}
-                      className="!bg-red-500 hover:!bg-red-600"
-                    >
-                      탈퇴하기
-                    </Button>
-                  </form>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </section>
         </div>
