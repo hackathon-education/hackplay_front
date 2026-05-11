@@ -1,3 +1,4 @@
+import CheckIcon from '@/assets/common/check-icon.svg?react';
 import ErrorIcon from '@/assets/common/close-icon.svg?react';
 import { useEffect, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -82,6 +83,7 @@ const MyPage = () => {
   const [isSendingCode, setIsSendingCode] = useState(false);
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [isCodeVerified, setIsCodeVerified] = useState(false);
+  const [isVerifyingCode, setIsVerifyingCode] = useState(false);
   const [verifyCode, setVerifyCode] = useState('');
   const [verifyCodeError, setVerifyCodeError] = useState('');
 
@@ -263,6 +265,7 @@ const MyPage = () => {
 
   const handleVerifyEmailCode = async (nextEmail: string) => {
     if (!nextEmail || verifyCodeError || !verifyCode) return;
+    setIsVerifyingCode(true);
     try {
       const res = await axiosInstance.post('/v1/email/verify', {
         email: nextEmail,
@@ -287,6 +290,8 @@ const MyPage = () => {
       }
     } catch (e: any) {
       setVerifyCodeError(e?.response?.data?.message ?? '인증 실패');
+    } finally {
+      setIsVerifyingCode(false);
     }
   };
 
@@ -433,6 +438,7 @@ const MyPage = () => {
                             type="button"
                             size="w53h35"
                             rounded="xs"
+                            className="shrink-0"
                             onClick={() => saveSettingsField('nickname')}
                             disabled={
                               !!settingsErrors.nickname ||
@@ -470,27 +476,60 @@ const MyPage = () => {
                             type="button"
                             size="w53h35"
                             rounded="xs"
+                            className="shrink-0"
                             disabled={isSendingCode || currentSettings.email === profile.email}
                             onClick={() => handleSendEmailCode(currentSettings.email)}
                           >
-                            수정
+                            {isSendingCode ? '...' : '수정'}
                           </Button>
                         </div>
-                        {isCodeSent && !isCodeVerified && (
-                          <div className="mt-2 flex gap-2">
-                            <Input
-                              placeholder="인증코드"
-                              value={verifyCode}
-                              onChange={(e) => setVerifyCode(e.target.value)}
-                            />
-                            <Button
-                              type="button"
-                              size="w53h35"
-                              rounded="xs"
-                              onClick={() => handleVerifyEmailCode(currentSettings.email)}
-                            >
-                              확인
-                            </Button>
+                        {isCodeSent && (
+                          <div className="flex flex-col gap-2">
+                            <div className="flex gap-2 items-center">
+                              <Input
+                                iconType="verifyCode"
+                                iconSize="w-4.5 h-auto"
+                                placeholder="인증코드 6자리"
+                                maxLength={6}
+                                value={verifyCode}
+                                disabled={isCodeVerified}
+                                onChange={(e) => setVerifyCode(e.target.value)}
+                                className={
+                                  verifyCodeError
+                                    ? 'border-input-error-border focus:!border-input-error-border focus:!ring-input-error-border'
+                                    : ''
+                                }
+                              />
+                              <Button
+                                type="button"
+                                disabled={
+                                  !verifyCode ||
+                                  !!verifyCodeError ||
+                                  isVerifyingCode ||
+                                  isCodeVerified
+                                }
+                                onClick={() => handleVerifyEmailCode(currentSettings.email)}
+                                size="w53h35"
+                                rounded="xs"
+                                className={`shrink-0 text-sm ${isCodeVerified ? '!font-semibold' : ''}`}
+                              >
+                                {isCodeVerified ? '인증완료' : isVerifyingCode ? '...' : '확인'}
+                              </Button>
+                            </div>
+                            {verifyCodeError && (
+                              <div className="flex text-text-error ml-[17px] items-center gap-1">
+                                <ErrorIcon className="size-4 stroke-current stroke-[1.5px]" />
+                                <span className="text-sm leading-tight">{verifyCodeError}</span>
+                              </div>
+                            )}
+                            {isCodeVerified && (
+                              <div className="flex text-text-accent ml-[17px] items-center gap-1">
+                                <CheckIcon className="stroke-current stroke-[1.5px]" />
+                                <span className="text-sm leading-tight">
+                                  이메일 인증이 완료되었습니다.
+                                </span>
+                              </div>
+                            )}
                           </div>
                         )}
                       </div>
