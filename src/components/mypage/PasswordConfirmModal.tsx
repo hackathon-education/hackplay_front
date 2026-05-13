@@ -11,7 +11,11 @@ interface PasswordConfirmModalProps {
   description?: string;
   confirmText?: string;
   onClose: () => void;
-  onConfirm: (currentPassword: string, newPassword: string) => Promise<void> | void;
+  onConfirm: (
+    currentPassword: string,
+    newPassword: string,
+    checkNewPassword: string,
+  ) => Promise<void> | void;
 }
 
 const PasswordConfirmModal = ({
@@ -54,7 +58,7 @@ const PasswordConfirmModal = ({
     if (!canSubmit) return;
     setIsSubmitting(true);
     try {
-      await onConfirm(currentPassword, newPassword);
+      await onConfirm(currentPassword, newPassword, confirmPassword);
       onClose();
     } finally {
       setIsSubmitting(false);
