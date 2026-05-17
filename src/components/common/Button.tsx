@@ -4,6 +4,7 @@ const SIZES = {
   wfullh50: 'w-full h-[50px]',
   wfullh44: 'w-full h-[44px]',
   wfullh42: 'w-full h-[42px]',
+  w155h35: 'w-[155px] h-[35px]',
   w74h43: 'w-[74px] h-[43px]',
   w53h35: 'w-[53px] h-[35px]',
   none: '',
