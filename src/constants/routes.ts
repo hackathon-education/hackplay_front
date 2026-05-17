@@ -5,10 +5,12 @@ export const ROUTES = {
   SIGNUP: '/signup',
   SIGNIN: '/signin',
 
+  // My page
+  MYPAGE: '/mypage',
+
   // 단계별 학습
   COURSES: {
     ROOT: '/courses',
-    LECTURE_LIST: (job: string, level: string) => `/courses/${job}/${level}`,
     LECTURE_MAIN: (job: string, level: string, lectureId: string) =>
       `/courses/${job}/${level}/${lectureId}`,
     LECTURE_DETAIL: (job: string, level: string, lectureId: string) =>
