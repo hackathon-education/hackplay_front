@@ -15,6 +15,7 @@ export interface LearningLecture {
   instructorName?: string;
   instructorImageUrl?: string;
   difficulty?: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED'; // 난도
+  progressRate?: number; // 0~100
 }
 
 type ApiEnvelope<T> = {

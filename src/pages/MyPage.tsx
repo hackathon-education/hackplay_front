@@ -93,6 +93,7 @@ const DUMMY_LEARNING_LIST: LearningLecture[] = [
     lastStudiedAt: '2025-10-17T14:30:00Z',
     resumeLectureId: 'course-1',
     instructorName: '조은영',
+    progressRate: 25,
   },
   {
     lectureId: 'course-2',
@@ -726,7 +727,7 @@ const MyPage = () => {
                         )}
                       </div>
 
-                      <div className="flex flex-1 flex-col items-start justify-between p-6 pt-0 lg:p-10 lg:pt-0">
+                      <div className="flex flex-1 flex-col items-start justify-between p-6 pt-0 lg:p-[35px] lg:pt-0">
                         <CategoryBadge>{recentLearning?.position ?? 'FRONTEND'}</CategoryBadge>
 
                         <div>
@@ -750,6 +751,26 @@ const MyPage = () => {
                           <p className="mt-[51px] text-xl leading-tight text-text-base">
                             {recentLearning?.description}
                           </p>
+                          {recentLearning?.progressRate != null && (
+                            <div className="mt-10 w-full self-end lg:mt-25">
+                              <div className="flex items-center justify-between gap-3 text-xl leading-[1.2] text-text-body">
+                                <span>진도율 {recentLearning.progressRate}%</span>
+                                <p className="mr-[11px]">
+                                  {recentLearning.progressRate >= 100
+                                    ? '완료된 강의입니다.'
+                                    : `${Math.max(1, 5 - Math.floor(recentLearning.progressRate / 26))}강 남음`}
+                                </p>
+                              </div>
+                              <div className="mt-[9px] h-[15px] overflow-hidden rounded-20 bg-[rgba(var(--neutral-180-rgb),0.13)] border border-text-body/20 shadow-7">
+                                <div
+                                  className="h-full rounded-20 bg-primary-500 border border-card-border"
+                                  style={{
+                                    width: `${Math.min(100, Math.max(0, recentLearning.progressRate))}%`,
+                                  }}
+                                />
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
