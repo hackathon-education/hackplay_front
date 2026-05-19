@@ -12,6 +12,9 @@ export interface LearningLecture {
   teamCount?: number;
   lastStudiedAt?: string; // ISO
   resumeLectureId?: string; // 이어하기용 (없으면 lectureId 사용)
+  instructorName?: string;
+  instructorImageUrl?: string;
+  difficulty?: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED'; // 난도
 }
 
 type ApiEnvelope<T> = {

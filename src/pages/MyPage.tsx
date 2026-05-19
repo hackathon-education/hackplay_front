@@ -2,7 +2,6 @@ import JobIcon from '@/assets/auth/briefcase-icon.svg?react';
 import CheckIcon from '@/assets/common/check-icon.svg?react';
 import ErrorIcon from '@/assets/common/close-icon.svg?react';
 import CalendarIcon from '@/assets/lecture/calendar-icon.svg?react';
-import StarIcon from '@/assets/lecture/star-icon.svg?react';
 import TeamMembersIcon from '@/assets/lecture/team-members-icon.svg?react';
 import TriangleRightIcon from '@/assets/lecture/triangle-right-icon.svg?react';
 import { useEffect, useMemo, useState } from 'react';
@@ -14,17 +13,15 @@ import { toast } from 'sonner';
 import { axiosInstance } from '@/api/axios';
 import { LearningLecture } from '@/api/learning';
 import { changeMyPassword, withdrawMember } from '@/api/member';
-import BackendThumbnail from '@/assets/backend.png';
 import RecentThumbnail from '@/assets/common/main-character-group.webp';
 import DesignerThumbnail from '@/assets/designer.png';
-import MockupThumbnail from '@/assets/mockup.jpg';
+import StarRatingIcon from '@/assets/lecture/star-rating-icon.webp';
 import MypageBg from '@/assets/mypage/mypage-bg.webp';
-import PlannerThumbnail from '@/assets/planner.png';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
 import CategoryBadge from '@/components/lecture/CategoryBadge';
 import PasswordConfirmModal from '@/components/mypage/PasswordConfirmModal';
-import { JOB_TYPES, JobKey } from '@/constants/jobTypes';
+import { DIFFICULTY_LABELS, JOB_TYPES, JobKey } from '@/constants/jobTypes';
 import { ROUTES } from '@/constants/routes';
 import { useAuthStore } from '@/store/authStore';
 
@@ -54,9 +51,9 @@ function formatRole(role: JobKey | null | undefined) {
   return JOB_TYPES[role] ?? role;
 }
 
-function safeRating(rating?: number) {
-  if (typeof rating !== 'number') return null;
-  return Math.max(0, Math.min(5, rating));
+function formatRating(rating?: number) {
+  if (typeof rating !== 'number') return '-';
+  return Math.max(0, Math.min(5, rating)).toFixed(1);
 }
 
 function formatDateLabel(iso?: string) {
@@ -66,6 +63,13 @@ function formatDateLabel(iso?: string) {
   const day = date.getDate();
   const twoDigits = (value: number) => `${value < 10 ? '0' : ''}${value}`;
   return `${date.getFullYear()}년 ${twoDigits(month)}월 ${twoDigits(day)}일`;
+}
+
+function getInitials(name?: string) {
+  if (!name) return '강';
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0].slice(0, 2);
+  return `${parts[0][0]}${parts[1][0]}`;
 }
 
 const Pill = ({ children }: { children: React.ReactNode }) => (
@@ -88,12 +92,13 @@ const DUMMY_LEARNING_LIST: LearningLecture[] = [
     teamCount: 8,
     lastStudiedAt: '2025-10-17T14:30:00Z',
     resumeLectureId: 'course-1',
+    instructorName: '조은영',
   },
   {
     lectureId: 'course-2',
     title: 'UI/UX 디자인 시스템 구축하기',
     description: '디자인 원칙부터 컴포넌트 라이브러리까지 실무형 디자인 시스템을 완성합니다.',
-    position: 'DESIGN',
+    position: 'FRONTEND',
     rating: 4.9,
     thumbnailUrl: DesignerThumbnail,
     status: 'COMPLETED',
@@ -101,32 +106,36 @@ const DUMMY_LEARNING_LIST: LearningLecture[] = [
     teamCount: 3,
     lastStudiedAt: '2025-10-10T11:20:00Z',
     resumeLectureId: 'course-2',
+    instructorName: '이름',
+    difficulty: 'INTERMEDIATE',
   },
   {
     lectureId: 'course-3',
     title: 'React Native 실전 프로젝트',
     description: '모바일 앱 개발의 핵심 흐름을 실습 중심으로 익힙니다.',
-    position: 'FRONT',
+    position: 'FRONTEND',
     rating: 4.8,
-    thumbnailUrl: PlannerThumbnail,
     status: 'IN_PROGRESS',
     startedAt: '2025-09-10T00:00:00Z',
     teamCount: 5,
     lastStudiedAt: '2025-09-27T09:15:00Z',
     resumeLectureId: 'course-3',
+    instructorName: '김소영',
+    difficulty: 'BEGINNER',
   },
   {
     lectureId: 'course-4',
     title: '백엔드 서버 성능 최적화 심화',
     description: '고성능 서버 설계와 안정적인 서비스 운영 노하우를 다룹니다.',
-    position: 'BACK',
+    position: 'BACKEND',
     rating: 5.0,
-    thumbnailUrl: BackendThumbnail,
     status: 'COMPLETED',
     startedAt: '2025-08-05T00:00:00Z',
     teamCount: 2,
     lastStudiedAt: '2025-09-15T17:40:00Z',
     resumeLectureId: 'course-4',
+    instructorName: '이현수',
+    difficulty: 'ADVANCED',
   },
   {
     lectureId: 'course-5',
@@ -134,12 +143,13 @@ const DUMMY_LEARNING_LIST: LearningLecture[] = [
     description: '웹 인터페이스 디자인의 기본과 실전 템플릿을 함께 완성합니다.',
     position: 'DESIGN',
     rating: 4.7,
-    thumbnailUrl: MockupThumbnail,
     status: 'IN_PROGRESS',
     startedAt: '2025-07-22T00:00:00Z',
     teamCount: 4,
     lastStudiedAt: '2025-09-05T13:05:00Z',
     resumeLectureId: 'course-5',
+    instructorName: '한유진',
+    difficulty: 'ADVANCED',
   },
 ];
 
@@ -696,7 +706,13 @@ const MyPage = () => {
                             <div className="absolute inset-0 bg-gradient-banner-glass backdrop-blur-[4px]" />
                           </>
                         ) : (
-                          <div className="h-full w-full bg-gray-100" />
+                          <div
+                            className="h-full w-full"
+                            style={{
+                              background:
+                                'linear-gradient(180deg, #A855F7 0%, rgba(99, 102, 241, 0.00) 159%)',
+                            }}
+                          />
                         )}
                         {recentLearning && (
                           <button
@@ -759,50 +775,73 @@ const MyPage = () => {
                       ))}
                     </div>
 
-                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-x-19.5 gap-y-38.5 lg:grid-cols-3">
                       {filteredLearning.length ? (
                         filteredLearning.map((lecture) => (
                           <div
                             key={lecture.lectureId}
-                            className="rounded-[32px] overflow-hidden border border-divider bg-white"
+                            className="rounded-30 overflow-hidden border border-card-border bg-white max-w-[417px]"
                           >
-                            <div className="relative aspect-[4/3] overflow-hidden">
-                              {lecture.thumbnailUrl && (
-                                <img
-                                  src={lecture.thumbnailUrl}
-                                  className="h-full w-full object-cover"
+                            <div className="relative aspect-[415/234] overflow-hidden">
+                              {lecture.thumbnailUrl ? (
+                                <>
+                                  <img
+                                    src={lecture.thumbnailUrl}
+                                    className="h-full w-full object-cover"
+                                  />
+                                  <div className="absolute inset-0 bg-gradient-banner-glass backdrop-blur-[4px]" />
+                                </>
+                              ) : (
+                                <div
+                                  className="h-full w-full"
+                                  style={{
+                                    background:
+                                      'linear-gradient(180deg, #A855F7 0%, rgba(99, 102, 241, 0.00) 159%)',
+                                  }}
                                 />
+                              )}
+                              {lecture.difficulty && (
+                                <div className="absolute top-8 left-[29px] z-nav bg-badge-bg rounded-10 px-3.5 py-2 font-medium">
+                                  {DIFFICULTY_LABELS[lecture.difficulty]}
+                                </div>
                               )}
                               <button
                                 type="button"
                                 onClick={() => goResume(lecture)}
-                                className="absolute inset-0 flex items-center justify-center bg-black/10"
+                                className="absolute inset-0 flex items-center justify-center"
                               >
-                                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow-lg">
-                                  <span className="ml-1 border-y-[6px] border-y-transparent border-l-[8px] border-l-primary-500" />
+                                <span className="flex w-[79px] h-[79px] items-center justify-center rounded-full border border-white/60 bg-white/40">
+                                  <TriangleRightIcon className="w-[29px] h-[29px] translate-x-[4px] text-white" />
                                 </span>
                               </button>
                             </div>
-                            <div className="p-5">
-                              <div className="flex items-center justify-between gap-2">
-                                <span className="rounded-full bg-badge-bg px-3 py-1 text-[11px] font-semibold uppercase text-text-accent tracking-[0.08em]">
-                                  {lecture.position}
-                                </span>
-                                <span className="text-sm font-semibold text-text-title">
-                                  {safeRating(lecture.rating) ?? '-'}
+                            <div className="pt-4 pb-5 px-[33.5px] flex flex-col gap-4.5">
+                              <div className="flex items-end justify-between gap-2">
+                                <CategoryBadge>{lecture.position}</CategoryBadge>
+                                <div className="flex items-center">
+                                  <img src={StarRatingIcon} alt="별점" className="w-9 h-9" />
+                                  <span className="font-semibold text-xl leading-[1.2] text-yellow-500 mr-2 translate-y-[1px]">
+                                    {formatRating(lecture.rating)}
+                                  </span>
+                                </div>
+                              </div>
+                              <h4 className="text-2xl leading-[1.21]">{lecture.title}</h4>
+                              <div className="flex items-center gap-[7px]">
+                                <div className="relative flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-btn-disabled-bg">
+                                  {lecture.instructorImageUrl ? (
+                                    <img
+                                      src={lecture.instructorImageUrl}
+                                      alt={lecture.instructorName ?? '강사'}
+                                      className="h-full w-full object-cover"
+                                    />
+                                  ) : (
+                                    <></>
+                                  )}
+                                </div>
+                                <span className="text-xl font-semibold leading-[1.2] text-text-body">
+                                  {lecture.instructorName ?? '강사 정보 없음'}
                                 </span>
                               </div>
-                              <h4 className="mt-4 text-lg font-bold text-text-title">
-                                {lecture.title}
-                              </h4>
-                              <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-text-meta">
-                                <span>{formatDateLabel(lecture.startedAt)}</span>
-                                <span>·</span>
-                                <span>
-                                  {lecture.teamCount != null ? `${lecture.teamCount}명` : '-'}
-                                </span>
-                              </div>
-                              <p className="mt-3 text-sm text-text-body">{lecture.description}</p>
                             </div>
                           </div>
                         ))
