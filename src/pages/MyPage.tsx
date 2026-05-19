@@ -1,6 +1,10 @@
 import JobIcon from '@/assets/auth/briefcase-icon.svg?react';
 import CheckIcon from '@/assets/common/check-icon.svg?react';
 import ErrorIcon from '@/assets/common/close-icon.svg?react';
+import CalendarIcon from '@/assets/lecture/calendar-icon.svg?react';
+import StarIcon from '@/assets/lecture/star-icon.svg?react';
+import TeamMembersIcon from '@/assets/lecture/team-members-icon.svg?react';
+import TriangleRightIcon from '@/assets/lecture/triangle-right-icon.svg?react';
 import { useEffect, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -10,9 +14,15 @@ import { toast } from 'sonner';
 import { axiosInstance } from '@/api/axios';
 import { LearningLecture } from '@/api/learning';
 import { changeMyPassword, withdrawMember } from '@/api/member';
+import BackendThumbnail from '@/assets/backend.png';
+import RecentThumbnail from '@/assets/common/main-character-group.webp';
+import DesignerThumbnail from '@/assets/designer.png';
+import MockupThumbnail from '@/assets/mockup.jpg';
 import MypageBg from '@/assets/mypage/mypage-bg.webp';
+import PlannerThumbnail from '@/assets/planner.png';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
+import CategoryBadge from '@/components/lecture/CategoryBadge';
 import PasswordConfirmModal from '@/components/mypage/PasswordConfirmModal';
 import { JOB_TYPES, JobKey } from '@/constants/jobTypes';
 import { ROUTES } from '@/constants/routes';
@@ -49,11 +59,89 @@ function safeRating(rating?: number) {
   return Math.max(0, Math.min(5, rating));
 }
 
+function formatDateLabel(iso?: string) {
+  if (!iso) return '-';
+  const date = new Date(iso);
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const twoDigits = (value: number) => `${value < 10 ? '0' : ''}${value}`;
+  return `${date.getFullYear()}년 ${twoDigits(month)}월 ${twoDigits(day)}일`;
+}
+
 const Pill = ({ children }: { children: React.ReactNode }) => (
   <span className="inline-flex items-center rounded-full bg-badge-bg px-3 py-1 text-xs font-semibold text-text-accent shadow-1">
     {children}
   </span>
 );
+
+const DUMMY_LEARNING_LIST: LearningLecture[] = [
+  {
+    lectureId: 'course-1',
+    title: '기업페이지 및 관리자페이지 제작',
+    description:
+      '현업에서 즉시 사용 가능한 디자인 시스템을 처음부터 끝까지 구축해봅니다. 토큰 설계부터 컴포넌트 라이브러리 제작까지 심도 있게 다룹니다.',
+    position: 'FRONTEND',
+    rating: 4.9,
+    thumbnailUrl: RecentThumbnail,
+    status: 'IN_PROGRESS',
+    startedAt: '2025-05-17T00:00:00Z',
+    teamCount: 8,
+    lastStudiedAt: '2025-10-17T14:30:00Z',
+    resumeLectureId: 'course-1',
+  },
+  {
+    lectureId: 'course-2',
+    title: 'UI/UX 디자인 시스템 구축하기',
+    description: '디자인 원칙부터 컴포넌트 라이브러리까지 실무형 디자인 시스템을 완성합니다.',
+    position: 'DESIGN',
+    rating: 4.9,
+    thumbnailUrl: DesignerThumbnail,
+    status: 'COMPLETED',
+    startedAt: '2025-08-19T00:00:00Z',
+    teamCount: 3,
+    lastStudiedAt: '2025-10-10T11:20:00Z',
+    resumeLectureId: 'course-2',
+  },
+  {
+    lectureId: 'course-3',
+    title: 'React Native 실전 프로젝트',
+    description: '모바일 앱 개발의 핵심 흐름을 실습 중심으로 익힙니다.',
+    position: 'FRONT',
+    rating: 4.8,
+    thumbnailUrl: PlannerThumbnail,
+    status: 'IN_PROGRESS',
+    startedAt: '2025-09-10T00:00:00Z',
+    teamCount: 5,
+    lastStudiedAt: '2025-09-27T09:15:00Z',
+    resumeLectureId: 'course-3',
+  },
+  {
+    lectureId: 'course-4',
+    title: '백엔드 서버 성능 최적화 심화',
+    description: '고성능 서버 설계와 안정적인 서비스 운영 노하우를 다룹니다.',
+    position: 'BACK',
+    rating: 5.0,
+    thumbnailUrl: BackendThumbnail,
+    status: 'COMPLETED',
+    startedAt: '2025-08-05T00:00:00Z',
+    teamCount: 2,
+    lastStudiedAt: '2025-09-15T17:40:00Z',
+    resumeLectureId: 'course-4',
+  },
+  {
+    lectureId: 'course-5',
+    title: '피그마로 시작하는 웹 디자인',
+    description: '웹 인터페이스 디자인의 기본과 실전 템플릿을 함께 완성합니다.',
+    position: 'DESIGN',
+    rating: 4.7,
+    thumbnailUrl: MockupThumbnail,
+    status: 'IN_PROGRESS',
+    startedAt: '2025-07-22T00:00:00Z',
+    teamCount: 4,
+    lastStudiedAt: '2025-09-05T13:05:00Z',
+    resumeLectureId: 'course-5',
+  },
+];
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -187,6 +275,12 @@ const MyPage = () => {
   }, [profile, resetSettings]);
 
   useEffect(() => {
+    if (!learningList.length) {
+      setLearningList(DUMMY_LEARNING_LIST);
+    }
+  }, [learningList.length]);
+
+  useEffect(() => {
     if (!isCodeSent || isCodeVerified || !verifyCode) return;
     if (/[^a-zA-Z0-9]/.test(verifyCode)) {
       setVerifyCodeError('인증코드는 영문자와 숫자만 입력할 수 있습니다.');
@@ -207,13 +301,18 @@ const MyPage = () => {
     setPwModalOpen(true);
   };
 
-  const handlePasswordConfirm = async (currentPassword: string, newPassword: string) => {
+  const handlePasswordConfirm = async (
+    currentPassword: string,
+    newPassword: string,
+    checkNewPassword: string,
+  ) => {
     if (!pendingAction) return;
     try {
       if (pendingAction === 'CHANGE_PASSWORD') {
         const res = await changeMyPassword({
           currentPassword,
           newPassword,
+          checkNewPassword,
         });
         if (res.code !== 200) throw new Error(res.message);
         toast.success('비밀번호를 변경했습니다.');
@@ -300,11 +399,6 @@ const MyPage = () => {
     }
   };
 
-  const filteredLearning = useMemo(() => {
-    if (historyFilter === 'ALL') return learningList;
-    return learningList.filter((l) => l.status === historyFilter);
-  }, [learningList, historyFilter]);
-
   const recentLearning = useMemo(() => {
     const copy = [...learningList];
     copy.sort((a, b) => {
@@ -314,6 +408,15 @@ const MyPage = () => {
     });
     return copy[0];
   }, [learningList]);
+
+  const filteredLearning = useMemo(() => {
+    const list = recentLearning
+      ? learningList.filter((lecture) => lecture.lectureId !== recentLearning.lectureId)
+      : learningList;
+
+    if (historyFilter === 'ALL') return list;
+    return list.filter((l) => l.status === historyFilter);
+  }, [learningList, historyFilter, recentLearning]);
 
   const goResume = (lecture: LearningLecture) => {
     const id = lecture.resumeLectureId ?? lecture.lectureId;
@@ -582,46 +685,134 @@ const MyPage = () => {
                 {/* History */}
                 {activeTab === 'history' && (
                   <div className="mt-8 flex flex-col gap-6">
-                    <div className="rounded-3xl border border-card-border bg-card-bg p-6 lg:p-8">
-                      <h3 className="mb-6 text-lg font-bold text-text-title">최근 학습</h3>
-                      {recentLearning ? (
-                        <div className="flex flex-col gap-6 lg:flex-row">
-                          <div className="relative aspect-video w-full shrink-0 overflow-hidden rounded-2xl border border-divider bg-gray-100 lg:w-[300px]">
-                            {recentLearning.thumbnailUrl && (
+                    <div className="flex flex-col gap-6">
+                      <div className="rounded-30 overflow-hidden border border-card-border bg-gradient-hero lg:flex items-start p-10 shadow-2">
+                        <div className="relative aspect-[613/416] overflow-hidden lg:w-[613px] shrink-0 border border-banner-border rounded-30 shadow-1">
+                          {recentLearning?.thumbnailUrl ? (
+                            <>
                               <img
                                 src={recentLearning.thumbnailUrl}
                                 className="h-full w-full object-cover"
                               />
-                            )}
+                              <div className="absolute inset-0 bg-gradient-banner-glass backdrop-blur-[4px]" />
+                            </>
+                          ) : (
+                            <div className="h-full w-full bg-gray-100" />
+                          )}
+                          {recentLearning && (
                             <button
                               onClick={() => goResume(recentLearning)}
-                              className="absolute inset-0 flex items-center justify-center bg-black/10"
+                              className="absolute inset-0 flex items-center justify-center"
                             >
-                              <span className="flex size-12 items-center justify-center rounded-full bg-white/90 shadow-lg">
-                                <span className="ml-1 border-y-[8px] border-y-transparent border-l-[12px] border-l-primary-500" />
+                              <span className="flex w-30 h-30 items-center justify-center rounded-full border border-white/60 bg-white/40">
+                                <TriangleRightIcon className="w-11 h-11 translate-x-[6px] text-white" />
                               </span>
                             </button>
-                          </div>
-                          <div className="flex flex-1 flex-col justify-center">
-                            <div className="flex gap-2">
-                              <Pill>
-                                {recentLearning.status === 'COMPLETED' ? '완료' : '진행 중'}
-                              </Pill>
+                          )}
+                        </div>
+
+                        <div className="flex flex-1 flex-col items-start justify-between p-6 pt-0 lg:p-10 lg:pt-0">
+                          <CategoryBadge>{recentLearning?.position ?? 'FRONTEND'}</CategoryBadge>
+
+                          <div>
+                            <h3 className="mt-[13px] text-5xl font-semibold text-text-accent leading-[1.2] whitespace-nowrap">
+                              {recentLearning?.title}
+                            </h3>
+                            <div className="mt-[13px] flex flex-wrap items-center gap-5 text-text-base text-sm leading-tight">
+                              <div className="flex items-center gap-2">
+                                <CalendarIcon />
+                                <span>시작일: {formatDateLabel(recentLearning?.startedAt)}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <TeamMembersIcon className="w-3.5 h-auto" />
+                                <span>
+                                  {recentLearning?.teamCount != null
+                                    ? `${recentLearning.teamCount} Team Members`
+                                    : '-'}
+                                </span>
+                              </div>
                             </div>
-                            <h4 className="mt-3 text-xl font-bold text-text-title">
-                              {recentLearning.title}
-                            </h4>
-                            <button
-                              onClick={() => goResume(recentLearning)}
-                              className="mt-4 w-fit text-sm font-bold text-text-accent hover:underline"
-                            >
-                              이어서 학습하기 ›
-                            </button>
+                            <p className="mt-[51px] text-xl leading-tight text-text-base">
+                              {recentLearning?.description}
+                            </p>
                           </div>
                         </div>
-                      ) : (
-                        <p className="text-text-body">학습 이력이 없습니다.</p>
-                      )}
+                      </div>
+
+                      <div className="flex flex-wrap gap-2">
+                        {(['ALL', 'IN_PROGRESS', 'COMPLETED'] as const).map((filter) => (
+                          <button
+                            key={filter}
+                            type="button"
+                            onClick={() => setHistoryFilter(filter)}
+                            className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
+                              historyFilter === filter
+                                ? 'bg-white text-text-accent border-card-border'
+                                : 'bg-transparent text-text-body border border-transparent hover:bg-white hover:text-text-title'
+                            }`}
+                          >
+                            {filter === 'ALL'
+                              ? '전체 강의'
+                              : filter === 'IN_PROGRESS'
+                                ? '진행 중'
+                                : '완료된 강의'}
+                          </button>
+                        ))}
+                      </div>
+
+                      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                        {filteredLearning.length ? (
+                          filteredLearning.map((lecture) => (
+                            <div
+                              key={lecture.lectureId}
+                              className="rounded-[32px] overflow-hidden border border-divider bg-white"
+                            >
+                              <div className="relative aspect-[4/3] overflow-hidden">
+                                {lecture.thumbnailUrl && (
+                                  <img
+                                    src={lecture.thumbnailUrl}
+                                    className="h-full w-full object-cover"
+                                  />
+                                )}
+                                <button
+                                  type="button"
+                                  onClick={() => goResume(lecture)}
+                                  className="absolute inset-0 flex items-center justify-center bg-black/10"
+                                >
+                                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow-lg">
+                                    <span className="ml-1 border-y-[6px] border-y-transparent border-l-[8px] border-l-primary-500" />
+                                  </span>
+                                </button>
+                              </div>
+                              <div className="p-5">
+                                <div className="flex items-center justify-between gap-2">
+                                  <span className="rounded-full bg-badge-bg px-3 py-1 text-[11px] font-semibold uppercase text-text-accent tracking-[0.08em]">
+                                    {lecture.position}
+                                  </span>
+                                  <span className="text-sm font-semibold text-text-title">
+                                    {safeRating(lecture.rating) ?? '-'}
+                                  </span>
+                                </div>
+                                <h4 className="mt-4 text-lg font-bold text-text-title">
+                                  {lecture.title}
+                                </h4>
+                                <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-text-meta">
+                                  <span>{formatDateLabel(lecture.startedAt)}</span>
+                                  <span>·</span>
+                                  <span>
+                                    {lecture.teamCount != null ? `${lecture.teamCount}명` : '-'}
+                                  </span>
+                                </div>
+                                <p className="mt-3 text-sm text-text-body">{lecture.description}</p>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="rounded-3xl border border-divider bg-white p-8 text-center text-sm text-text-body">
+                            선택한 필터에 해당하는 학습 강의가 없습니다.
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 )}
