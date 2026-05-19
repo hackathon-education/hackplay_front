@@ -11,14 +11,7 @@ export const useUserMenu = (onClose?: () => void) => {
 
   const handleLogout = async () => {
     try {
-      const token = sessionStorage.getItem('accessToken');
-      if (token) {
-        await axiosInstance.post(
-          '/v1/auth/signout',
-          {},
-          { headers: { Authorization: `Bearer ${token}` } },
-        );
-      }
+      await axiosInstance.post('/v1/auth/signout', {});
     } catch (error) {
       console.error('로그아웃 실패:', error);
     } finally {

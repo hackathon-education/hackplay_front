@@ -28,14 +28,19 @@ const LoginPage = () => {
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
       const response = await axiosInstance.post('/v1/auth/signin', data);
-      const result = response.data;
+      
+      // 응답에서 사용자 정보 추출 (쿠키 기반 인증)
+      const userData = response.data?.data;
+      if (!userData) {
+        alert('로그인에 실패했습니다. (사용자 정보 없음)');
+        return;
+      }
 
       login({
-        accessToken: result.data.accessToken,
-        nickname: result.data.nickname,
-        email: result.data.email,
-        profileImageUrl: result.data.profileImageUrl,
-        role: result.data.role,
+        nickname: userData.nickname || '',
+        email: userData.email || '',
+        profileImageUrl: userData.profileImageUrl,
+        role: userData.role,
       });
 
       navigate(ROUTES.MAIN);
