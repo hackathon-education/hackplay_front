@@ -684,135 +684,133 @@ const MyPage = () => {
 
                 {/* History */}
                 {activeTab === 'history' && (
-                  <div className="mt-8 flex flex-col gap-6">
-                    <div className="flex flex-col gap-6">
-                      <div className="rounded-30 overflow-hidden border border-card-border bg-gradient-hero lg:flex items-start p-10 shadow-2">
-                        <div className="relative aspect-[613/416] overflow-hidden lg:w-[613px] shrink-0 border border-banner-border rounded-30 shadow-1">
-                          {recentLearning?.thumbnailUrl ? (
-                            <>
-                              <img
-                                src={recentLearning.thumbnailUrl}
-                                className="h-full w-full object-cover"
-                              />
-                              <div className="absolute inset-0 bg-gradient-banner-glass backdrop-blur-[4px]" />
-                            </>
-                          ) : (
-                            <div className="h-full w-full bg-gray-100" />
-                          )}
-                          {recentLearning && (
-                            <button
-                              onClick={() => goResume(recentLearning)}
-                              className="absolute inset-0 flex items-center justify-center"
-                            >
-                              <span className="flex w-30 h-30 items-center justify-center rounded-full border border-white/60 bg-white/40">
-                                <TriangleRightIcon className="w-11 h-11 translate-x-[6px] text-white" />
-                              </span>
-                            </button>
-                          )}
-                        </div>
-
-                        <div className="flex flex-1 flex-col items-start justify-between p-6 pt-0 lg:p-10 lg:pt-0">
-                          <CategoryBadge>{recentLearning?.position ?? 'FRONTEND'}</CategoryBadge>
-
-                          <div>
-                            <h3 className="mt-[13px] text-5xl font-semibold text-text-accent leading-[1.2] whitespace-nowrap">
-                              {recentLearning?.title}
-                            </h3>
-                            <div className="mt-[13px] flex flex-wrap items-center gap-5 text-text-base text-sm leading-tight">
-                              <div className="flex items-center gap-2">
-                                <CalendarIcon />
-                                <span>시작일: {formatDateLabel(recentLearning?.startedAt)}</span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <TeamMembersIcon className="w-3.5 h-auto" />
-                                <span>
-                                  {recentLearning?.teamCount != null
-                                    ? `${recentLearning.teamCount} Team Members`
-                                    : '-'}
-                                </span>
-                              </div>
-                            </div>
-                            <p className="mt-[51px] text-xl leading-tight text-text-base">
-                              {recentLearning?.description}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex flex-wrap gap-2">
-                        {(['ALL', 'IN_PROGRESS', 'COMPLETED'] as const).map((filter) => (
-                          <button
-                            key={filter}
-                            type="button"
-                            onClick={() => setHistoryFilter(filter)}
-                            className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
-                              historyFilter === filter
-                                ? 'bg-white text-text-accent border-card-border'
-                                : 'bg-transparent text-text-body border border-transparent hover:bg-white hover:text-text-title'
-                            }`}
-                          >
-                            {filter === 'ALL'
-                              ? '전체 강의'
-                              : filter === 'IN_PROGRESS'
-                                ? '진행 중'
-                                : '완료된 강의'}
-                          </button>
-                        ))}
-                      </div>
-
-                      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-                        {filteredLearning.length ? (
-                          filteredLearning.map((lecture) => (
-                            <div
-                              key={lecture.lectureId}
-                              className="rounded-[32px] overflow-hidden border border-divider bg-white"
-                            >
-                              <div className="relative aspect-[4/3] overflow-hidden">
-                                {lecture.thumbnailUrl && (
-                                  <img
-                                    src={lecture.thumbnailUrl}
-                                    className="h-full w-full object-cover"
-                                  />
-                                )}
-                                <button
-                                  type="button"
-                                  onClick={() => goResume(lecture)}
-                                  className="absolute inset-0 flex items-center justify-center bg-black/10"
-                                >
-                                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow-lg">
-                                    <span className="ml-1 border-y-[6px] border-y-transparent border-l-[8px] border-l-primary-500" />
-                                  </span>
-                                </button>
-                              </div>
-                              <div className="p-5">
-                                <div className="flex items-center justify-between gap-2">
-                                  <span className="rounded-full bg-badge-bg px-3 py-1 text-[11px] font-semibold uppercase text-text-accent tracking-[0.08em]">
-                                    {lecture.position}
-                                  </span>
-                                  <span className="text-sm font-semibold text-text-title">
-                                    {safeRating(lecture.rating) ?? '-'}
-                                  </span>
-                                </div>
-                                <h4 className="mt-4 text-lg font-bold text-text-title">
-                                  {lecture.title}
-                                </h4>
-                                <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-text-meta">
-                                  <span>{formatDateLabel(lecture.startedAt)}</span>
-                                  <span>·</span>
-                                  <span>
-                                    {lecture.teamCount != null ? `${lecture.teamCount}명` : '-'}
-                                  </span>
-                                </div>
-                                <p className="mt-3 text-sm text-text-body">{lecture.description}</p>
-                              </div>
-                            </div>
-                          ))
+                  <div className="mt-5 flex flex-col gap-8">
+                    <div className="rounded-30 overflow-hidden border border-card-border bg-gradient-hero lg:flex items-start p-10 shadow-2">
+                      <div className="relative aspect-[613/416] overflow-hidden lg:w-[613px] shrink-0 border border-banner-border rounded-30 shadow-1">
+                        {recentLearning?.thumbnailUrl ? (
+                          <>
+                            <img
+                              src={recentLearning.thumbnailUrl}
+                              className="h-full w-full object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gradient-banner-glass backdrop-blur-[4px]" />
+                          </>
                         ) : (
-                          <div className="rounded-3xl border border-divider bg-white p-8 text-center text-sm text-text-body">
-                            선택한 필터에 해당하는 학습 강의가 없습니다.
-                          </div>
+                          <div className="h-full w-full bg-gray-100" />
+                        )}
+                        {recentLearning && (
+                          <button
+                            onClick={() => goResume(recentLearning)}
+                            className="absolute inset-0 flex items-center justify-center"
+                          >
+                            <span className="flex w-30 h-30 items-center justify-center rounded-full border border-white/60 bg-white/40">
+                              <TriangleRightIcon className="w-11 h-11 translate-x-[6px] text-white" />
+                            </span>
+                          </button>
                         )}
                       </div>
+
+                      <div className="flex flex-1 flex-col items-start justify-between p-6 pt-0 lg:p-10 lg:pt-0">
+                        <CategoryBadge>{recentLearning?.position ?? 'FRONTEND'}</CategoryBadge>
+
+                        <div>
+                          <h3 className="mt-[13px] text-5xl font-semibold text-text-accent leading-[1.2] whitespace-nowrap">
+                            {recentLearning?.title}
+                          </h3>
+                          <div className="mt-[13px] flex flex-wrap items-center gap-5 text-text-base text-sm leading-tight">
+                            <div className="flex items-center gap-2">
+                              <CalendarIcon />
+                              <span>시작일: {formatDateLabel(recentLearning?.startedAt)}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <TeamMembersIcon className="w-3.5 h-auto" />
+                              <span>
+                                {recentLearning?.teamCount != null
+                                  ? `${recentLearning.teamCount} Team Members`
+                                  : '-'}
+                              </span>
+                            </div>
+                          </div>
+                          <p className="mt-[51px] text-xl leading-tight text-text-base">
+                            {recentLearning?.description}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-[9px] w-fit shadow-3 border border-chip-default-border bg-white rounded-30 p-2.5">
+                      {(['ALL', 'IN_PROGRESS', 'COMPLETED'] as const).map((filter) => (
+                        <button
+                          key={filter}
+                          type="button"
+                          onClick={() => setHistoryFilter(filter)}
+                          className={`rounded-50 px-4 py-[9px] text-xl leading-none transition ${
+                            historyFilter === filter
+                              ? 'bg-chip-active-bg text-chip-active-text'
+                              : 'bg-chip-default-bg text-chip-default-text hover:text-tab-text-hover'
+                          }`}
+                        >
+                          {filter === 'ALL'
+                            ? '전체 강의'
+                            : filter === 'IN_PROGRESS'
+                              ? '진행 중인 강의'
+                              : '완료된 강의'}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                      {filteredLearning.length ? (
+                        filteredLearning.map((lecture) => (
+                          <div
+                            key={lecture.lectureId}
+                            className="rounded-[32px] overflow-hidden border border-divider bg-white"
+                          >
+                            <div className="relative aspect-[4/3] overflow-hidden">
+                              {lecture.thumbnailUrl && (
+                                <img
+                                  src={lecture.thumbnailUrl}
+                                  className="h-full w-full object-cover"
+                                />
+                              )}
+                              <button
+                                type="button"
+                                onClick={() => goResume(lecture)}
+                                className="absolute inset-0 flex items-center justify-center bg-black/10"
+                              >
+                                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow-lg">
+                                  <span className="ml-1 border-y-[6px] border-y-transparent border-l-[8px] border-l-primary-500" />
+                                </span>
+                              </button>
+                            </div>
+                            <div className="p-5">
+                              <div className="flex items-center justify-between gap-2">
+                                <span className="rounded-full bg-badge-bg px-3 py-1 text-[11px] font-semibold uppercase text-text-accent tracking-[0.08em]">
+                                  {lecture.position}
+                                </span>
+                                <span className="text-sm font-semibold text-text-title">
+                                  {safeRating(lecture.rating) ?? '-'}
+                                </span>
+                              </div>
+                              <h4 className="mt-4 text-lg font-bold text-text-title">
+                                {lecture.title}
+                              </h4>
+                              <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-text-meta">
+                                <span>{formatDateLabel(lecture.startedAt)}</span>
+                                <span>·</span>
+                                <span>
+                                  {lecture.teamCount != null ? `${lecture.teamCount}명` : '-'}
+                                </span>
+                              </div>
+                              <p className="mt-3 text-sm text-text-body">{lecture.description}</p>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="rounded-3xl border border-divider bg-white p-8 text-center text-sm text-text-body">
+                          선택한 필터에 해당하는 학습 강의가 없습니다.
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
