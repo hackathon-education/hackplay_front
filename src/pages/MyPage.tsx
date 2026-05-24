@@ -1,8 +1,10 @@
 import JobIcon from '@/assets/auth/briefcase-icon.svg?react';
 import CheckIcon from '@/assets/common/check-icon.svg?react';
 import ErrorIcon from '@/assets/common/close-icon.svg?react';
+import BookIcon from '@/assets/lecture/book-icon.svg?react';
 import CalendarIcon from '@/assets/lecture/calendar-icon.svg?react';
 import TeamMembersIcon from '@/assets/lecture/team-members-icon.svg?react';
+import TimeIcon from '@/assets/lecture/time-icon.svg?react';
 import TriangleRightIcon from '@/assets/lecture/triangle-right-icon.svg?react';
 import { useEffect, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -65,6 +67,13 @@ function formatDateLabel(iso?: string) {
   return `${date.getFullYear()}년 ${twoDigits(month)}월 ${twoDigits(day)}일`;
 }
 
+function formatStudyDuration(minutes?: number) {
+  if (!minutes) return '0시간 0분';
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  return `${hours}시간 ${mins}분`;
+}
+
 function getInitials(name?: string) {
   if (!name) return '강';
   const parts = name.trim().split(/\s+/);
@@ -109,6 +118,8 @@ const DUMMY_LEARNING_LIST: LearningLecture[] = [
     resumeLectureId: 'course-2',
     instructorName: '이름',
     difficulty: 'INTERMEDIATE',
+    progressRate: 35,
+    studyDurationMinutes: 270,
   },
   {
     lectureId: 'course-3',
@@ -123,6 +134,8 @@ const DUMMY_LEARNING_LIST: LearningLecture[] = [
     resumeLectureId: 'course-3',
     instructorName: '김소영',
     difficulty: 'BEGINNER',
+    progressRate: 55,
+    studyDurationMinutes: 730,
   },
   {
     lectureId: 'course-4',
@@ -137,6 +150,8 @@ const DUMMY_LEARNING_LIST: LearningLecture[] = [
     resumeLectureId: 'course-4',
     instructorName: '이현수',
     difficulty: 'ADVANCED',
+    progressRate: 25,
+    studyDurationMinutes: 525,
   },
   {
     lectureId: 'course-5',
@@ -151,6 +166,8 @@ const DUMMY_LEARNING_LIST: LearningLecture[] = [
     resumeLectureId: 'course-5',
     instructorName: '한유진',
     difficulty: 'ADVANCED',
+    progressRate: 75,
+    studyDurationMinutes: 990,
   },
 ];
 
@@ -796,14 +813,14 @@ const MyPage = () => {
                       ))}
                     </div>
 
-                    <div className="grid grid-cols-1 gap-x-19.5 gap-y-38.5 lg:grid-cols-3">
+                    <div className="grid grid-cols-1 gap-x-23.5 gap-y-[105px] lg:grid-cols-3">
                       {filteredLearning.length ? (
                         filteredLearning.map((lecture) => (
                           <div
                             key={lecture.lectureId}
                             className="rounded-30 overflow-hidden border border-card-border bg-white max-w-[417px]"
                           >
-                            <div className="relative aspect-[415/234] overflow-hidden">
+                            <div className="relative aspect-[415/235] overflow-hidden">
                               {lecture.thumbnailUrl ? (
                                 <>
                                   <img
@@ -836,7 +853,7 @@ const MyPage = () => {
                                 </span>
                               </button>
                             </div>
-                            <div className="pt-4 pb-5 px-[33.5px] flex flex-col gap-4.5">
+                            <div className="pt-[7px] pb-[13.5px] px-[33.5px] flex flex-col gap-4.5">
                               <div className="flex items-end justify-between gap-2">
                                 <CategoryBadge>{lecture.position}</CategoryBadge>
                                 <div className="flex items-center">
@@ -846,23 +863,49 @@ const MyPage = () => {
                                   </span>
                                 </div>
                               </div>
-                              <h4 className="text-2xl leading-[1.21]">{lecture.title}</h4>
-                              <div className="flex items-center gap-[7px]">
-                                <div className="relative flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-btn-disabled-bg">
-                                  {lecture.instructorImageUrl ? (
-                                    <img
-                                      src={lecture.instructorImageUrl}
-                                      alt={lecture.instructorName ?? '강사'}
-                                      className="h-full w-full object-cover"
-                                    />
-                                  ) : (
-                                    <></>
-                                  )}
+                              <div className="flex flex-col gap-2.5">
+                                <h4 className="text-2xl leading-[1.21]">{lecture.title}</h4>
+                                <div className="flex items-center gap-[7px]">
+                                  <div className="relative flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-btn-disabled-bg">
+                                    {lecture.instructorImageUrl ? (
+                                      <img
+                                        src={lecture.instructorImageUrl}
+                                        alt={lecture.instructorName ?? '강사'}
+                                        className="h-full w-full object-cover"
+                                      />
+                                    ) : (
+                                      <></>
+                                    )}
+                                  </div>
+                                  <span className="text-xl font-semibold leading-[1.2] text-text-body">
+                                    {lecture.instructorName ?? '강사 정보 없음'}
+                                  </span>
                                 </div>
-                                <span className="text-xl font-semibold leading-[1.2] text-text-body">
-                                  {lecture.instructorName ?? '강사 정보 없음'}
-                                </span>
                               </div>
+                              {lecture.progressRate != null && (
+                                <div className="w-full self-end">
+                                  <div className="flex items-center justify-between gap-3 leading-[1.2] text-text-body">
+                                    <div className="flex items-center gap-1.5">
+                                      <TimeIcon className="w-5.5 h-5.5" />
+                                      <span>
+                                        {formatStudyDuration(lecture.studyDurationMinutes)}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center gap-[7.2px]">
+                                      <BookIcon className="w-4.5 translate-y-[1px]" />
+                                      <span>진도율 {lecture.progressRate}%</span>
+                                    </div>
+                                  </div>
+                                  <div className="mt-[5.5px] h-3 overflow-hidden rounded-20 bg-[rgba(var(--neutral-180-rgb),0.13)] border border-text-body/20 shadow-7">
+                                    <div
+                                      className="h-full rounded-20 bg-primary-500 border border-card-border"
+                                      style={{
+                                        width: `${Math.min(100, Math.max(0, lecture.progressRate))}%`,
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                              )}
                             </div>
                           </div>
                         ))

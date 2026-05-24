@@ -16,6 +16,7 @@ export interface LearningLecture {
   instructorImageUrl?: string;
   difficulty?: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED'; // 난도
   progressRate?: number; // 0~100
+  studyDurationMinutes?: number; // 학습 시간 (분 단위)
 }
 
 type ApiEnvelope<T> = {
