@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -77,7 +78,7 @@ const ConfirmModal = ({
     setFieldValues(newValues);
   };
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <motion.div
@@ -134,7 +135,8 @@ const ConfirmModal = ({
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 };
 

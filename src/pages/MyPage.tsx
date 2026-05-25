@@ -24,6 +24,7 @@ import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
 import CategoryBadge from '@/components/lecture/CategoryBadge';
 import PasswordConfirmModal from '@/components/mypage/PasswordConfirmModal';
+import WithdrawModal from '@/components/mypage/WithdrawModal';
 import { DIFFICULTY_LABELS, JOB_TYPES, JobKey } from '@/constants/jobTypes';
 import { ROUTES } from '@/constants/routes';
 import { useAuthStore } from '@/store/authStore';
@@ -212,6 +213,9 @@ const MyPage = () => {
   const [pwModalConfirmText, setPwModalConfirmText] = useState('');
   const [pendingAction, setPendingAction] = useState<null | 'CHANGE_PASSWORD'>(null);
 
+  // Withdraw modal
+  const [withdrawModalOpen, setWithdrawModalOpen] = useState(false);
+
   // Forms
   const {
     register: registerSettings,
@@ -298,10 +302,6 @@ const MyPage = () => {
   //     setProfileLoading(false);
   //   }
   // };
-
-  useEffect(() => {
-    resetSettings(profile);
-  }, [profile, resetSettings]);
 
   useEffect(() => {
     if (!learningList.length) {
@@ -428,6 +428,25 @@ const MyPage = () => {
     }
   };
 
+  const handleWithdraw = async (email: string, password: string, confirmPassword: string) => {
+    if (password !== confirmPassword) {
+      toast.error('비밀번호가 일치하지 않습니다.');
+      return;
+    }
+    if (email !== profile.email) {
+      toast.error('입력한 이메일이 일치하지 않습니다.');
+      return;
+    }
+    try {
+      await withdrawMember({ password });
+      toast.success('탈퇴 처리되었습니다.');
+      logout();
+      navigate(ROUTES.MAIN);
+    } catch (e: any) {
+      toast.error(e?.response?.data?.message ?? '탈퇴 처리에 실패했습니다.');
+    }
+  };
+
   const recentLearning = useMemo(() => {
     const copy = [...learningList];
     copy.sort((a, b) => {
@@ -490,6 +509,12 @@ const MyPage = () => {
           onConfirm={handlePasswordConfirm}
         />
 
+        <WithdrawModal
+          isOpen={withdrawModalOpen}
+          onClose={() => setWithdrawModalOpen(false)}
+          onConfirm={handleWithdraw}
+        />
+
         <div className="flex flex-col lg:flex-row">
           {/* Sidebar */}
           <aside className="lg:w-[113px] shrink-0">
@@ -500,7 +525,13 @@ const MyPage = () => {
                   <button
                     key={tab}
                     type="button"
-                    onClick={() => setSearchParams({ tab })}
+                    onClick={() => {
+                      if (tab === 'withdraw') {
+                        setWithdrawModalOpen(true);
+                      } else {
+                        setSearchParams({ tab });
+                      }
+                    }}
                     className={`relative flex w-full items-center justify-center py-3.5 text-sm leading-tight transition-all ${
                       selected
                         ? 'z-nav bg-white text-tab-text-active'
@@ -939,33 +970,6 @@ const MyPage = () => {
                         </div>
                       )}
                     </div>
-                  </div>
-                )}
-
-                {/* Withdraw */}
-                {activeTab === 'withdraw' && (
-                  <div className="mt-8 rounded-3xl border border-card-border bg-card-bg p-6 lg:p-8">
-                    <h3 className="text-lg font-bold text-text-title text-red-600">회원 탈퇴</h3>
-                    <p className="mt-2 text-sm text-text-body">
-                      탈퇴 시 모든 학습 데이터가 삭제되며 복구할 수 없습니다.
-                    </p>
-                    <form
-                      className="mt-8 flex flex-col gap-4"
-                      onSubmit={handleSubmitWithdraw(onSubmitWithdraw)}
-                    >
-                      <Input
-                        type="password"
-                        placeholder="비밀번호 확인"
-                        {...registerWithdraw('password', { required: true })}
-                      />
-                      <Button
-                        type="submit"
-                        disabled={!withdrawIsValid}
-                        className="!bg-red-500 hover:!bg-red-600"
-                      >
-                        탈퇴하기
-                      </Button>
-                    </form>
                   </div>
                 )}
               </div>
