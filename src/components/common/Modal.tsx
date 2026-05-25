@@ -9,7 +9,7 @@ import Input from '@/components/common/Input';
 export interface ModalFieldConfig {
   type: 'email' | 'password' | 'text';
   placeholder: string;
-  iconType: string;
+  iconType: 'email' | 'password' | 'confirmPassword' | 'nickname' | 'verifyCode';
   iconSize: string;
 }
 
@@ -22,6 +22,7 @@ interface ConfirmModalProps {
   onClose: () => void;
   onConfirm: (...values: string[]) => Promise<void> | void;
   buttonClassName?: string;
+  onDisabledChange?: (disabled: boolean) => void;
 }
 
 const ConfirmModal = ({
@@ -33,6 +34,7 @@ const ConfirmModal = ({
   onClose,
   onConfirm,
   buttonClassName,
+  onDisabledChange,
 }: ConfirmModalProps) => {
   const [fieldValues, setFieldValues] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -60,6 +62,10 @@ const ConfirmModal = ({
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
+
+  useEffect(() => {
+    onDisabledChange?.(!canSubmit);
+  }, [canSubmit, onDisabledChange]);
 
   const handleConfirm = async () => {
     if (!canSubmit) return;

@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import ConfirmModal, { type ModalFieldConfig } from '@/components/common/Modal';
 
 interface WithdrawModalProps {
@@ -7,6 +9,8 @@ interface WithdrawModalProps {
 }
 
 const WithdrawModal = ({ isOpen, onClose, onConfirm }: WithdrawModalProps) => {
+  const [isDisabled, setIsDisabled] = useState(true);
+
   const fields: ModalFieldConfig[] = [
     {
       type: 'email',
@@ -37,7 +41,10 @@ const WithdrawModal = ({ isOpen, onClose, onConfirm }: WithdrawModalProps) => {
       fields={fields}
       onClose={onClose}
       onConfirm={onConfirm}
-      buttonClassName="!rounded-2xl !bg-btn-error-bg hover:!bg-btn-error-bg-hover"
+      onDisabledChange={setIsDisabled}
+      buttonClassName={
+        !isDisabled ? '!rounded-2xl !bg-btn-error-bg hover:!bg-btn-error-bg-hover' : '!rounded-2xl'
+      }
     />
   );
 };
