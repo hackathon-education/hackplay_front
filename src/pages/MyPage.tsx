@@ -28,6 +28,7 @@ import WithdrawModal from '@/components/mypage/WithdrawModal';
 import { DIFFICULTY_LABELS, JOB_TYPES, JobKey } from '@/constants/jobTypes';
 import { ROUTES } from '@/constants/routes';
 import { useAuthStore } from '@/store/authStore';
+import { endAuthSession } from '@/utils/authSession';
 
 type TabKey = 'settings' | 'payments' | 'history' | 'withdraw';
 
@@ -177,7 +178,7 @@ const MyPage = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const { user, login, logout } = useAuthStore();
+  const { user, login } = useAuthStore();
 
   const activeTab = useMemo(() => getTabFromSearch(searchParams.get('tab')), [searchParams]);
 
@@ -420,7 +421,7 @@ const MyPage = () => {
     try {
       await withdrawMember({ password: data.password });
       toast.success('탈퇴 처리되었습니다.');
-      logout();
+      await endAuthSession();
       resetWithdraw();
       navigate(ROUTES.MAIN);
     } catch (e: any) {
@@ -449,7 +450,7 @@ const MyPage = () => {
     try {
       await withdrawMember();
       toast.success('탈퇴 처리되었습니다.');
-      logout();
+      await endAuthSession();
       navigate(ROUTES.MAIN);
     } catch (e: any) {
       toast.error(e?.response?.data?.message ?? '탈퇴 처리에 실패했습니다.');

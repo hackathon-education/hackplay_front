@@ -1,24 +1,16 @@
 import { useNavigate } from 'react-router-dom';
 
-import { axiosInstance } from '@/api/axios';
 import { USER_MENU_ITEMS } from '@/constants/menuData';
 import { ROUTES } from '@/constants/routes';
-import { useAuthStore } from '@/store/authStore';
+import { endAuthSession } from '@/utils/authSession';
 
 export const useUserMenu = (onClose?: () => void) => {
-  const { logout } = useAuthStore();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    try {
-      await axiosInstance.post('/v1/auth/signout', {});
-    } catch (error) {
-      console.error('로그아웃 실패:', error);
-    } finally {
-      logout();
-      navigate(ROUTES.MAIN);
-      if (onClose) onClose();
-    }
+    await endAuthSession();
+    navigate(ROUTES.MAIN);
+    if (onClose) onClose();
   };
 
   const handleMenuItemClick = (item: (typeof USER_MENU_ITEMS)[number]) => {
@@ -30,7 +22,7 @@ export const useUserMenu = (onClose?: () => void) => {
     if (item.path && item.path !== '#') {
       navigate(item.path);
     } else {
-      console.log(`${item.label} 클릭`);  // TODO: 기능 구현 완료 시 제거
+      console.log(`${item.label} 클릭`); // TODO: 기능 구현 완료 시 제거
     }
 
     if (onClose) onClose();
