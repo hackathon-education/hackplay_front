@@ -24,8 +24,8 @@ export async function changeMyPassword(body: {
   return res.data;
 }
 
-export async function withdrawMember(body: { password: string }): Promise<ApiEnvelope<null>> {
-  const res = await axiosInstance.post<ApiEnvelope<null>>('/v1/members/withdraw', body);
+export async function withdrawMember(): Promise<ApiEnvelope<null>> {
+  const res = await axiosInstance.delete<ApiEnvelope<null>>('/v1/members');
   return res.data;
 }
 

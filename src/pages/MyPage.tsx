@@ -437,8 +437,17 @@ const MyPage = () => {
       toast.error('입력한 이메일이 일치하지 않습니다.');
       return;
     }
+
+    // 확인 alert
+    const isConfirmed = window.confirm(
+      '정말로 계정을 탈퇴하시겠습니까?\n탈퇴 후 모든 데이터는 복구할 수 없습니다.',
+    );
+    if (!isConfirmed) {
+      return;
+    }
+
     try {
-      await withdrawMember({ password });
+      await withdrawMember();
       toast.success('탈퇴 처리되었습니다.');
       logout();
       navigate(ROUTES.MAIN);
