@@ -19,6 +19,7 @@ import RecentThumbnail from '@/assets/common/main-character-group.webp';
 import DesignerThumbnail from '@/assets/designer.png';
 import StarRatingIcon from '@/assets/lecture/star-rating-icon.webp';
 import MypageBg from '@/assets/mypage/mypage-bg.webp';
+import SearchIcon from '@/assets/mypage/search-icon.webp';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
 import CategoryBadge from '@/components/lecture/CategoryBadge';
@@ -815,100 +816,123 @@ const MyPage = () => {
 
                     <div className="grid grid-cols-1 gap-x-23.5 gap-y-[105px] lg:grid-cols-3">
                       {filteredLearning.length ? (
-                        filteredLearning.map((lecture) => (
-                          <div
-                            key={lecture.lectureId}
-                            className="rounded-30 overflow-hidden border border-card-border bg-white max-w-[417px]"
-                          >
-                            <div className="relative aspect-[415/235] overflow-hidden">
-                              {lecture.thumbnailUrl ? (
-                                <>
-                                  <img
-                                    src={lecture.thumbnailUrl}
-                                    className="h-full w-full object-cover"
-                                  />
-                                  <div className="absolute inset-0 bg-gradient-banner-glass backdrop-blur-[4px]" />
-                                </>
-                              ) : (
-                                <div
-                                  className="h-full w-full"
-                                  style={{
-                                    background:
-                                      'linear-gradient(180deg, #A855F7 0%, rgba(99, 102, 241, 0.00) 159%)',
-                                  }}
-                                />
-                              )}
-                              {lecture.difficulty && (
-                                <div className="absolute top-8 left-[29px] z-nav bg-badge-bg rounded-10 px-3.5 py-2 font-medium">
-                                  {DIFFICULTY_LABELS[lecture.difficulty]}
-                                </div>
-                              )}
-                              <button
-                                type="button"
-                                onClick={() => goResume(lecture)}
-                                className="absolute inset-0 flex items-center justify-center"
-                              >
-                                <span className="flex w-[79px] h-[79px] items-center justify-center rounded-full border border-white/60 bg-white/40">
-                                  <TriangleRightIcon className="w-[29px] h-[29px] translate-x-[4px] text-white" />
-                                </span>
-                              </button>
-                            </div>
-                            <div className="pt-[7px] pb-[13.5px] px-[33.5px] flex flex-col gap-4.5">
-                              <div className="flex items-end justify-between gap-2">
-                                <CategoryBadge>{lecture.position}</CategoryBadge>
-                                <div className="flex items-center">
-                                  <img src={StarRatingIcon} alt="별점" className="w-9 h-9" />
-                                  <span className="font-semibold text-xl leading-[1.2] text-yellow-500 mr-2 translate-y-[1px]">
-                                    {formatRating(lecture.rating)}
-                                  </span>
-                                </div>
-                              </div>
-                              <div className="flex flex-col gap-2.5">
-                                <h4 className="text-2xl leading-[1.21]">{lecture.title}</h4>
-                                <div className="flex items-center gap-[7px]">
-                                  <div className="relative flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-btn-disabled-bg">
-                                    {lecture.instructorImageUrl ? (
-                                      <img
-                                        src={lecture.instructorImageUrl}
-                                        alt={lecture.instructorName ?? '강사'}
-                                        className="h-full w-full object-cover"
-                                      />
-                                    ) : (
-                                      <></>
-                                    )}
-                                  </div>
-                                  <span className="text-xl font-semibold leading-[1.2] text-text-body">
-                                    {lecture.instructorName ?? '강사 정보 없음'}
-                                  </span>
-                                </div>
-                              </div>
-                              {lecture.progressRate != null && (
-                                <div className="w-full self-end">
-                                  <div className="flex items-center justify-between gap-3 leading-[1.2] text-text-body">
-                                    <div className="flex items-center gap-1.5">
-                                      <TimeIcon className="w-5.5 h-5.5" />
-                                      <span>
-                                        {formatStudyDuration(lecture.studyDurationMinutes)}
-                                      </span>
-                                    </div>
-                                    <div className="flex items-center gap-[7.2px]">
-                                      <BookIcon className="w-4.5 translate-y-[1px]" />
-                                      <span>진도율 {lecture.progressRate}%</span>
-                                    </div>
-                                  </div>
-                                  <div className="mt-[5.5px] h-3 overflow-hidden rounded-20 bg-[rgba(var(--neutral-180-rgb),0.13)] border border-text-body/20 shadow-7">
-                                    <div
-                                      className="h-full rounded-20 bg-primary-500 border border-card-border"
-                                      style={{
-                                        width: `${Math.min(100, Math.max(0, lecture.progressRate))}%`,
-                                      }}
+                        <>
+                          {filteredLearning.map((lecture) => (
+                            <div
+                              key={lecture.lectureId}
+                              className="rounded-30 overflow-hidden border border-card-border bg-white max-w-[417px] h-[440px]"
+                            >
+                              <div className="relative aspect-[415/235] overflow-hidden">
+                                {lecture.thumbnailUrl ? (
+                                  <>
+                                    <img
+                                      src={lecture.thumbnailUrl}
+                                      className="h-full w-full object-cover"
                                     />
+                                    <div className="absolute inset-0 bg-gradient-banner-glass backdrop-blur-[4px]" />
+                                  </>
+                                ) : (
+                                  <div
+                                    className="h-full w-full"
+                                    style={{
+                                      background:
+                                        'linear-gradient(180deg, #A855F7 0%, rgba(99, 102, 241, 0.00) 159%)',
+                                    }}
+                                  />
+                                )}
+                                {lecture.difficulty && (
+                                  <div className="absolute top-8 left-[29px] z-nav bg-badge-bg rounded-10 px-3.5 py-2 font-medium">
+                                    {DIFFICULTY_LABELS[lecture.difficulty]}
+                                  </div>
+                                )}
+                                <button
+                                  type="button"
+                                  onClick={() => goResume(lecture)}
+                                  className="absolute inset-0 flex items-center justify-center"
+                                >
+                                  <span className="flex w-[79px] h-[79px] items-center justify-center rounded-full border border-white/60 bg-white/40">
+                                    <TriangleRightIcon className="w-[29px] h-[29px] translate-x-[4px] text-white" />
+                                  </span>
+                                </button>
+                              </div>
+                              <div className="pt-[7px] pb-[13.5px] px-[33.5px] flex flex-col gap-4.5">
+                                <div className="flex items-end justify-between gap-2">
+                                  <CategoryBadge>{lecture.position}</CategoryBadge>
+                                  <div className="flex items-center">
+                                    <img src={StarRatingIcon} alt="별점" className="w-9 h-9" />
+                                    <span className="font-semibold text-xl leading-[1.2] text-yellow-500 mr-2 translate-y-[1px]">
+                                      {formatRating(lecture.rating)}
+                                    </span>
                                   </div>
                                 </div>
-                              )}
+                                <div className="flex flex-col gap-2.5">
+                                  <h4 className="text-2xl leading-[1.21]">{lecture.title}</h4>
+                                  <div className="flex items-center gap-[7px]">
+                                    <div className="relative flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-btn-disabled-bg">
+                                      {lecture.instructorImageUrl ? (
+                                        <img
+                                          src={lecture.instructorImageUrl}
+                                          alt={lecture.instructorName ?? '강사'}
+                                          className="h-full w-full object-cover"
+                                        />
+                                      ) : (
+                                        <></>
+                                      )}
+                                    </div>
+                                    <span className="text-xl font-semibold leading-[1.2] text-text-body">
+                                      {lecture.instructorName ?? '강사 정보 없음'}
+                                    </span>
+                                  </div>
+                                </div>
+                                {lecture.progressRate != null && (
+                                  <div className="w-full self-end">
+                                    <div className="flex items-center justify-between gap-3 leading-[1.2] text-text-body">
+                                      <div className="flex items-center gap-1.5">
+                                        <TimeIcon className="w-5.5 h-5.5" />
+                                        <span>
+                                          {formatStudyDuration(lecture.studyDurationMinutes)}
+                                        </span>
+                                      </div>
+                                      <div className="flex items-center gap-[7.2px]">
+                                        <BookIcon className="w-4.5 translate-y-[1px]" />
+                                        <span>진도율 {lecture.progressRate}%</span>
+                                      </div>
+                                    </div>
+                                    <div className="mt-[5.5px] h-3 overflow-hidden rounded-20 bg-[rgba(var(--neutral-180-rgb),0.13)] border border-text-body/20 shadow-7">
+                                      <div
+                                        className="h-full rounded-20 bg-primary-500 border border-card-border"
+                                        style={{
+                                          width: `${Math.min(100, Math.max(0, lecture.progressRate))}%`,
+                                        }}
+                                      />
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
                             </div>
-                          </div>
-                        ))
+                          ))}
+                          <button
+                            type="button"
+                            onClick={() => navigate(ROUTES.COURSES.ROOT)}
+                            className="rounded-30 overflow-hidden border border-dashed border-card-border bg-white max-w-[417px] h-[501px] flex flex-col items-center justify-center px-[74.5px] text-center shadow-2 -translate-y-7.5"
+                          >
+                            <div className="w-19 h-19 bg-icon-neutral-250/35 rounded-full flex items-center justify-center mb-3">
+                              <img
+                                src={SearchIcon}
+                                alt=""
+                                className="[transform:scaleX(-1)_scaleY(-1)_rotate(-172.27deg)] w-11"
+                              />
+                            </div>
+                            <h3 className="text-[2rem] font-semibold mb-4 leading-[1.2]">
+                              새로운 강의 찾기
+                            </h3>
+                            <p className="text-2xl text-text-body leading-[1.21]">
+                              나에게 맞는 새로운 기술과
+                              <br />
+                              트렌드를 탐험해보세요.
+                            </p>
+                          </button>
+                        </>
                       ) : (
                         <div className="rounded-3xl border border-divider bg-white p-8 text-center text-sm text-text-body">
                           선택한 필터에 해당하는 학습 강의가 없습니다.
