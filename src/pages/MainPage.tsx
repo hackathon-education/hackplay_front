@@ -1,5 +1,3 @@
-import Mockup from '../assets/mockup.jpg';
-
 const MainPage = () => {
   return (
     <div className="w-full mx-auto pt-16 sm:pt-20 md:pt-24 lg:pt-28 xl:pt-[8.125rem] text-center px-4 sm:px-6 md:px-8 lg: px-10 xl:px-[12.375rem]">
@@ -18,7 +16,7 @@ const MainPage = () => {
           <div className="dot" />
         </div>
         <div className="w-full max-w-[196px] sm:max-w-[272px] md:max-w-[346px] lg:max-w-[445px] xl:max-w-[742px] ml-auto rounded-[clamp(5px,2.7vw,20px)] overflow-hidden aspect-[742/426]">
-          <img src={Mockup} alt="메인 모형 이미지" />
+          <img src alt="메인 모형 이미지" />
         </div>
       </section>
 
