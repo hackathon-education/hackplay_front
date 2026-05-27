@@ -219,3 +219,408 @@
   /* Layer 5: 토스트, 알림 (최상위) */
   --z-index-toast: 20000;
 }
+
+/* MainPage Styles */
+.main-hero-visual {
+  animation: hackplay-hero-zoom 18s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.main-title-glow {
+  animation: hackplay-title-glow 4.8s ease-in-out infinite;
+}
+
+.main-float-slow {
+  animation: hackplay-float 5.8s ease-in-out infinite;
+}
+
+.main-float-delay {
+  animation: hackplay-float 6.4s ease-in-out 0.8s infinite;
+}
+
+.main-float-soft {
+  animation: hackplay-float-soft 7.2s ease-in-out 0.35s infinite;
+}
+
+.main-cta-shine {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.main-cta-shine::after {
+  content: '';
+  position: absolute;
+  inset: -35% auto -35% -50%;
+  z-index: -1;
+  width: 42%;
+  transform: skewX(-18deg);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.42), transparent);
+  animation: hackplay-shine 3.2s ease-in-out infinite;
+}
+
+.main-card-lift {
+  transition:
+    transform 260ms ease,
+    box-shadow 260ms ease,
+    border-color 260ms ease;
+}
+
+.main-card-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 26px 70px rgba(15, 35, 80, 0.14);
+}
+
+.main-icon-bob {
+  animation: hackplay-icon-bob 4.6s ease-in-out infinite;
+}
+
+.main-quiz-modal-drift {
+  animation: hackplay-modal-drift 6s ease-in-out infinite;
+}
+
+.main-pulse-ring {
+  position: relative;
+}
+
+.main-pulse-ring::after {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  border-radius: 1.9rem;
+  border: 1px solid rgba(255, 59, 73, 0.28);
+  animation: hackplay-pulse-ring 2.6s ease-out infinite;
+}
+
+.main-answer-highlight {
+  animation: hackplay-answer-highlight 2.4s ease-in-out infinite;
+}
+
+.main-editor-glow {
+  position: relative;
+}
+
+.main-editor-glow::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  z-index: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    120deg,
+    rgba(0, 125, 241, 0.24),
+    rgba(134, 232, 213, 0.18),
+    rgba(125, 92, 255, 0.2)
+  );
+  opacity: 0.6;
+  filter: blur(18px);
+  animation: hackplay-editor-glow 5.5s ease-in-out infinite alternate;
+}
+
+.main-editor-glow > * {
+  position: relative;
+  z-index: 1;
+}
+
+.main-code-line {
+  animation: hackplay-code-line 5.8s ease-in-out infinite;
+  animation-delay: calc(var(--line-index, 0) * 120ms);
+}
+
+.main-autosave-knob {
+  animation: hackplay-autosave-knob 2.8s ease-in-out infinite;
+}
+
+.main-gradient-bar {
+  background-size: 180% 100%;
+  animation: hackplay-gradient-slide 5.5s ease-in-out infinite;
+}
+
+.main-role-detail-card {
+  animation: hackplay-role-detail-in 280ms ease-out;
+}
+
+.main-chat-message {
+  animation: hackplay-chat-message-in 260ms ease-out both;
+}
+
+.main-project-finder-result {
+  animation: hackplay-project-result-in 360ms ease-out both;
+}
+
+.main-workspace-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 520ms ease,
+    transform 520ms ease;
+}
+
+.main-workspace-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.main-workspace-preview {
+  animation: hackplay-workspace-preview-in 360ms ease-out both;
+}
+
+.main-terminal-line {
+  opacity: 0;
+  animation: hackplay-terminal-line-in 420ms ease-out forwards;
+}
+
+.main-preview-apply {
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease;
+}
+
+.main-preview-apply:hover {
+  transform: translateY(-2px);
+  background-color: #006ed6;
+  box-shadow: 0 18px 38px rgba(0, 125, 241, 0.34);
+}
+
+@keyframes hackplay-hero-zoom {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.06) translate3d(0, -8px, 0);
+  }
+}
+
+@keyframes hackplay-title-glow {
+  0%,
+  100% {
+    text-shadow:
+      0 10px 24px rgba(0, 0, 0, 0.35),
+      0 0 0 rgba(255, 255, 255, 0);
+  }
+
+  50% {
+    text-shadow:
+      0 10px 24px rgba(0, 0, 0, 0.35),
+      0 0 28px rgba(255, 255, 255, 0.38);
+  }
+}
+
+@keyframes hackplay-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+
+  50% {
+    transform: translate3d(0, -15px, 0) rotate(8deg);
+  }
+}
+
+@keyframes hackplay-float-soft {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, -9px, 0);
+  }
+}
+
+@keyframes hackplay-shine {
+  0%,
+  32% {
+    left: -55%;
+  }
+
+  62%,
+  100% {
+    left: 120%;
+  }
+}
+
+@keyframes hackplay-icon-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes hackplay-modal-drift {
+  0%,
+  100% {
+    transform: translate(-50%, -50%);
+  }
+
+  50% {
+    transform: translate(-50%, calc(-50% - 8px));
+  }
+}
+
+@keyframes hackplay-pulse-ring {
+  0% {
+    opacity: 0.65;
+    transform: scale(0.88);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.18);
+  }
+}
+
+@keyframes hackplay-answer-highlight {
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(0, 125, 241, 0);
+  }
+
+  50% {
+    box-shadow: 0 0 0 5px rgba(0, 125, 241, 0.08);
+  }
+}
+
+@keyframes hackplay-editor-glow {
+  from {
+    opacity: 0.35;
+    transform: scale(0.98);
+  }
+
+  to {
+    opacity: 0.72;
+    transform: scale(1.01);
+  }
+}
+
+@keyframes hackplay-code-line {
+  0%,
+  100% {
+    background-color: transparent;
+  }
+
+  50% {
+    background-color: rgba(0, 125, 241, 0.045);
+  }
+}
+
+@keyframes hackplay-autosave-knob {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(-2px);
+  }
+}
+
+@keyframes hackplay-gradient-slide {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes hackplay-role-detail-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hackplay-chat-message-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hackplay-project-result-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hackplay-workspace-preview-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes hackplay-terminal-line-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-hero-visual,
+  .main-title-glow,
+  .main-float-slow,
+  .main-float-delay,
+  .main-float-soft,
+  .main-icon-bob,
+  .main-quiz-modal-drift,
+  .main-answer-highlight,
+  .main-editor-glow::before,
+  .main-code-line,
+  .main-autosave-knob,
+  .main-gradient-bar,
+  .main-role-detail-card,
+  .main-chat-message,
+  .main-project-finder-result,
+  .main-workspace-preview,
+  .main-terminal-line {
+    animation: none;
+  }
+
+  .main-workspace-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .main-cta-shine::after,
+  .main-pulse-ring::after {
+    display: none;
+  }
+}
