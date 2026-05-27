@@ -33,7 +33,12 @@
   --neutral-000: #ffffff;
   --neutral-000-rgb: 255, 255, 255;
   --neutral-100: #f9fafb;
+  --neutral-125: #f6faff;
+  --neutral-125-rgb: 246, 250, 255;
   --neutral-150: #f0f0f0;
+  --neutral-175: #edeaea;
+  --neutral-180: #e2dddd;
+  --neutral-180-rgb: 226, 221, 221;
   --neutral-200: #d5d5d5;
   --neutral-200-rgb: 213, 213, 213;
   --neutral-250: #d9d9d9;
@@ -53,6 +58,7 @@
 
   /* Error */
   --error-600: #ff0000;
+  --error-700: #e60000;
 
   /* Yellow */
   --yellow-500: #f8b500;

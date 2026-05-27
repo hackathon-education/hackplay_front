@@ -43,6 +43,9 @@
 
   --color-btn-white-bg: rgba(var(--neutral-000-rgb), 0.75);
 
+  --color-btn-error-bg: var(--error-600);
+  --color-btn-error-bg-hover: var(--error-700);
+
   /* Card */
   --color-card-bg: var(--neutral-000);
   --color-card-hover-bg: var(--neutral-100);
@@ -52,8 +55,9 @@
   --color-card-border-lavender-200: var(--lavender-200);
 
   /* Chip */
+  --color-chip-default-border: var(--neutral-175);
   --color-chip-default-bg: transparent;
-  --color-chip-default-text: var(--neutral-600);
+  --color-chip-default-text: var(--neutral-700);
 
   --color-chip-active-bg: rgba(var(--primary-500-rgb), 0.1);
   --color-chip-active-text: var(--primary-500);
@@ -100,6 +104,12 @@
     156deg,
     rgba(var(--primary-750-rgb), 0.4) 0.02%,
     rgba(var(--magenta-500-rgb), 0.4) 99.98%
+  );
+
+  --background-image-gradient-hero: linear-gradient(
+    90deg,
+    rgba(var(--neutral-000-rgb), 0.8) 0%,
+    rgba(246, 250, 255, 0.8) 100%
   );
 
   /* Icon */
@@ -168,13 +178,17 @@
   --shadow-1: 1px 1px 12px 0 rgba(var(--primary-300-rgb), 0.1);
   --shadow-2: 0 4px 4px 0 rgba(var(--neutral-1000-rgb), 0.25);
   --shadow-3: 0 4px 4px 0 rgba(var(--primary-300-rgb), 0.1);
-  --shadow-4: 0px 6px 6px 0px rgba(var(--neutral-1000-rgb), 0.25);
-  --shadow-5: 1px 1px 20px 0px rgba(var(--primary-350-rgb), 0.25);
+  --shadow-4: 0 6px 6px 0 rgba(var(--neutral-1000-rgb), 0.25);
+  --shadow-5: 1px 1px 20px 0 rgba(var(--primary-350-rgb), 0.25);
+  --shadow-6: 0 4px 12px 0 rgba(var(--neutral-1000-rgb), 0.1);
+  --shadow-7: 0 2px 2px 0 rgba(var(--neutral-1000-rgb), 0.25);
 
   /* Tab */
   --color-tab-border-default: var(--neutral-200);
   --color-tab-border-active: var(--primary-500);
+  --color-tab-bg-default: rgba(var(--neutral-000-rgb), 0.5);
   --color-tab-text-default: var(--neutral-700);
+  --color-tab-text-hover: var(--neutral-900);
   --color-tab-text-active: var(--primary-500);
 
   /* Text */
@@ -186,13 +200,6 @@
   --color-text-white: var(--neutral-000);
   --color-text-body: var(--neutral-600);
   --color-text-error: var(--error-600);
-
-  /** Shadow **/
-  --shadow-6: 1px 1px 50px 0px rgba(0, 0, 0, 0.4);
-  --shadow-7: 1px 1px 20px -9px rgba(0, 0, 0, 0.4);
-  --shadow-8: 1px 1px 30px -9px rgba(0, 0, 0, 0.4);
-  --shadow-9: 1.455px 1.455px 1.455px rgba(0, 0, 0, 0.1);
-  --shadow-10: 1px 1px 30px -9px rgba(0, 113, 188, 1);
 
   /** z-index 계층 구조 **/
 
@@ -211,16 +218,4 @@
 
   /* Layer 5: 토스트, 알림 (최상위) */
   --z-index-toast: 20000;
-}
-
-.dot {
-  @apply w-1 h-1 sm:w-1.5 sm:h-1.5 md:w-2 md:h-2 lg:w-2.5 lg:h-2.5 xl:w-3 xl:h-3 bg-gray-200 rounded-full;
-}
-
-.blue-gradient {
-  @apply from-blue-400 to-blue-300;
-}
-
-.header-white-box {
-  @apply rounded-4xl bg-white shadow-1;
 }
