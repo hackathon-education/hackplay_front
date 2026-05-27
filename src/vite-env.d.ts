@@ -3,6 +3,7 @@
 
 interface ImportMetaEnv {
   readonly VITE_SERVER_BASEURL: string;
+  readonly VITE_DEV_AUTH_BYPASS?: string;
 }
 
 declare module '*.svg?react' {

@@ -11,10 +11,10 @@ import CodeEditorPage from '@/pages/CodeEditorPage';
 import CoursesPage from '@/pages/CoursesPage';
 import ErrorPage from '@/pages/ErrorPage';
 import LectureDetailPage from '@/pages/LectureDetailPage';
-import LectureListPage from '@/pages/LectureListPage';
 import LectureMainPage from '@/pages/LectureMainPage';
 import LoginPage from '@/pages/LoginPage';
 import MainPage from '@/pages/MainPage';
+import MyPage from '@/pages/MyPage';
 import ProjectsPage from '@/pages/ProjectsPage';
 import SignupPage from '@/pages/SignupPage';
 
@@ -40,10 +40,6 @@ const router = createBrowserRouter([
           {
             path: ROUTES.COURSES.ROOT,
             element: <CoursesPage />,
-          },
-          {
-            path: ROUTES.COURSES.LECTURE_LIST(':job', ':level'),
-            element: <LectureListPage />,
           },
           {
             path: ROUTES.COURSES.LECTURE_MAIN(':job', ':level', ':lectureId'),

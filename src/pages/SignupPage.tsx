@@ -6,6 +6,8 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { TbEye, TbEyeOff } from 'react-icons/tb';
 import { useNavigate } from 'react-router-dom';
 
+import { toast } from 'sonner';
+
 import { axiosInstance } from '@/api/axios';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
@@ -71,7 +73,7 @@ const SignupPage = () => {
         return;
       }
       await axiosInstance.post('/v1/email/send', { email });
-      alert('인증코드가 전송되었습니다.');
+      toast.success('인증코드가 전송되었습니다.');
       setIsCodeSent(true);
       setIsCodeVerified(false);
       setVerificationCode('');

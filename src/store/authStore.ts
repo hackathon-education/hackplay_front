@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 import { JobKey } from '@/constants/jobTypes';
+import { safeRemoveItem } from '@/utils/storage';
 
 interface UserInfo {
   nickname: string;
@@ -13,52 +14,32 @@ interface AuthState {
   isLoggedIn: boolean;
   isLoading: boolean;
   user: UserInfo | null;
-  login: (data: { accessToken: string } & UserInfo) => void;
+  login: (data: UserInfo) => void;
   logout: () => void;
-  hydrate: () => void;
+  hydrate: () => Promise<void>;
 }
 
 const STORAGE_KEYS = {
-  token: 'accessToken',
   nickname: 'nickname',
   email: 'email',
   profile: 'profileImageUrl',
   role: 'role',
+} as const;
+
+const DEV_AUTH_BYPASS_USER: UserInfo = {
+  nickname: '개발자',
+  email: 'dev@hackplay.local',
+  role: 'FRONT',
 };
 
-const hasWindow = typeof window !== 'undefined';
-
-const getStoredAuth = (): { isLoggedIn: boolean; user: UserInfo | null } => {
-  if (!hasWindow) return { isLoggedIn: false, user: null };
-
-  const accessToken = sessionStorage.getItem(STORAGE_KEYS.token);
-
-  if (!accessToken) return { isLoggedIn: false, user: null };
-
-  return {
-    isLoggedIn: true,
-    user: {
-      nickname: localStorage.getItem(STORAGE_KEYS.nickname) ?? '',
-      email: localStorage.getItem(STORAGE_KEYS.email) ?? '',
-      profileImageUrl: localStorage.getItem(STORAGE_KEYS.profile) ?? undefined,
-      role: localStorage.getItem(STORAGE_KEYS.role) as JobKey,
-    },
-  };
-};
+const isDevAuthBypassEnabled =
+  import.meta.env.MODE === 'development' && import.meta.env.VITE_DEV_AUTH_BYPASS === 'true';
 
 export const useAuthStore = create<AuthState>((set) => ({
   isLoggedIn: false,
   isLoading: true,
   user: null,
-  login: ({ accessToken, nickname, email, profileImageUrl, role }) => {
-    if (!hasWindow) return;
-
-    sessionStorage.setItem(STORAGE_KEYS.token, accessToken);
-    if (nickname) localStorage.setItem(STORAGE_KEYS.nickname, nickname);
-    if (email) localStorage.setItem(STORAGE_KEYS.email, email);
-    if (profileImageUrl) localStorage.setItem(STORAGE_KEYS.profile, profileImageUrl);
-    if (role) localStorage.setItem(STORAGE_KEYS.role, role);
-
+  login: ({ nickname, email, profileImageUrl, role }) => {
     set({
       isLoggedIn: true,
       isLoading: false,
@@ -66,20 +47,26 @@ export const useAuthStore = create<AuthState>((set) => ({
     });
   },
   logout: () => {
-    if (hasWindow) {
-      sessionStorage.removeItem(STORAGE_KEYS.token);
-      localStorage.removeItem(STORAGE_KEYS.nickname);
-      localStorage.removeItem(STORAGE_KEYS.email);
-      localStorage.removeItem(STORAGE_KEYS.profile);
-      localStorage.removeItem(STORAGE_KEYS.role);
-    }
+    safeRemoveItem('local', STORAGE_KEYS.nickname);
+    safeRemoveItem('local', STORAGE_KEYS.email);
+    safeRemoveItem('local', STORAGE_KEYS.profile);
+    safeRemoveItem('local', STORAGE_KEYS.role);
 
     set({ isLoggedIn: false, isLoading: false, user: null });
   },
-  hydrate: () => {
+  hydrate: async () => {
     try {
-      const stored = getStoredAuth();
-      set({ ...stored, isLoading: false });
+      set({ isLoading: true });
+      if (isDevAuthBypassEnabled) {
+        set({
+          isLoggedIn: true,
+          isLoading: false,
+          user: DEV_AUTH_BYPASS_USER,
+        });
+        return;
+      }
+
+      set({ isLoggedIn: false, isLoading: false, user: null });
     } catch (error) {
       console.error('Hydration error:', error);
       set({ isLoggedIn: false, isLoading: false, user: null });

@@ -13,8 +13,8 @@ export const NAV_ITEMS: NavItem[] = [
 
 // 사용자 드롭다운 메뉴
 export const USER_MENU_ITEMS: NavItem[] = [
-  { label: '계정설정' }, // TODO: 계정설정 기능 구현
+  { label: '계정설정', path: `${ROUTES.MYPAGE}?tab=settings` },
   // { label: '문의하기' }, // TODO: 문의하기 기능 구현
-  { label: '마이페이지' }, // TODO: 마이페이지 라우트 연결
+  { label: '마이페이지', path: ROUTES.MYPAGE },
   { label: '로그아웃' },
 ] as const;
