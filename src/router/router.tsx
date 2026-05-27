@@ -50,19 +50,6 @@ const router = createBrowserRouter([
             element: <LectureDetailPage />,
           },
           {
-            element: <ProtectedRoute />,
-            children: [
-              {
-                path: ROUTES.WORKSPACE(':lectureId'),
-                element: <CodeEditorPage />,
-              },
-              {
-                path: ROUTES.MYPAGE,
-                element: <MyPage />,
-              },
-            ],
-          },
-          {
             path: ROUTES.BASIC_LEARNING.ROOT,
             element: <BasicLearningPage />,
           },
@@ -73,6 +60,16 @@ const router = createBrowserRouter([
           {
             path: ROUTES.PROJECTS,
             element: <ProjectsPage />,
+          },
+        ],
+      },
+      // 코드 에디터 (헤더/푸터 없음)
+      {
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: ROUTES.WORKSPACE(':lectureId'),
+            element: <CodeEditorPage />,
           },
         ],
       },

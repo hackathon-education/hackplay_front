@@ -13,9 +13,11 @@ export interface UnitItemProps {
 
 interface UnitItemComponentProps {
   unit: UnitItemProps;
+  /** 잠금 해제 시 재생 버튼 동작 (미지정이면 개발용 로그만) */
+  onPlay?: () => void;
 }
 
-const UnitItem = ({ unit }: UnitItemComponentProps) => {
+const UnitItem = ({ unit, onPlay }: UnitItemComponentProps) => {
   return (
     <div className="flex items-center justify-between pl-5.5 pr-6.5 h-[93px] hover:bg-card-hover-bg transition-colors">
       <div className="flex items-center gap-[21px]">
@@ -48,8 +50,9 @@ const UnitItem = ({ unit }: UnitItemComponentProps) => {
             <button
               type="button"
               className="flex items-center justify-center w-full h-full rounded-full bg-btn-default-bg shadow-4 cursor-pointer hover:bg-btn-default-bg-hover transition-all"
-              // TODO: 해당 유닛의 코드 에디터 페이지로 이동하게 수정
-              onClick={() => console.log(`${unit.title} 학습 시작`)}
+              onClick={() =>
+                onPlay ? onPlay() : console.log(`${unit.title} 학습 시작`)
+              }
             >
               <TriangleRightIcon className="w-4 h-4 text-btn-default-text translate-x-[3px]" />
             </button>

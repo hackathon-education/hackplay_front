@@ -13,6 +13,8 @@ interface FileNode {
 
 interface FileTreeProps {
   files: FileNode[];
+  /** 우측 상단 제목 (예: My First Project (19)) */
+  projectTitle?: string;
   selectedPath?: string;
   onFileSelect: (path: string) => void;
   onDelete: (path: string) => void; // 삭제 핸들러
@@ -23,6 +25,7 @@ interface FileTreeProps {
 
 const FileTree = ({
   files,
+  projectTitle,
   selectedPath,
   onFileSelect,
   onDelete,
@@ -322,8 +325,15 @@ const FileTree = ({
   return (
     <div className="h-full flex flex-col">
       {/* 헤더 */}
-      <div className="flex items-center justify-between pt-2.5 pb-2 pl-[1.188rem] border-b-[0.5px] border-gray-200 bg-gray-150">
-        <LuFiles className="w-5 h-5 text-gray-620 stroke-[2.2]" />
+      <div className="flex items-center justify-between gap-2 border-b-[0.5px] border-gray-200 bg-gray-150 px-3 py-2.5">
+        <div className="flex min-w-0 flex-1 items-center gap-2">
+          <LuFiles className="h-5 w-5 shrink-0 text-gray-620 stroke-[2.2]" />
+          {projectTitle ? (
+            <span className="truncate text-sm font-semibold tracking-tight text-gray-630">
+              {projectTitle}
+            </span>
+          ) : null}
+        </div>
       </div>
 
       {/* 파일 트리 */}

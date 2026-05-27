@@ -1,4 +1,30 @@
 const MainPage = () => {
+  const [projectFinderAnswers, setProjectFinderAnswers] = useState<string[]>([]);
+  const [activeFlowStepId, setActiveFlowStepId] = useState<string | null>(null);
+  const currentProjectFinderStep = PROJECT_FINDER_STEPS[projectFinderAnswers.length];
+  const isProjectFinderComplete = projectFinderAnswers.length === PROJECT_FINDER_STEPS.length;
+  const projectFinderProgress = Math.round(
+    (projectFinderAnswers.length / PROJECT_FINDER_STEPS.length) * 100,
+  );
+
+  const handleHackathonClick = () => {
+    document.getElementById('hackathon')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const handleLearningClick = () => {
+    document.getElementById('learning')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const handleProjectFinderSelect = (option: string) => {
+    if (isProjectFinderComplete) return;
+
+    setProjectFinderAnswers((answers) => [...answers, option]);
+  };
+
+  const handleProjectFinderReset = () => {
+    setProjectFinderAnswers([]);
+  };
+
   return (
     <div className="w-full mx-auto pt-16 sm:pt-20 md:pt-24 lg:pt-28 xl:pt-[8.125rem] text-center px-4 sm:px-6 md:px-8 lg: px-10 xl:px-[12.375rem]">
       <header>
