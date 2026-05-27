@@ -502,14 +502,14 @@ const MyPage = () => {
   };
 
   return (
-    <div className="relative min-h-screen lg:h-[2353px] overflow-hidden -mx-[15px] lg:-mx-5 -mt-16.5 lg:-mt-24">
+    <div className="relative min-h-screen lg:min-h-[2353px] overflow-hidden -mx-[15px] lg:-mx-5 -mt-16.5 lg:-mt-24">
       <img
         src={MypageBg}
         alt=""
-        className="absolute inset-0 z-0 w-full h-full 2xl:h-auto object-cover"
+        className="absolute inset-0 z-0 h-full w-full object-cover 2xl:h-auto"
       />
 
-      <div className="relative z-base mx-auto w-full max-w-[1703px] px-[15px] lg:px-5 pt-26 lg:pt-[175px] pb-20">
+      <div className="relative z-base mx-auto w-full max-w-[1703px] px-4 sm:px-[15px] lg:px-5 pt-16 lg:pt-[175px] pb-12 sm:pb-16 lg:pb-20">
         <PasswordConfirmModal
           isOpen={pwModalOpen}
           title={pwModalTitle}
@@ -527,8 +527,8 @@ const MyPage = () => {
 
         <div className="flex flex-col lg:flex-row">
           {/* Sidebar */}
-          <aside className="lg:w-[113px] shrink-0">
-            <div className="flex flex-col rounded-l-20 border border-r-0 border-tab-border-default overflow-hidden divide-y divide-tab-border-default">
+          <aside className="w-full shrink-0 lg:w-[113px]">
+            <div className="flex flex-row overflow-hidden rounded-t-20 border border-b-0 border-tab-border-default lg:flex-col lg:rounded-l-20 lg:rounded-tr-none lg:border-b lg:border-r-0 divide-x divide-tab-border-default lg:divide-x-0 lg:divide-y">
               {(['settings', 'payments', 'history', 'withdraw'] as TabKey[]).map((tab) => {
                 const selected = tab === activeTab;
                 return (
@@ -542,7 +542,7 @@ const MyPage = () => {
                         setSearchParams({ tab });
                       }
                     }}
-                    className={`relative flex w-full items-center justify-center py-3.5 text-sm leading-tight transition-all ${
+                    className={`relative flex min-h-11 flex-1 items-center justify-center px-1 py-2.5 text-xs leading-tight transition-all sm:py-3 sm:text-sm lg:flex-none lg:py-3.5 ${
                       selected
                         ? 'z-nav bg-white text-tab-text-active'
                         : 'bg-tab-bg-default text-tab-text-default hover:text-tab-text-hover'
@@ -556,18 +556,22 @@ const MyPage = () => {
           </aside>
 
           {/* Content Area */}
-          <section className="relative flex-1">
-            <div className="min-h-[538px] rounded-20 rounded-tl-none border border-l-0 border-card-border bg-tab-bg-default p-8 lg:p-[55px]">
-              <div className={`${activeTab === 'settings' ? 'max-w-[299px] mx-auto' : ''}`}>
-                <h2 className="text-2xl text-text-accent leading-[1.2]">{TAB_LABEL[activeTab]}</h2>
+          <section className="relative min-w-0 flex-1">
+            <div className="min-h-0 rounded-b-20 rounded-t-none border border-card-border bg-tab-bg-default p-4 sm:p-6 md:p-8 lg:min-h-[538px] lg:rounded-20 lg:rounded-tl-none lg:border-l-0 lg:p-[55px]">
+              <div
+                className={`${activeTab === 'settings' ? 'mx-auto w-full max-w-[299px]' : 'w-full'}`}
+              >
+                <h2 className="text-xl text-text-accent leading-[1.2] sm:text-2xl">
+                  {TAB_LABEL[activeTab]}
+                </h2>
 
                 {/* Settings */}
                 {activeTab === 'settings' && (
-                  <div className="mt-[35px] flex flex-col gap-[35px]">
-                    <div className="flex flex-col gap-[35px] pr-[13px]">
+                  <div className="mt-6 flex flex-col gap-6 sm:mt-8 sm:gap-8 lg:mt-[35px] lg:gap-[35px]">
+                    <div className="flex flex-col gap-6 sm:gap-8 lg:gap-[35px] lg:pr-[13px]">
                       <div className="flex flex-col gap-[7px]">
                         <label className="text-sm text-text-base leading-tight">닉네임</label>
-                        <div className="flex items-center gap-2">
+                        <div className="flex min-w-0 items-center gap-2">
                           <Input
                             iconType="nickname"
                             iconSize="w-5.5 h-auto -translate-x-[2px]"
@@ -579,11 +583,11 @@ const MyPage = () => {
                                 message: '닉네임은 최소 2자 이상이어야 합니다.',
                               },
                             })}
-                            className={
+                            className={`min-w-0 flex-1 ${
                               settingsErrors.nickname
                                 ? 'border-input-error-border focus:!border-input-error-border focus:!ring-input-error-border'
                                 : ''
-                            }
+                            }`}
                           />
                           <Button
                             type="button"
@@ -611,17 +615,17 @@ const MyPage = () => {
 
                       <div className="flex flex-col gap-[7px]">
                         <label className="text-sm text-text-base leading-tight">이메일</label>
-                        <div className="flex items-center gap-2">
+                        <div className="flex min-w-0 items-center gap-2">
                           <Input
                             type="email"
                             iconType="email"
                             iconSize="w-4.5 h-auto"
                             {...registerSettings('email', { required: '이메일을 입력해주세요' })}
-                            className={
+                            className={`min-w-0 flex-1 ${
                               settingsErrors.email
                                 ? 'border-input-error-border focus:!border-input-error-border focus:!ring-input-error-border'
                                 : ''
-                            }
+                            }`}
                           />
                           <Button
                             type="button"
@@ -636,7 +640,7 @@ const MyPage = () => {
                         </div>
                         {isCodeSent && (
                           <div className="flex flex-col gap-2">
-                            <div className="flex gap-2 items-center">
+                            <div className="flex min-w-0 items-center gap-2">
                               <Input
                                 iconType="verifyCode"
                                 iconSize="w-4.5 h-auto"
@@ -645,11 +649,11 @@ const MyPage = () => {
                                 value={verifyCode}
                                 disabled={isCodeVerified}
                                 onChange={(e) => setVerifyCode(e.target.value)}
-                                className={
+                                className={`min-w-0 flex-1 ${
                                   verifyCodeError
                                     ? 'border-input-error-border focus:!border-input-error-border focus:!ring-input-error-border'
                                     : ''
-                                }
+                                }`}
                               />
                               <Button
                                 type="button"
@@ -687,8 +691,8 @@ const MyPage = () => {
 
                       <div className="flex flex-col gap-[7px]">
                         <label className="text-sm text-text-base leading-tight">희망 직무</label>
-                        <div className="flex items-center gap-2">
-                          <div className="relative w-full">
+                        <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center">
+                          <div className="relative min-w-0 w-full sm:flex-1">
                             <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
                               <JobIcon className="text-text-base w-4.5 -translate-x-[1px]" />
                             </div>
@@ -711,25 +715,25 @@ const MyPage = () => {
                               <option value="BACK">{JOB_TYPES.BACK}</option>
                             </select>
                           </div>
-                          {settingsErrors.role && (
-                            <div className="flex text-text-error ml-[17px] items-center gap-1">
-                              <ErrorIcon className="size-4 stroke-current stroke-[1.5px]" />
-                              <span className="text-sm leading-tight">
-                                {settingsErrors.role.message}
-                              </span>
-                            </div>
-                          )}
                           <Button
                             type="button"
                             size="w53h35"
                             rounded="xs"
-                            className="shrink-0"
+                            className="shrink-0 self-start sm:self-center"
                             onClick={() => saveSettingsField('role')}
                             disabled={currentSettings.role === profile.role}
                           >
                             수정
                           </Button>
                         </div>
+                        {settingsErrors.role && (
+                          <div className="flex items-center gap-1 text-text-error ml-[17px]">
+                            <ErrorIcon className="size-4 stroke-current stroke-[1.5px]" />
+                            <span className="text-sm leading-tight">
+                              {settingsErrors.role.message}
+                            </span>
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -747,16 +751,16 @@ const MyPage = () => {
 
                 {/* Payments */}
                 {activeTab === 'payments' && (
-                  <div className="mt-8 rounded-3xl border border-card-border bg-card-bg p-10 text-center">
+                  <div className="mt-6 rounded-3xl border border-card-border bg-card-bg p-6 text-center sm:mt-8 sm:p-10">
                     <p className="text-text-body">결제 내역 기능은 준비 중입니다.</p>
                   </div>
                 )}
 
                 {/* History */}
                 {activeTab === 'history' && (
-                  <div className="mt-5 flex flex-col gap-8">
-                    <div className="rounded-30 overflow-hidden border border-card-border bg-gradient-hero lg:flex items-start p-10 shadow-2">
-                      <div className="relative aspect-[613/416] overflow-hidden lg:w-[613px] shrink-0 border border-banner-border rounded-30 shadow-1">
+                  <div className="mt-4 flex flex-col gap-6 sm:mt-5 sm:gap-8">
+                    <div className="flex flex-col items-start overflow-hidden rounded-20 border border-card-border bg-gradient-hero p-4 shadow-2 sm:rounded-30 sm:p-6 lg:flex-row lg:p-10">
+                      <div className="relative aspect-[613/416] w-full shrink-0 overflow-hidden rounded-20 border border-banner-border shadow-1 sm:rounded-30 lg:w-[min(100%,613px)]">
                         {recentLearning?.thumbnailUrl ? (
                           <>
                             <img
@@ -779,21 +783,21 @@ const MyPage = () => {
                             onClick={() => goResume(recentLearning)}
                             className="absolute inset-0 flex items-center justify-center"
                           >
-                            <span className="flex w-30 h-30 items-center justify-center rounded-full border border-white/60 bg-white/40">
-                              <TriangleRightIcon className="w-11 h-11 translate-x-[6px] text-white" />
+                            <span className="flex h-20 w-20 items-center justify-center rounded-full border border-white/60 bg-white/40 sm:h-24 sm:w-24 lg:h-30 lg:w-30">
+                              <TriangleRightIcon className="h-8 w-8 translate-x-[4px] text-white sm:h-10 sm:w-10 sm:translate-x-[6px] lg:h-11 lg:w-11" />
                             </span>
                           </button>
                         )}
                       </div>
 
-                      <div className="flex flex-1 flex-col items-start justify-between p-6 pt-0 lg:p-[35px] lg:pt-0">
+                      <div className="flex w-full flex-1 flex-col items-start justify-between p-4 pt-4 sm:p-6 sm:pt-5 lg:p-[35px] lg:pt-0">
                         <CategoryBadge>{recentLearning?.position ?? 'FRONTEND'}</CategoryBadge>
 
-                        <div>
-                          <h3 className="mt-[13px] text-5xl font-semibold text-text-accent leading-[1.2] whitespace-nowrap">
+                        <div className="w-full">
+                          <h3 className="mt-3 text-xl font-semibold leading-snug text-text-accent break-keep sm:mt-[13px] sm:text-2xl md:text-3xl lg:text-5xl lg:leading-[1.2]">
                             {recentLearning?.title}
                           </h3>
-                          <div className="mt-[13px] flex flex-wrap items-center gap-5 text-text-base text-sm leading-tight">
+                          <div className="mt-3 flex flex-wrap items-center gap-3 text-sm leading-tight text-text-base sm:mt-[13px] sm:gap-5">
                             <div className="flex items-center gap-2">
                               <CalendarIcon />
                               <span>시작일: {formatDateLabel(recentLearning?.startedAt)}</span>
@@ -807,12 +811,12 @@ const MyPage = () => {
                               </span>
                             </div>
                           </div>
-                          <p className="mt-[51px] text-xl leading-tight text-text-base">
+                          <p className="mt-6 text-sm leading-relaxed text-text-base sm:mt-10 sm:text-base lg:mt-[51px] lg:text-xl lg:leading-tight">
                             {recentLearning?.description}
                           </p>
                           {recentLearning?.progressRate != null && (
-                            <div className="mt-10 w-full self-end lg:mt-25">
-                              <div className="flex items-center justify-between gap-3 text-xl leading-[1.2] text-text-body">
+                            <div className="mt-6 w-full self-end sm:mt-8 lg:mt-25">
+                              <div className="flex flex-wrap items-center justify-between gap-2 text-sm leading-[1.2] text-text-body sm:gap-3 sm:text-base lg:text-xl">
                                 <span>진도율 {recentLearning.progressRate}%</span>
                                 <p className="mr-[11px]">
                                   {recentLearning.progressRate >= 100
@@ -834,13 +838,13 @@ const MyPage = () => {
                       </div>
                     </div>
 
-                    <div className="flex flex-wrap gap-[9px] w-fit shadow-3 border border-chip-default-border bg-white rounded-30 p-2.5">
+                    <div className="flex w-full flex-wrap gap-2 rounded-20 border border-chip-default-border bg-white p-2 shadow-3 sm:w-fit sm:gap-[9px] sm:rounded-30 sm:p-2.5">
                       {(['ALL', 'IN_PROGRESS', 'COMPLETED'] as const).map((filter) => (
                         <button
                           key={filter}
                           type="button"
                           onClick={() => setHistoryFilter(filter)}
-                          className={`rounded-50 px-4 py-[9px] text-xl leading-none transition ${
+                          className={`flex-1 rounded-50 px-3 py-2 text-sm leading-none transition sm:flex-none sm:px-4 sm:py-[9px] sm:text-base lg:text-xl ${
                             historyFilter === filter
                               ? 'bg-chip-active-bg text-chip-active-text'
                               : 'bg-chip-default-bg text-chip-default-text hover:text-tab-text-hover'
@@ -855,13 +859,13 @@ const MyPage = () => {
                       ))}
                     </div>
 
-                    <div className="grid grid-cols-1 gap-x-23.5 gap-y-[105px] lg:grid-cols-3">
+                    <div className="grid grid-cols-1 justify-items-center gap-y-10 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-16 lg:grid-cols-3 lg:gap-x-23.5 lg:gap-y-[105px]">
                       {filteredLearning.length ? (
                         <>
                           {filteredLearning.map((lecture) => (
                             <div
                               key={lecture.lectureId}
-                              className="rounded-30 overflow-hidden border border-card-border bg-white max-w-[417px] h-[440px]"
+                              className="flex h-full w-full max-w-[417px] flex-col overflow-hidden rounded-20 border border-card-border bg-white sm:rounded-30 lg:h-[440px]"
                             >
                               <div className="relative aspect-[415/235] overflow-hidden">
                                 {lecture.thumbnailUrl ? (
@@ -882,7 +886,7 @@ const MyPage = () => {
                                   />
                                 )}
                                 {lecture.difficulty && (
-                                  <div className="absolute top-8 left-[29px] z-nav bg-badge-bg rounded-10 px-3.5 py-2 font-medium">
+                                  <div className="absolute left-4 top-4 z-nav rounded-10 bg-badge-bg px-3 py-1.5 font-medium sm:left-[29px] sm:top-8 sm:px-3.5 sm:py-2">
                                     {DIFFICULTY_LABELS[lecture.difficulty]}
                                   </div>
                                 )}
@@ -891,25 +895,31 @@ const MyPage = () => {
                                   onClick={() => goResume(lecture)}
                                   className="absolute inset-0 flex items-center justify-center"
                                 >
-                                  <span className="flex w-[79px] h-[79px] items-center justify-center rounded-full border border-white/60 bg-white/40">
-                                    <TriangleRightIcon className="w-[29px] h-[29px] translate-x-[4px] text-white" />
+                                  <span className="flex h-14 w-14 items-center justify-center rounded-full border border-white/60 bg-white/40 sm:h-[79px] sm:w-[79px]">
+                                    <TriangleRightIcon className="h-6 w-6 translate-x-[3px] text-white sm:h-[29px] sm:w-[29px] sm:translate-x-[4px]" />
                                   </span>
                                 </button>
                               </div>
-                              <div className="pt-[7px] pb-[13.5px] px-[33.5px] flex flex-col gap-4.5">
+                              <div className="flex flex-1 flex-col gap-4 px-4 pb-4 pt-2 sm:gap-4.5 sm:px-6 sm:pb-[13.5px] sm:pt-[7px] lg:px-[33.5px]">
                                 <div className="flex items-end justify-between gap-2">
                                   <CategoryBadge>{lecture.position}</CategoryBadge>
                                   <div className="flex items-center">
-                                    <img src={StarRatingIcon} alt="별점" className="w-9 h-9" />
-                                    <span className="font-semibold text-xl leading-[1.2] text-yellow-500 mr-2 translate-y-[1px]">
+                                    <img
+                                      src={StarRatingIcon}
+                                      alt="별점"
+                                      className="h-7 w-7 sm:h-9 sm:w-9"
+                                    />
+                                    <span className="mr-2 translate-y-[1px] text-lg font-semibold leading-[1.2] text-yellow-500 sm:text-xl">
                                       {formatRating(lecture.rating)}
                                     </span>
                                   </div>
                                 </div>
                                 <div className="flex flex-col gap-2.5">
-                                  <h4 className="text-2xl leading-[1.21]">{lecture.title}</h4>
+                                  <h4 className="text-lg leading-snug sm:text-2xl sm:leading-[1.21]">
+                                    {lecture.title}
+                                  </h4>
                                   <div className="flex items-center gap-[7px]">
-                                    <div className="relative flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-btn-disabled-bg">
+                                    <div className="relative flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full bg-btn-disabled-bg sm:h-8 sm:w-8">
                                       {lecture.instructorImageUrl ? (
                                         <img
                                           src={lecture.instructorImageUrl}
@@ -920,7 +930,7 @@ const MyPage = () => {
                                         <></>
                                       )}
                                     </div>
-                                    <span className="text-xl font-semibold leading-[1.2] text-text-body">
+                                    <span className="text-base font-semibold leading-[1.2] text-text-body sm:text-xl">
                                       {lecture.instructorName ?? '강사 정보 없음'}
                                     </span>
                                   </div>
@@ -955,19 +965,19 @@ const MyPage = () => {
                           <button
                             type="button"
                             onClick={() => navigate(ROUTES.COURSES.ROOT)}
-                            className="rounded-30 overflow-hidden border border-dashed border-card-border bg-white max-w-[417px] h-[501px] flex flex-col items-center justify-center px-[74.5px] text-center shadow-2 -translate-y-7.5"
+                            className="flex min-h-[320px] w-full max-w-[417px] flex-col items-center justify-center overflow-hidden rounded-20 border border-dashed border-card-border bg-white px-6 py-10 text-center shadow-2 sm:min-h-[400px] sm:rounded-30 sm:px-10 lg:min-h-[501px] lg:px-[74.5px] lg:-translate-y-7.5"
                           >
-                            <div className="w-19 h-19 bg-icon-neutral-250/35 rounded-full flex items-center justify-center mb-3">
+                            <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-icon-neutral-250/35 sm:h-19 sm:w-19">
                               <img
                                 src={SearchIcon}
                                 alt=""
-                                className="[transform:scaleX(-1)_scaleY(-1)_rotate(-172.27deg)] w-11"
+                                className="w-8 [transform:scaleX(-1)_scaleY(-1)_rotate(-172.27deg)] sm:w-11"
                               />
                             </div>
-                            <h3 className="text-[2rem] font-semibold mb-4 leading-[1.2]">
+                            <h3 className="mb-3 text-xl font-semibold leading-[1.2] sm:mb-4 sm:text-[2rem]">
                               새로운 강의 찾기
                             </h3>
-                            <p className="text-2xl text-text-body leading-[1.21]">
+                            <p className="text-base leading-relaxed text-text-body sm:text-2xl sm:leading-[1.21]">
                               나에게 맞는 새로운 기술과
                               <br />
                               트렌드를 탐험해보세요.
